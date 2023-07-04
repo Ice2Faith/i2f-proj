@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>i2f-proj</artifactId>
+        <groupId>com.i2f</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>i2f-common</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.i2f</groupId>
+            <artifactId>i2f-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>i2f.boost</groupId>
+            <artifactId>i2f-core</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/../lib/i2f-core-1.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>i2f.boost</groupId>
+            <artifactId>i2f-core-j2ee</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/../lib/i2f-core-j2ee-1.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>i2f.boost</groupId>
+            <artifactId>i2f-extension</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/../lib/i2f-extension-1.0.jar</systemPath>
+        </dependency>
+
+        <!-- 加密算法的BC实现，没有出口政策限制，可以使用更强的加密强度 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+        </dependency>
+
+        <!-- 增加了对国密SM系列算法的支持 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+        </dependency>
+    </dependencies>
+</project>

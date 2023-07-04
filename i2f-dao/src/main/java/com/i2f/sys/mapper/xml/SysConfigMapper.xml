@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.i2f.sys.mapper.SysConfigMapper">
+    <!--
+    * @author Ice2Faith
+    * @date 2023-07-04 17:31:20
+    * @desc sys_config 配置表
+    -->
+
+    <resultMap id="mapDoResultMap" type="com.i2f.sys.data.dom.SysConfigDo">
+        <id property="id" column="id"/>
+        <result property="groupKey" column="group_key"/>
+        <result property="groupName" column="group_name"/>
+        <result property="typeKey" column="type_key"/>
+        <result property="typeName" column="type_name"/>
+        <result property="entryId" column="entry_id"/>
+        <result property="entryKey" column="entry_key"/>
+        <result property="entryName" column="entry_name"/>
+        <result property="entryDesc" column="entry_desc"/>
+        <result property="entryOrder" column="entry_order"/>
+        <result property="parentEntryId" column="parent_entry_id"/>
+        <result property="paramDesc" column="param_desc"/>
+        <result property="param1" column="param1"/>
+        <result property="param2" column="param2"/>
+        <result property="param3" column="param3"/>
+        <result property="param4" column="param4"/>
+        <result property="param5" column="param5"/>
+        <result property="status" column="status"/>
+        <result property="level" column="level"/>
+        <result property="validTime" column="valid_time"/>
+        <result property="invalidTime" column="invalid_time"/>
+        <result property="modFlag" column="mod_flag"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="sysFlag" column="sys_flag"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateUser" column="update_user"/>
+    </resultMap>
+
+    <resultMap id="mapVoResultMap" type="com.i2f.sys.data.vo.SysConfigVo"
+               extends="mapDoResultMap">
+        <result property="groupKeyDesc" column="group_key_desc"/>
+        <result property="typeKeyDesc" column="type_key_desc"/>
+        <result property="entryOrderDesc" column="entry_order_desc"/>
+        <result property="statusDesc" column="status_desc"/>
+        <result property="levelDesc" column="level_desc"/>
+        <result property="modFlagDesc" column="mod_flag_desc"/>
+        <result property="delFlagDesc" column="del_flag_desc"/>
+        <result property="sysFlagDesc" column="sys_flag_desc"/>
+    </resultMap>
+
+    <sql id="columnsAsCamel">
+          a.id
+         ,a.group_key as groupKey
+         ,a.group_name as groupName
+         ,a.type_key as typeKey
+         ,a.type_name as typeName
+         ,a.entry_id as entryId
+         ,a.entry_key as entryKey
+         ,a.entry_name as entryName
+         ,a.entry_desc as entryDesc
+         ,a.entry_order as entryOrder
+         ,a.parent_entry_id as parentEntryId
+         ,a.param_desc as paramDesc
+         ,a.param1
+         ,a.param2
+         ,a.param3
+         ,a.param4
+         ,a.param5
+         ,a.status
+         ,a.level
+         ,a.valid_time as validTime
+         ,a.invalid_time as invalidTime
+         ,a.mod_flag as modFlag
+         ,a.del_flag as delFlag
+         ,a.sys_flag as sysFlag
+         ,a.create_time as createTime
+         ,a.create_user as createUser
+         ,a.update_time as updateTime
+         ,a.update_user as updateUser
+    </sql>
+
+    <sql id="columnDescAsCamel">
+         a.group_key_desc as groupKeyDesc
+         a.type_key_desc as typeKeyDesc
+         a.entry_order_desc as entryOrderDesc
+         a.status_desc as statusDesc
+         a.level_desc as levelDesc
+         a.mod_flag_desc as modFlagDesc
+         a.del_flag_desc as delFlagDesc
+         a.sys_flag_desc as sysFlagDesc
+    </sql>
+
+    <sql id="baseQueryBody">
+        select
+              a.id
+              ,a.group_key
+              ,a.group_name
+              ,a.type_key
+              ,a.type_name
+              ,a.entry_id
+              ,a.entry_key
+              ,a.entry_name
+              ,a.entry_desc
+              ,a.entry_order
+              ,a.parent_entry_id
+              ,a.param_desc
+              ,a.param1
+              ,a.param2
+              ,a.param3
+              ,a.param4
+              ,a.param5
+              ,a.status
+              ,a.level
+              ,a.valid_time
+              ,a.invalid_time
+              ,a.mod_flag
+              ,a.del_flag
+              ,a.sys_flag
+              ,a.create_time
+              ,a.create_user
+              ,a.update_time
+              ,a.update_user
+        from sys_config a
+    </sql>
+
+    <sql id="baseQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.groupKey!=null">
+                and a.group_key = #{post.groupKey}
+            </if>
+            <if test="post.groupName!=null and post.groupName!=''">
+                and instr(a.group_name,#{post.groupName}) &gt; 0
+            </if>
+            <if test="post.typeKey!=null">
+                and a.type_key = #{post.typeKey}
+            </if>
+            <if test="post.typeName!=null and post.typeName!=''">
+                and instr(a.type_name,#{post.typeName}) &gt; 0
+            </if>
+            <if test="post.entryId!=null">
+                and a.entry_id = #{post.entryId}
+            </if>
+            <if test="post.entryKey!=null and post.entryKey!=''">
+                and instr(a.entry_key,#{post.entryKey}) &gt; 0
+            </if>
+            <if test="post.entryName!=null and post.entryName!=''">
+                and instr(a.entry_name,#{post.entryName}) &gt; 0
+            </if>
+            <if test="post.entryDesc!=null and post.entryDesc!=''">
+                and instr(a.entry_desc,#{post.entryDesc}) &gt; 0
+            </if>
+            <if test="post.entryOrder!=null">
+                and a.entry_order = #{post.entryOrder}
+            </if>
+            <if test="post.parentEntryId!=null">
+                and a.parent_entry_id = #{post.parentEntryId}
+            </if>
+            <if test="post.paramDesc!=null and post.paramDesc!=''">
+                and instr(a.param_desc,#{post.paramDesc}) &gt; 0
+            </if>
+            <if test="post.param1!=null and post.param1!=''">
+                and instr(a.param1,#{post.param1}) &gt; 0
+            </if>
+            <if test="post.param2!=null and post.param2!=''">
+                and instr(a.param2,#{post.param2}) &gt; 0
+            </if>
+            <if test="post.param3!=null and post.param3!=''">
+                and instr(a.param3,#{post.param3}) &gt; 0
+            </if>
+            <if test="post.param4!=null and post.param4!=''">
+                and instr(a.param4,#{post.param4}) &gt; 0
+            </if>
+            <if test="post.param5!=null and post.param5!=''">
+                and instr(a.param5,#{post.param5}) &gt; 0
+            </if>
+            <if test="post.status!=null">
+                and a.status = #{post.status}
+            </if>
+            <if test="post.level!=null">
+                and a.level = #{post.level}
+            </if>
+            <if test="post.validTime!=null">
+                and a.valid_time = #{post.validTime}
+            </if>
+            <if test="post.invalidTime!=null">
+                and a.invalid_time = #{post.invalidTime}
+            </if>
+            <if test="post.modFlag!=null">
+                and a.mod_flag = #{post.modFlag}
+            </if>
+            <if test="post.delFlag!=null">
+                and a.del_flag = #{post.delFlag}
+            </if>
+            <if test="post.sysFlag!=null">
+                and a.sys_flag = #{post.sysFlag}
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(a.create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and a.update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(a.update_user,#{post.updateUser}) &gt; 0
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="list" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="findByPk" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSelective">
+        insert into sys_config
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                id,
+            </if>
+            <if test="post.groupKey!=null">
+                group_key,
+            </if>
+            <if test="post.groupName!=null and post.groupName!=''">
+                group_name,
+            </if>
+            <if test="post.typeKey!=null">
+                type_key,
+            </if>
+            <if test="post.typeName!=null and post.typeName!=''">
+                type_name,
+            </if>
+            <if test="post.entryId!=null">
+                entry_id,
+            </if>
+            <if test="post.entryKey!=null and post.entryKey!=''">
+                entry_key,
+            </if>
+            <if test="post.entryName!=null and post.entryName!=''">
+                entry_name,
+            </if>
+            <if test="post.entryDesc!=null and post.entryDesc!=''">
+                entry_desc,
+            </if>
+            <if test="post.entryOrder!=null">
+                entry_order,
+            </if>
+            <if test="post.parentEntryId!=null">
+                parent_entry_id,
+            </if>
+            <if test="post.paramDesc!=null and post.paramDesc!=''">
+                param_desc,
+            </if>
+            <if test="post.param1!=null and post.param1!=''">
+                param1,
+            </if>
+            <if test="post.param2!=null and post.param2!=''">
+                param2,
+            </if>
+            <if test="post.param3!=null and post.param3!=''">
+                param3,
+            </if>
+            <if test="post.param4!=null and post.param4!=''">
+                param4,
+            </if>
+            <if test="post.param5!=null and post.param5!=''">
+                param5,
+            </if>
+            <if test="post.status!=null">
+                status,
+            </if>
+            <if test="post.level!=null">
+                level,
+            </if>
+            <if test="post.validTime!=null">
+                valid_time,
+            </if>
+            <if test="post.invalidTime!=null">
+                invalid_time,
+            </if>
+            <if test="post.modFlag!=null">
+                mod_flag,
+            </if>
+            <if test="post.delFlag!=null">
+                del_flag,
+            </if>
+            <if test="post.sysFlag!=null">
+                sys_flag,
+            </if>
+            <if test="post.createTime!=null">
+                create_time,
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user,
+            </if>
+            <if test="post.updateTime!=null">
+                update_time,
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user,
+            </if>
+        </trim>
+        )
+        values
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                #{post.id},
+            </if>
+            <if test="post.groupKey!=null">
+                #{post.groupKey},
+            </if>
+            <if test="post.groupName!=null and post.groupName!=''">
+                #{post.groupName},
+            </if>
+            <if test="post.typeKey!=null">
+                #{post.typeKey},
+            </if>
+            <if test="post.typeName!=null and post.typeName!=''">
+                #{post.typeName},
+            </if>
+            <if test="post.entryId!=null">
+                #{post.entryId},
+            </if>
+            <if test="post.entryKey!=null and post.entryKey!=''">
+                #{post.entryKey},
+            </if>
+            <if test="post.entryName!=null and post.entryName!=''">
+                #{post.entryName},
+            </if>
+            <if test="post.entryDesc!=null and post.entryDesc!=''">
+                #{post.entryDesc},
+            </if>
+            <if test="post.entryOrder!=null">
+                #{post.entryOrder},
+            </if>
+            <if test="post.parentEntryId!=null">
+                #{post.parentEntryId},
+            </if>
+            <if test="post.paramDesc!=null and post.paramDesc!=''">
+                #{post.paramDesc},
+            </if>
+            <if test="post.param1!=null and post.param1!=''">
+                #{post.param1},
+            </if>
+            <if test="post.param2!=null and post.param2!=''">
+                #{post.param2},
+            </if>
+            <if test="post.param3!=null and post.param3!=''">
+                #{post.param3},
+            </if>
+            <if test="post.param4!=null and post.param4!=''">
+                #{post.param4},
+            </if>
+            <if test="post.param5!=null and post.param5!=''">
+                #{post.param5},
+            </if>
+            <if test="post.status!=null">
+                #{post.status},
+            </if>
+            <if test="post.level!=null">
+                #{post.level},
+            </if>
+            <if test="post.validTime!=null">
+                #{post.validTime},
+            </if>
+            <if test="post.invalidTime!=null">
+                #{post.invalidTime},
+            </if>
+            <if test="post.modFlag!=null">
+                #{post.modFlag},
+            </if>
+            <if test="post.delFlag!=null">
+                #{post.delFlag},
+            </if>
+            <if test="post.sysFlag!=null">
+                #{post.sysFlag},
+            </if>
+            <if test="post.createTime!=null">
+                #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                #{post.createUser},
+            </if>
+            <if test="post.updateTime!=null">
+                #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                #{post.updateUser},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateSelectiveByPk">
+        update sys_config
+        <set>
+            <if test="post.id!=null">
+                id = #{post.id},
+            </if>
+            <if test="post.groupKey!=null">
+                group_key = #{post.groupKey},
+            </if>
+            <if test="post.groupName!=null and post.groupName!=''">
+                group_name = #{post.groupName},
+            </if>
+            <if test="post.typeKey!=null">
+                type_key = #{post.typeKey},
+            </if>
+            <if test="post.typeName!=null and post.typeName!=''">
+                type_name = #{post.typeName},
+            </if>
+            <if test="post.entryId!=null">
+                entry_id = #{post.entryId},
+            </if>
+            <if test="post.entryKey!=null and post.entryKey!=''">
+                entry_key = #{post.entryKey},
+            </if>
+            <if test="post.entryName!=null and post.entryName!=''">
+                entry_name = #{post.entryName},
+            </if>
+            <if test="post.entryDesc!=null and post.entryDesc!=''">
+                entry_desc = #{post.entryDesc},
+            </if>
+            <if test="post.entryOrder!=null">
+                entry_order = #{post.entryOrder},
+            </if>
+            <if test="post.parentEntryId!=null">
+                parent_entry_id = #{post.parentEntryId},
+            </if>
+            <if test="post.paramDesc!=null and post.paramDesc!=''">
+                param_desc = #{post.paramDesc},
+            </if>
+            <if test="post.param1!=null and post.param1!=''">
+                param1 = #{post.param1},
+            </if>
+            <if test="post.param2!=null and post.param2!=''">
+                param2 = #{post.param2},
+            </if>
+            <if test="post.param3!=null and post.param3!=''">
+                param3 = #{post.param3},
+            </if>
+            <if test="post.param4!=null and post.param4!=''">
+                param4 = #{post.param4},
+            </if>
+            <if test="post.param5!=null and post.param5!=''">
+                param5 = #{post.param5},
+            </if>
+            <if test="post.status!=null">
+                status = #{post.status},
+            </if>
+            <if test="post.level!=null">
+                level = #{post.level},
+            </if>
+            <if test="post.validTime!=null">
+                valid_time = #{post.validTime},
+            </if>
+            <if test="post.invalidTime!=null">
+                invalid_time = #{post.invalidTime},
+            </if>
+            <if test="post.modFlag!=null">
+                mod_flag = #{post.modFlag},
+            </if>
+            <if test="post.delFlag!=null">
+                del_flag = #{post.delFlag},
+            </if>
+            <if test="post.sysFlag!=null">
+                sys_flag = #{post.sysFlag},
+            </if>
+            <if test="post.createTime!=null">
+                create_time = #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user = #{post.createUser},
+            </if>
+            <if test="post.updateTime!=null">
+                update_time = #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user = #{post.updateUser},
+            </if>
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteByPk">
+        delete from sys_config
+        where id = #{id}
+    </delete>
+
+    <insert id="insert">
+        insert into sys_config
+        (
+                    id
+             ,group_key
+             ,group_name
+             ,type_key
+             ,type_name
+             ,entry_id
+             ,entry_key
+             ,entry_name
+             ,entry_desc
+             ,entry_order
+             ,parent_entry_id
+             ,param_desc
+             ,param1
+             ,param2
+             ,param3
+             ,param4
+             ,param5
+             ,status
+             ,level
+             ,valid_time
+             ,invalid_time
+             ,mod_flag
+             ,del_flag
+             ,sys_flag
+             ,create_time
+             ,create_user
+             ,update_time
+             ,update_user
+                            )
+        values
+        (
+                    #{post.id}
+             ,#{post.groupKey}
+             ,#{post.groupName}
+             ,#{post.typeKey}
+             ,#{post.typeName}
+             ,#{post.entryId}
+             ,#{post.entryKey}
+             ,#{post.entryName}
+             ,#{post.entryDesc}
+             ,#{post.entryOrder}
+             ,#{post.parentEntryId}
+             ,#{post.paramDesc}
+             ,#{post.param1}
+             ,#{post.param2}
+             ,#{post.param3}
+             ,#{post.param4}
+             ,#{post.param5}
+             ,#{post.status}
+             ,#{post.level}
+             ,#{post.validTime}
+             ,#{post.invalidTime}
+             ,#{post.modFlag}
+             ,#{post.delFlag}
+             ,#{post.sysFlag}
+             ,#{post.createTime}
+             ,#{post.createUser}
+             ,#{post.updateTime}
+             ,#{post.updateUser}
+                            )
+    </insert>
+
+    <update id="updateByPk">
+        update sys_config
+        <set>
+            id = #{post.id},
+            group_key = #{post.groupKey},
+            group_name = #{post.groupName},
+            type_key = #{post.typeKey},
+            type_name = #{post.typeName},
+            entry_id = #{post.entryId},
+            entry_key = #{post.entryKey},
+            entry_name = #{post.entryName},
+            entry_desc = #{post.entryDesc},
+            entry_order = #{post.entryOrder},
+            parent_entry_id = #{post.parentEntryId},
+            param_desc = #{post.paramDesc},
+            param1 = #{post.param1},
+            param2 = #{post.param2},
+            param3 = #{post.param3},
+            param4 = #{post.param4},
+            param5 = #{post.param5},
+            status = #{post.status},
+            level = #{post.level},
+            valid_time = #{post.validTime},
+            invalid_time = #{post.invalidTime},
+            mod_flag = #{post.modFlag},
+            del_flag = #{post.delFlag},
+            sys_flag = #{post.sysFlag},
+            create_time = #{post.createTime},
+            create_user = #{post.createUser},
+            update_time = #{post.updateTime},
+            update_user = #{post.updateUser},
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteSelective">
+        delete from sys_config
+        where
+        <trim suffixOverrides="and|or" prefixOverrides="and|or">
+            <if test="post.id!=null">
+                and id = #{post.id}
+            </if>
+            <if test="post.groupKey!=null">
+                and group_key = #{post.groupKey}
+            </if>
+            <if test="post.groupName!=null and post.groupName!=''">
+                and instr(group_name,#{post.groupName}) &gt; 0
+            </if>
+            <if test="post.typeKey!=null">
+                and type_key = #{post.typeKey}
+            </if>
+            <if test="post.typeName!=null and post.typeName!=''">
+                and instr(type_name,#{post.typeName}) &gt; 0
+            </if>
+            <if test="post.entryId!=null">
+                and entry_id = #{post.entryId}
+            </if>
+            <if test="post.entryKey!=null and post.entryKey!=''">
+                and instr(entry_key,#{post.entryKey}) &gt; 0
+            </if>
+            <if test="post.entryName!=null and post.entryName!=''">
+                and instr(entry_name,#{post.entryName}) &gt; 0
+            </if>
+            <if test="post.entryDesc!=null and post.entryDesc!=''">
+                and instr(entry_desc,#{post.entryDesc}) &gt; 0
+            </if>
+            <if test="post.entryOrder!=null">
+                and entry_order = #{post.entryOrder}
+            </if>
+            <if test="post.parentEntryId!=null">
+                and parent_entry_id = #{post.parentEntryId}
+            </if>
+            <if test="post.paramDesc!=null and post.paramDesc!=''">
+                and instr(param_desc,#{post.paramDesc}) &gt; 0
+            </if>
+            <if test="post.param1!=null and post.param1!=''">
+                and instr(param1,#{post.param1}) &gt; 0
+            </if>
+            <if test="post.param2!=null and post.param2!=''">
+                and instr(param2,#{post.param2}) &gt; 0
+            </if>
+            <if test="post.param3!=null and post.param3!=''">
+                and instr(param3,#{post.param3}) &gt; 0
+            </if>
+            <if test="post.param4!=null and post.param4!=''">
+                and instr(param4,#{post.param4}) &gt; 0
+            </if>
+            <if test="post.param5!=null and post.param5!=''">
+                and instr(param5,#{post.param5}) &gt; 0
+            </if>
+            <if test="post.status!=null">
+                and status = #{post.status}
+            </if>
+            <if test="post.level!=null">
+                and level = #{post.level}
+            </if>
+            <if test="post.validTime!=null">
+                and valid_time = #{post.validTime}
+            </if>
+            <if test="post.invalidTime!=null">
+                and invalid_time = #{post.invalidTime}
+            </if>
+            <if test="post.modFlag!=null">
+                and mod_flag = #{post.modFlag}
+            </if>
+            <if test="post.delFlag!=null">
+                and del_flag = #{post.delFlag}
+            </if>
+            <if test="post.sysFlag!=null">
+                and sys_flag = #{post.sysFlag}
+            </if>
+            <if test="post.createTime!=null">
+                and create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(update_user,#{post.updateUser}) &gt; 0
+            </if>
+        </trim>
+    </delete>
+
+    <insert id="insertBatch">
+        insert into sys_config
+        (
+        id
+        ,group_key
+        ,group_name
+        ,type_key
+        ,type_name
+        ,entry_id
+        ,entry_key
+        ,entry_name
+        ,entry_desc
+        ,entry_order
+        ,parent_entry_id
+        ,param_desc
+        ,param1
+        ,param2
+        ,param3
+        ,param4
+        ,param5
+        ,status
+        ,level
+        ,valid_time
+        ,invalid_time
+        ,mod_flag
+        ,del_flag
+        ,sys_flag
+        ,create_time
+        ,create_user
+        ,update_time
+        ,update_user
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}
+            ,#{item.groupKey}
+            ,#{item.groupName}
+            ,#{item.typeKey}
+            ,#{item.typeName}
+            ,#{item.entryId}
+            ,#{item.entryKey}
+            ,#{item.entryName}
+            ,#{item.entryDesc}
+            ,#{item.entryOrder}
+            ,#{item.parentEntryId}
+            ,#{item.paramDesc}
+            ,#{item.param1}
+            ,#{item.param2}
+            ,#{item.param3}
+            ,#{item.param4}
+            ,#{item.param5}
+            ,#{item.status}
+            ,#{item.level}
+            ,#{item.validTime}
+            ,#{item.invalidTime}
+            ,#{item.modFlag}
+            ,#{item.delFlag}
+            ,#{item.sysFlag}
+            ,#{item.createTime}
+            ,#{item.createUser}
+            ,#{item.updateTime}
+            ,#{item.updateUser}
+            )
+        </foreach>
+
+    </insert>
+</mapper>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.i2f.sys.mapper.SysUserDeptMapper">
+    <!--
+    * @author Ice2Faith
+    * @date 2023-07-04 17:34:56
+    * @desc sys_user_dept 用户-部门表
+    -->
+
+    <resultMap id="mapDoResultMap" type="com.i2f.sys.data.dom.SysUserDeptDo">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUser" column="create_user"/>
+    </resultMap>
+
+    <resultMap id="mapVoResultMap" type="com.i2f.sys.data.vo.SysUserDeptVo"
+               extends="mapDoResultMap">
+    </resultMap>
+
+    <sql id="columnsAsCamel">
+         a.id
+         ,a.user_id as userId
+         ,a.dept_id as deptId
+         ,a.create_time as createTime
+         ,a.create_user as createUser
+    </sql>
+
+    <sql id="columnDescAsCamel">
+    </sql>
+
+    <sql id="baseQueryBody">
+        select
+               a.id
+              ,a.user_id
+              ,a.dept_id
+              ,a.create_time
+              ,a.create_user
+        from sys_user_dept a
+    </sql>
+
+    <sql id="baseQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.userId!=null">
+                and a.user_id = #{post.userId}
+            </if>
+            <if test="post.deptId!=null">
+                and a.dept_id = #{post.deptId}
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(a.create_user,#{post.createUser}) &gt; 0
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="list" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="findByPk" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSelective">
+        insert into sys_user_dept
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                id,
+            </if>
+            <if test="post.userId!=null">
+                user_id,
+            </if>
+            <if test="post.deptId!=null">
+                dept_id,
+            </if>
+            <if test="post.createTime!=null">
+                create_time,
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user,
+            </if>
+        </trim>
+        )
+        values
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                #{post.id},
+            </if>
+            <if test="post.userId!=null">
+                #{post.userId},
+            </if>
+            <if test="post.deptId!=null">
+                #{post.deptId},
+            </if>
+            <if test="post.createTime!=null">
+                #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                #{post.createUser},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateSelectiveByPk">
+        update sys_user_dept
+        <set>
+            <if test="post.id!=null">
+                id = #{post.id},
+            </if>
+            <if test="post.userId!=null">
+                user_id = #{post.userId},
+            </if>
+            <if test="post.deptId!=null">
+                dept_id = #{post.deptId},
+            </if>
+            <if test="post.createTime!=null">
+                create_time = #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user = #{post.createUser},
+            </if>
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteByPk">
+        delete from sys_user_dept
+        where id = #{id}
+    </delete>
+
+    <insert id="insert">
+        insert into sys_user_dept
+        (
+                    id
+             ,user_id
+             ,dept_id
+             ,create_time
+             ,create_user
+                            )
+        values
+        (
+                    #{post.id}
+             ,#{post.userId}
+             ,#{post.deptId}
+             ,#{post.createTime}
+             ,#{post.createUser}
+                            )
+    </insert>
+
+    <update id="updateByPk">
+        update sys_user_dept
+        <set>
+            id = #{post.id},
+            user_id = #{post.userId},
+            dept_id = #{post.deptId},
+            create_time = #{post.createTime},
+            create_user = #{post.createUser},
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteSelective">
+        delete from sys_user_dept
+        where
+        <trim suffixOverrides="and|or" prefixOverrides="and|or">
+            <if test="post.id!=null">
+                and id = #{post.id}
+            </if>
+            <if test="post.userId!=null">
+                and user_id = #{post.userId}
+            </if>
+            <if test="post.deptId!=null">
+                and dept_id = #{post.deptId}
+            </if>
+            <if test="post.createTime!=null">
+                and create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(create_user,#{post.createUser}) &gt; 0
+            </if>
+        </trim>
+    </delete>
+
+    <insert id="insertBatch">
+        insert into sys_user_dept
+        (
+        id
+        ,user_id
+        ,dept_id
+        ,create_time
+        ,create_user
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}
+            ,#{item.userId}
+            ,#{item.deptId}
+            ,#{item.createTime}
+            ,#{item.createUser}
+            )
+        </foreach>
+
+    </insert>
+</mapper>

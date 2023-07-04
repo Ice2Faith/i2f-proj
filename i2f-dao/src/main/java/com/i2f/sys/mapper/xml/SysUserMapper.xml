@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.i2f.sys.mapper.SysUserMapper">
+    <!--
+    * @author Ice2Faith
+    * @date 2023-07-04 15:47:56
+    * @desc sys_user 用户表
+    -->
+
+    <resultMap id="mapDoResultMap" type="com.i2f.sys.data.dom.SysUserDo">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="realname" column="realname"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="regDate" column="reg_date"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="sysFlag" column="sys_flag"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateUser" column="update_user"/>
+    </resultMap>
+
+    <resultMap id="mapVoResultMap" type="com.i2f.sys.data.vo.SysUserVo"
+               extends="mapDoResultMap">
+        <result property="delFlagDesc" column="del_flag_desc"/>
+        <result property="sysFlagDesc" column="sys_flag_desc"/>
+        <result property="statusDesc" column="status_desc"/>
+    </resultMap>
+
+    <sql id="columnsAsCamel">
+          a.id
+         ,a.username
+         ,a.password
+         ,a.realname
+         ,a.phone
+         ,a.email
+         ,a.reg_date as regDate
+         ,a.del_flag as delFlag
+         ,a.sys_flag as sysFlag
+         ,a.status
+         ,a.create_time as createTime
+         ,a.create_user as createUser
+         ,a.update_time as updateTime
+         ,a.update_user as updateUser
+    </sql>
+
+    <sql id="columnDescAsCamel">
+          a.del_flag_desc as delFlagDesc
+          ,a.sys_flag_desc as sysFlagDesc
+          ,a.status_desc as statusDesc
+    </sql>
+
+    <sql id="baseQueryBody">
+        select
+               a.id
+              ,a.username
+              ,a.password
+              ,a.realname
+              ,a.phone
+              ,a.email
+              ,a.reg_date
+              ,a.del_flag
+              ,a.sys_flag
+              ,a.status
+              ,a.create_time
+              ,a.create_user
+              ,a.update_time
+              ,a.update_user
+        from sys_user a
+    </sql>
+
+    <sql id="baseQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.username!=null and post.username!=''">
+                and instr(a.username,#{post.username}) &gt; 0
+            </if>
+            <if test="post.password!=null and post.password!=''">
+                and instr(a.password,#{post.password}) &gt; 0
+            </if>
+            <if test="post.realname!=null and post.realname!=''">
+                and instr(a.realname,#{post.realname}) &gt; 0
+            </if>
+            <if test="post.phone!=null and post.phone!=''">
+                and instr(a.phone,#{post.phone}) &gt; 0
+            </if>
+            <if test="post.email!=null and post.email!=''">
+                and instr(a.email,#{post.email}) &gt; 0
+            </if>
+            <if test="post.regDate!=null">
+                and a.reg_date = #{post.regDate}
+            </if>
+            <if test="post.delFlag!=null">
+                and a.del_flag = #{post.delFlag}
+            </if>
+            <if test="post.sysFlag!=null">
+                and a.sys_flag = #{post.sysFlag}
+            </if>
+            <if test="post.status!=null">
+                and a.status = #{post.status}
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(a.create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and a.update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(a.update_user,#{post.updateUser}) &gt; 0
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="list" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="findByPk" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.id = #{id}
+    </select>
+
+    <select id="findByUsername" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.username = #{username}
+    </select>
+
+    <insert id="insertSelective">
+        insert into sys_user
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                id,
+            </if>
+            <if test="post.username!=null and post.username!=''">
+                username,
+            </if>
+            <if test="post.password!=null and post.password!=''">
+                password,
+            </if>
+            <if test="post.realname!=null and post.realname!=''">
+                realname,
+            </if>
+            <if test="post.phone!=null and post.phone!=''">
+                phone,
+            </if>
+            <if test="post.email!=null and post.email!=''">
+                email,
+            </if>
+            <if test="post.regDate!=null">
+                reg_date,
+            </if>
+            <if test="post.delFlag!=null">
+                del_flag,
+            </if>
+            <if test="post.sysFlag!=null">
+                sys_flag,
+            </if>
+            <if test="post.status!=null">
+                status,
+            </if>
+            <if test="post.createTime!=null">
+                create_time,
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user,
+            </if>
+            <if test="post.updateTime!=null">
+                update_time,
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user,
+            </if>
+        </trim>
+        )
+        values
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                #{post.id},
+            </if>
+            <if test="post.username!=null and post.username!=''">
+                #{post.username},
+            </if>
+            <if test="post.password!=null and post.password!=''">
+                #{post.password},
+            </if>
+            <if test="post.realname!=null and post.realname!=''">
+                #{post.realname},
+            </if>
+            <if test="post.phone!=null and post.phone!=''">
+                #{post.phone},
+            </if>
+            <if test="post.email!=null and post.email!=''">
+                #{post.email},
+            </if>
+            <if test="post.regDate!=null">
+                #{post.regDate},
+            </if>
+            <if test="post.delFlag!=null">
+                #{post.delFlag},
+            </if>
+            <if test="post.sysFlag!=null">
+                #{post.sysFlag},
+            </if>
+            <if test="post.status!=null">
+                #{post.status},
+            </if>
+            <if test="post.createTime!=null">
+                #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                #{post.createUser},
+            </if>
+            <if test="post.updateTime!=null">
+                #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                #{post.updateUser},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateSelectiveByPk">
+        update sys_user
+        <set>
+            <if test="post.id!=null">
+                id = #{post.id},
+            </if>
+            <if test="post.username!=null and post.username!=''">
+                username = #{post.username},
+            </if>
+            <if test="post.password!=null and post.password!=''">
+                password = #{post.password},
+            </if>
+            <if test="post.realname!=null and post.realname!=''">
+                realname = #{post.realname},
+            </if>
+            <if test="post.phone!=null and post.phone!=''">
+                phone = #{post.phone},
+            </if>
+            <if test="post.email!=null and post.email!=''">
+                email = #{post.email},
+            </if>
+            <if test="post.regDate!=null">
+                reg_date = #{post.regDate},
+            </if>
+            <if test="post.delFlag!=null">
+                del_flag = #{post.delFlag},
+            </if>
+            <if test="post.sysFlag!=null">
+                sys_flag = #{post.sysFlag},
+            </if>
+            <if test="post.status!=null">
+                status = #{post.status},
+            </if>
+            <if test="post.createTime!=null">
+                create_time = #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user = #{post.createUser},
+            </if>
+            <if test="post.updateTime!=null">
+                update_time = #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user = #{post.updateUser},
+            </if>
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteByPk">
+        delete from sys_user
+        where id = #{id}
+    </delete>
+
+    <insert id="insert">
+        insert into sys_user
+        (
+                    id
+             ,username
+             ,password
+             ,realname
+             ,phone
+             ,email
+             ,reg_date
+             ,del_flag
+             ,sys_flag
+             ,status
+             ,create_time
+             ,create_user
+             ,update_time
+             ,update_user
+                            )
+        values
+        (
+                    #{post.id}
+             ,#{post.username}
+             ,#{post.password}
+             ,#{post.realname}
+             ,#{post.phone}
+             ,#{post.email}
+             ,#{post.regDate}
+             ,#{post.delFlag}
+             ,#{post.sysFlag}
+             ,#{post.status}
+             ,#{post.createTime}
+             ,#{post.createUser}
+             ,#{post.updateTime}
+             ,#{post.updateUser}
+                            )
+    </insert>
+
+    <update id="updateByPk">
+        update sys_user
+        <set>
+            id = #{post.id},
+            username = #{post.username},
+            password = #{post.password},
+            realname = #{post.realname},
+            phone = #{post.phone},
+            email = #{post.email},
+            reg_date = #{post.regDate},
+            del_flag = #{post.delFlag},
+            sys_flag = #{post.sysFlag},
+            status = #{post.status},
+            create_time = #{post.createTime},
+            create_user = #{post.createUser},
+            update_time = #{post.updateTime},
+            update_user = #{post.updateUser},
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteSelective">
+        delete from sys_user
+        where
+        <trim suffixOverrides="and|or" prefixOverrides="and|or">
+            <if test="post.id!=null">
+                and id = #{post.id}
+            </if>
+            <if test="post.username!=null and post.username!=''">
+                and instr(username,#{post.username}) &gt; 0
+            </if>
+            <if test="post.password!=null and post.password!=''">
+                and instr(password,#{post.password}) &gt; 0
+            </if>
+            <if test="post.realname!=null and post.realname!=''">
+                and instr(realname,#{post.realname}) &gt; 0
+            </if>
+            <if test="post.phone!=null and post.phone!=''">
+                and instr(phone,#{post.phone}) &gt; 0
+            </if>
+            <if test="post.email!=null and post.email!=''">
+                and instr(email,#{post.email}) &gt; 0
+            </if>
+            <if test="post.regDate!=null">
+                and reg_date = #{post.regDate}
+            </if>
+            <if test="post.delFlag!=null">
+                and del_flag = #{post.delFlag}
+            </if>
+            <if test="post.sysFlag!=null">
+                and sys_flag = #{post.sysFlag}
+            </if>
+            <if test="post.status!=null">
+                and status = #{post.status}
+            </if>
+            <if test="post.createTime!=null">
+                and create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(update_user,#{post.updateUser}) &gt; 0
+            </if>
+        </trim>
+    </delete>
+
+    <insert id="insertBatch">
+        insert into sys_user
+        (
+        id
+        ,username
+        ,password
+        ,realname
+        ,phone
+        ,email
+        ,reg_date
+        ,del_flag
+        ,sys_flag
+        ,status
+        ,create_time
+        ,create_user
+        ,update_time
+        ,update_user
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}
+            ,#{item.username}
+            ,#{item.password}
+            ,#{item.realname}
+            ,#{item.phone}
+            ,#{item.email}
+            ,#{item.regDate}
+            ,#{item.delFlag}
+            ,#{item.sysFlag}
+            ,#{item.status}
+            ,#{item.createTime}
+            ,#{item.createUser}
+            ,#{item.updateTime}
+            ,#{item.updateUser}
+            )
+        </foreach>
+
+    </insert>
+</mapper>

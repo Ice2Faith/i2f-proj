@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.i2f.sys.mapper.SysDeptMapper">
+    <!--
+    * @author Ice2Faith
+    * @date 2023-07-04 17:30:12
+    * @desc sys_dept 部门表
+    -->
+
+    <resultMap id="mapDoResultMap" type="com.i2f.sys.data.dom.SysDeptDo">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="remark" column="remark"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="level" column="level"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateUser" column="update_user"/>
+    </resultMap>
+
+    <resultMap id="mapVoResultMap" type="com.i2f.sys.data.vo.SysDeptVo"
+               extends="mapDoResultMap">
+        <result property="levelDesc" column="level_desc"/>
+        <result property="statusDesc" column="status_desc"/>
+    </resultMap>
+
+    <sql id="columnsAsCamel">
+           a.id
+          ,a.name
+          ,a.remark
+          ,a.parent_id as parentId
+          ,a.level
+          ,a.status
+          ,a.create_time as createTime
+          ,a.create_user as createUser
+          ,a.update_time as updateTime
+          ,a.update_user as updateUser
+    </sql>
+
+    <sql id="columnDescAsCamel">
+          a.level_desc as levelDesc
+          ,a.status_desc as statusDesc
+    </sql>
+
+    <sql id="baseQueryBody">
+        select
+              a.id
+              ,a.name
+              ,a.remark
+              ,a.parent_id
+              ,a.level
+              ,a.status
+              ,a.create_time
+              ,a.create_user
+              ,a.update_time
+              ,a.update_user
+        from sys_dept a
+    </sql>
+
+    <sql id="baseQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.name!=null and post.name!=''">
+                and instr(a.name,#{post.name}) &gt; 0
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                and instr(a.remark,#{post.remark}) &gt; 0
+            </if>
+            <if test="post.parentId!=null">
+                and a.parent_id = #{post.parentId}
+            </if>
+            <if test="post.level!=null">
+                and a.level = #{post.level}
+            </if>
+            <if test="post.status!=null">
+                and a.status = #{post.status}
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(a.create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and a.update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(a.update_user,#{post.updateUser}) &gt; 0
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="list" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="findByPk" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSelective">
+        insert into sys_dept
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                id,
+            </if>
+            <if test="post.name!=null and post.name!=''">
+                name,
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                remark,
+            </if>
+            <if test="post.parentId!=null">
+                parent_id,
+            </if>
+            <if test="post.level!=null">
+                level,
+            </if>
+            <if test="post.status!=null">
+                status,
+            </if>
+            <if test="post.createTime!=null">
+                create_time,
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user,
+            </if>
+            <if test="post.updateTime!=null">
+                update_time,
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user,
+            </if>
+        </trim>
+        )
+        values
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                #{post.id},
+            </if>
+            <if test="post.name!=null and post.name!=''">
+                #{post.name},
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                #{post.remark},
+            </if>
+            <if test="post.parentId!=null">
+                #{post.parentId},
+            </if>
+            <if test="post.level!=null">
+                #{post.level},
+            </if>
+            <if test="post.status!=null">
+                #{post.status},
+            </if>
+            <if test="post.createTime!=null">
+                #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                #{post.createUser},
+            </if>
+            <if test="post.updateTime!=null">
+                #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                #{post.updateUser},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateSelectiveByPk">
+        update sys_dept
+        <set>
+            <if test="post.id!=null">
+                id = #{post.id},
+            </if>
+            <if test="post.name!=null and post.name!=''">
+                name = #{post.name},
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                remark = #{post.remark},
+            </if>
+            <if test="post.parentId!=null">
+                parent_id = #{post.parentId},
+            </if>
+            <if test="post.level!=null">
+                level = #{post.level},
+            </if>
+            <if test="post.status!=null">
+                status = #{post.status},
+            </if>
+            <if test="post.createTime!=null">
+                create_time = #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user = #{post.createUser},
+            </if>
+            <if test="post.updateTime!=null">
+                update_time = #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user = #{post.updateUser},
+            </if>
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteByPk">
+        delete from sys_dept
+        where id = #{id}
+    </delete>
+
+    <insert id="insert">
+        insert into sys_dept
+        (
+                    id
+             ,name
+             ,remark
+             ,parent_id
+             ,level
+             ,status
+             ,create_time
+             ,create_user
+             ,update_time
+             ,update_user
+                            )
+        values
+        (
+                    #{post.id}
+             ,#{post.name}
+             ,#{post.remark}
+             ,#{post.parentId}
+             ,#{post.level}
+             ,#{post.status}
+             ,#{post.createTime}
+             ,#{post.createUser}
+             ,#{post.updateTime}
+             ,#{post.updateUser}
+                            )
+    </insert>
+
+    <update id="updateByPk">
+        update sys_dept
+        <set>
+            id = #{post.id},
+            name = #{post.name},
+            remark = #{post.remark},
+            parent_id = #{post.parentId},
+            level = #{post.level},
+            status = #{post.status},
+            create_time = #{post.createTime},
+            create_user = #{post.createUser},
+            update_time = #{post.updateTime},
+            update_user = #{post.updateUser},
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteSelective">
+        delete from sys_dept
+        where
+        <trim suffixOverrides="and|or" prefixOverrides="and|or">
+            <if test="post.id!=null">
+                and id = #{post.id}
+            </if>
+            <if test="post.name!=null and post.name!=''">
+                and instr(name,#{post.name}) &gt; 0
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                and instr(remark,#{post.remark}) &gt; 0
+            </if>
+            <if test="post.parentId!=null">
+                and parent_id = #{post.parentId}
+            </if>
+            <if test="post.level!=null">
+                and level = #{post.level}
+            </if>
+            <if test="post.status!=null">
+                and status = #{post.status}
+            </if>
+            <if test="post.createTime!=null">
+                and create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(update_user,#{post.updateUser}) &gt; 0
+            </if>
+        </trim>
+    </delete>
+
+    <insert id="insertBatch">
+        insert into sys_dept
+        (
+        id
+        ,name
+        ,remark
+        ,parent_id
+        ,level
+        ,status
+        ,create_time
+        ,create_user
+        ,update_time
+        ,update_user
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}
+            ,#{item.name}
+            ,#{item.remark}
+            ,#{item.parentId}
+            ,#{item.level}
+            ,#{item.status}
+            ,#{item.createTime}
+            ,#{item.createUser}
+            ,#{item.updateTime}
+            ,#{item.updateUser}
+            )
+        </foreach>
+
+    </insert>
+</mapper>
