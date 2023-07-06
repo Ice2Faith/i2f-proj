@@ -1,4 +1,4 @@
-package com.i2f.sys.controller;
+﻿package com.i2f.sys.controller;
 
 
 import com.i2f.sys.data.vo.SysConfigVo;
@@ -13,8 +13,8 @@ import java.util.List;
 
 /**
  * @author Ice2Faith
- * @date 2023-07-04 17:31:20
- * @desc sys_config 配置表
+ * @date 2023-07-06 16:46:18
+ * @desc sys_config
  */
 @Slf4j
 @RestController
