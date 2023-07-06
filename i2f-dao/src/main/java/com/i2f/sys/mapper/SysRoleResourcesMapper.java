@@ -1,6 +1,7 @@
 package com.i2f.sys.mapper;
 
 import com.i2f.sys.data.dom.SysRoleResourcesDo;
+import com.i2f.sys.data.vo.SysResourcesVo;
 import com.i2f.sys.data.vo.SysRoleResourcesVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,4 +36,13 @@ public interface SysRoleResourcesMapper {
     <T extends SysRoleResourcesDo> int deleteSelective(@Param("post") T post);
 
     int insertBatch(@Param("list") Collection<? extends SysRoleResourcesDo> list);
+
+    int deleteByResId(@Param("resId")Long resId);
+
+    int deleteRoleResources(@Param("roleId")Long roleId);
+
+    List<SysResourcesVo> findRoleResources(@Param("roleId")Long roleId);
+
+    List<String> findRolePermKeys(@Param("roleId")Long roleId);
+
 }

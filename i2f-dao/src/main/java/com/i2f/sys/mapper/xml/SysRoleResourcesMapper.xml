@@ -197,6 +197,15 @@
         </trim>
     </delete>
 
+    <delete id="deleteByResId">
+        delete from sys_role_resources
+        where res_id=#{resId}
+    </delete>
+    <delete id="deleteRoleResources">
+        delete from sys_role_resources
+        where role_id=#{roleId}
+    </delete>
+
     <insert id="insertBatch">
         insert into sys_role_resources
         (

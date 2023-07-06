@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.Set;
+
 /**
  * @author Ice2Faith
  * @date 2023-07-04 15:47:56
@@ -38,4 +40,9 @@ public class SysUserVo extends SysUserDo {
     protected String statusDesc;
 
 
+    protected Set<String> urls;
+    protected Set<String> perms;
+    protected Set<String> menus;
+    protected Set<String> roles;
+    protected Set<String> depts;
 }

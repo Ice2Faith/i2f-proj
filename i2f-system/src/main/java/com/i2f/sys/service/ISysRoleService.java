@@ -1,8 +1,10 @@
 package com.i2f.sys.service;
 
+import com.i2f.sys.data.vo.SysResourcesVo;
 import com.i2f.sys.data.vo.SysRoleVo;
 import i2f.core.std.api.ApiPage;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,4 +26,18 @@ public interface ISysRoleService {
     void update(SysRoleVo webVo);
 
     void delete(Long id);
+
+    void enable(Long id);
+
+    void disable(Long id);
+
+    List<SysResourcesVo> findRoleResources(Long roleId);
+
+    List<String> findRolePermKeys(Long roleId);
+
+    void deleteRoleResources(Long roleId);
+
+    void updateRoleResources(Long roleId, Collection<Long> resIds);
+
+
 }

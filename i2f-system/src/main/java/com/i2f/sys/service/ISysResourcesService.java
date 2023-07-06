@@ -24,4 +24,10 @@ public interface ISysResourcesService {
     void update(SysResourcesVo webVo);
 
     void delete(Long id);
+
+    void enable(Long id);
+
+    void disable(Long id);
+
+
 }

@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/sysConfig")
+@RequestMapping("/api/sys/config")
 public class SysConfigController {
 
 

@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/sysUser")
+@RequestMapping("/api/sys/user")
 public class SysUserController {
 
     @Autowired

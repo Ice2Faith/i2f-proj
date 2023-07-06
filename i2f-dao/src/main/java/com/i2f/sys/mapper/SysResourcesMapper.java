@@ -35,4 +35,19 @@ public interface SysResourcesMapper {
     <T extends SysResourcesDo> int deleteSelective(@Param("post") T post);
 
     int insertBatch(@Param("list") Collection<? extends SysResourcesDo> list);
+
+    List<SysResourcesVo> findRoleResources(@Param("roleId")Long roleId);
+
+    List<String> findRolePermKeys(@Param("roleId")Long roleId);
+
+    List<SysResourcesVo> findUserResources(@Param("userId") Long userId);
+
+    List<String> findUserPermKeys(@Param("userId")Long userId);
+
+
+    int countOfMenuKey(@Param("key")String key,
+                       @Param("excludesIds")Collection<Object> excludesIds);
+
+    int countOfPermKey(@Param("key")String key,
+                       @Param("excludesIds")Collection<Object> excludesIds);
 }

@@ -2,6 +2,7 @@ package com.i2f.hello.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ public class HelloController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @PreAuthorize("hasAuthority('MENU_home') && hasRole('admin')")
     @PostMapping(value = "/hello")
     public Object hello(HttpServletRequest request, @RequestBody Map<String, Object> body) {
         body.put("addr", request.getRemoteAddr());

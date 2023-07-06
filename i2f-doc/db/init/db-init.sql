@@ -59,7 +59,7 @@ create table sys_resources
  id bigint auto_increment primary key comment 'ID',
  name varchar(300) comment '名称',
  menu_key varchar(300) comment '菜单键',
- type int not null default 0 comment '类型：0 菜单，1 接口，2 按钮，3 权限',
+ type int not null default 0 comment '类型：0 菜单，1 权限',
  url varchar(4096) comment 'URL',
  perm_key varchar(300) comment '权限键',
  remark varchar(300) comment '备注',
@@ -130,6 +130,7 @@ on sys_config(status,parent_entry_id);
 create table sys_dept
 (
  id bigint auto_increment primary key comment 'ID',
+ dept_key varchar(300) NULL COMMENT '部门键',
  name varchar(300) comment '名称',
  remark varchar(1024) comment '备注',
  parent_id bigint comment '父资源ID，见：sys_dept.id',
@@ -162,8 +163,8 @@ insert into sys_config (group_key,group_name,type_key,type_name,entry_id,entry_k
 	 (1,'系统',1,'配置',1,'sys:name','SSWP','应用名称',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,'2023-07-04 14:55:04','3000-01-01 00:00:00',1,0,1,'2023-07-04 14:55:04','sys',NULL,NULL),
 	 (1,'系统',1,'配置',2,'sys:icon','icon-sswp','应用图标',2,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,'2023-07-04 14:55:04','3000-01-01 00:00:00',1,0,1,'2023-07-04 14:55:04','sys',NULL,NULL);
 
-insert into sys_dept (id,name,remark,parent_id,`level`,status,create_time,create_user,update_time,update_user) values
-	 (1,'根',NULL,NULL,0,1,'2023-07-04 14:51:51','sys',NULL,NULL);
+insert into sys_dept (id,dept_key,name,remark,parent_id,`level`,status,create_time,create_user,update_time,update_user) values
+	 (1,'/','根',NULL,NULL,0,1,'2023-07-04 14:51:51','sys',NULL,NULL);
 
 insert into sys_resources (id,name,menu_key,`type`,url,perm_key,remark,parent_id,status,create_time,create_user,update_time,update_user) values
 	 (1,'首页','home',0,'/home','home',NULL,NULL,1,'2023-07-04 14:50:21','sys',NULL,NULL);

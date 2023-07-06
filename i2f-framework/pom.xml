@@ -19,6 +19,11 @@
 
         <dependency>
             <groupId>com.i2f</groupId>
+            <artifactId>i2f-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.i2f</groupId>
             <artifactId>i2f-common</artifactId>
         </dependency>
 

@@ -35,4 +35,15 @@ public interface SysRoleMapper {
     <T extends SysRoleDo> int deleteSelective(@Param("post") T post);
 
     int insertBatch(@Param("list") Collection<? extends SysRoleDo> list);
+
+    List<SysRoleVo> findUserRoles(@Param("userId") Long userId);
+
+    List<String> findUserRoleKeys(@Param("userId")Long userId);
+
+    int countOfKey(@Param("key")String key,
+                   @Param("excludesIds")Collection<Object> excludesIds);
+
+    int deleteLogicalByPk(@Param("post") SysRoleVo post);
+
+    int disableByPk(@Param("post") SysRoleVo post);
 }

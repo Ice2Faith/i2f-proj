@@ -9,6 +9,7 @@
 
     <resultMap id="mapDoResultMap" type="com.i2f.sys.data.dom.SysDeptDo">
         <id property="id" column="id"/>
+        <result property="deptKey" column="dept_key"/>
         <result property="name" column="name"/>
         <result property="remark" column="remark"/>
         <result property="parentId" column="parent_id"/>
@@ -28,6 +29,7 @@
 
     <sql id="columnsAsCamel">
            a.id
+          ,a.dept_key
           ,a.name
           ,a.remark
           ,a.parent_id as parentId
@@ -47,6 +49,7 @@
     <sql id="baseQueryBody">
         select
               a.id
+              ,a.dept_key
               ,a.name
               ,a.remark
               ,a.parent_id
@@ -64,6 +67,9 @@
         <where>
             <if test="post.id!=null">
                 and a.id = #{post.id}
+            </if>
+            <if test="post.deptKey!=null and post.deptKey!=''">
+                and instr(a.dept_key,#{post.deptKey}) &gt; 0
             </if>
             <if test="post.name!=null and post.name!=''">
                 and instr(a.name,#{post.name}) &gt; 0
@@ -107,6 +113,72 @@
         <include refid="baseQueryBody"></include>
         where a.id = #{id}
     </select>
+    <select id="findUserDepts" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where exists (
+            select 1 from sys_user_dept m
+            where m.user_id=#{userId}
+            and m.dept_id=a.id
+        )
+        and a.status=1
+    </select>
+    <select id="findUserDeptKeys" resultType="java.lang.String">
+        select
+        distinct dept_key
+        from sys_dept a
+        where a.dept_key is not null
+        and exists (
+            select 1 from sys_user_dept m
+            where m.user_id=#{userId}
+            and m.dept_id=a.id
+        )
+        and a.status=1
+    </select>
+
+    <select id="countOfKey" resultType="java.lang.Integer">
+        select count(*) cnt
+        form sys_dept
+        where dept_key=#{key}
+        and status != 99
+        <if test="excludesIds!=null and excludesIds.size>0">
+            and id not in
+            <foreach collection="excludesIds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+    <update id="deleteLogicalByPk">
+        update sys_dept
+        <set>
+            status=99,
+            <if test="post.updateTime!=null">
+                update_time = #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user = #{post.updateUser},
+            </if>
+        </set>
+        where id=#{post.id}
+        and del_flag=1
+        and sys_flag=0
+    </update>
+
+    <update id="disableByPk">
+        update sys_dept
+        <set>
+            status=0,
+            <if test="post.updateTime!=null">
+                update_time = #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user = #{post.updateUser},
+            </if>
+        </set>
+        where id=#{post.id}
+        and sys_flag=0
+    </update>
 
     <insert id="insertSelective">
         insert into sys_dept
@@ -114,6 +186,9 @@
         <trim suffixOverrides="," prefixOverrides=",">
             <if test="post.id!=null">
                 id,
+            </if>
+            <if test="post.deptKey!=null and post.deptKey!=''">
+                dept_key,
             </if>
             <if test="post.name!=null and post.name!=''">
                 name,
@@ -149,6 +224,9 @@
         <trim suffixOverrides="," prefixOverrides=",">
             <if test="post.id!=null">
                 #{post.id},
+            </if>
+            <if test="post.deptKey!=null and post.deptKey!=''">
+                #{post.deptKey},
             </if>
             <if test="post.name!=null and post.name!=''">
                 #{post.name},
@@ -186,6 +264,9 @@
         <set>
             <if test="post.id!=null">
                 id = #{post.id},
+            </if>
+            <if test="post.deptKey!=null and post.deptKey!=''">
+                dept_key = #{post.deptKey},
             </if>
             <if test="post.name!=null and post.name!=''">
                 name = #{post.name},
@@ -227,6 +308,7 @@
         insert into sys_dept
         (
                     id
+             ,dept_key
              ,name
              ,remark
              ,parent_id
@@ -240,6 +322,7 @@
         values
         (
                     #{post.id}
+             ,#{post.deptKey}
              ,#{post.name}
              ,#{post.remark}
              ,#{post.parentId}
@@ -256,6 +339,7 @@
         update sys_dept
         <set>
             id = #{post.id},
+            dept_key = #{post.deptKey},
             name = #{post.name},
             remark = #{post.remark},
             parent_id = #{post.parentId},
@@ -275,6 +359,9 @@
         <trim suffixOverrides="and|or" prefixOverrides="and|or">
             <if test="post.id!=null">
                 and id = #{post.id}
+            </if>
+            <if test="post.deptKey!=null and post.deptKey!=''">
+                and instr(dept_key,#{post.deptKey}) &gt; 0
             </if>
             <if test="post.name!=null and post.name!=''">
                 and instr(name,#{post.name}) &gt; 0
@@ -310,6 +397,7 @@
         insert into sys_dept
         (
         id
+        ,dept_key
         ,name
         ,remark
         ,parent_id
@@ -324,6 +412,7 @@
         <foreach collection="list" item="item" separator=",">
             (
             #{item.id}
+            ,#{item.deptKey}
             ,#{item.name}
             ,#{item.remark}
             ,#{item.parentId}

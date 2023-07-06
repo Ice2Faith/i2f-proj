@@ -2,6 +2,7 @@ package com.i2f.sys.mapper;
 
 import com.i2f.sys.data.dom.SysDeptDo;
 import com.i2f.sys.data.vo.SysDeptVo;
+import com.i2f.sys.data.vo.SysRoleVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -35,4 +36,15 @@ public interface SysDeptMapper {
     <T extends SysDeptDo> int deleteSelective(@Param("post") T post);
 
     int insertBatch(@Param("list") Collection<? extends SysDeptDo> list);
+
+    List<SysDeptVo> findUserDepts(@Param("userId")Long userId);
+
+    List<String> findUserDeptKeys(@Param("userId")Long userId);
+
+    int countOfKey(@Param("key")String key,
+                   @Param("excludesIds")Collection<Object> excludesIds);
+
+    int deleteLogicalByPk(@Param("post") SysDeptVo post);
+
+    int disableByPk(@Param("post") SysDeptVo post);
 }

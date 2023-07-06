@@ -27,6 +27,11 @@ public class SysDeptDo {
     protected Long id;
 
     /**
+     * 部门键
+     */
+    protected String deptKey;
+
+    /**
      * 名称
      */
     protected String name;

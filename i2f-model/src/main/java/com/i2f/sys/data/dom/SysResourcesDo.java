@@ -67,6 +67,11 @@ public class SysResourcesDo {
     protected Integer status;
 
     /**
+     * 排序字段
+     */
+    protected Integer orderIndex;
+
+    /**
      * 创建时间
      */
     protected Date createTime;

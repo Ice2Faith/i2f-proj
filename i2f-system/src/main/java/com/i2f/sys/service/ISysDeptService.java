@@ -24,4 +24,9 @@ public interface ISysDeptService {
     void update(SysDeptVo webVo);
 
     void delete(Long id);
+
+    void enable(Long id);
+
+    void disable(Long id);
+
 }

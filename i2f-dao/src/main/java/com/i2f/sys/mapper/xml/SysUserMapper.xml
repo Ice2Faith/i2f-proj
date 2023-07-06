@@ -64,8 +64,24 @@
               ,a.email
               ,a.reg_date
               ,a.del_flag
+              ,case
+              when a.del_flag=0 then '否'
+              when a.del_flag=1 then '是'
+              else ''
+              end del_flag_desc
               ,a.sys_flag
+              ,case
+              when a.sys_flag=0 then '否'
+              when a.sys_flag=1 then '是'
+              else ''
+              end sys_flag_desc
               ,a.status
+              ,case
+              when a.status=0 then '禁用'
+              when a.status=1 then '启用'
+              when a.status=99 then '删除'
+              else ''
+              end status_desc
               ,a.create_time
               ,a.create_user
               ,a.update_time
@@ -103,9 +119,14 @@
             <if test="post.sysFlag!=null">
                 and a.sys_flag = #{post.sysFlag}
             </if>
-            <if test="post.status!=null">
-                and a.status = #{post.status}
-            </if>
+            <choose>
+                <when test="post.status!=null">
+                    and a.status = #{post.status}
+                </when>
+                <otherwise>
+                    and a.status != 99
+                </otherwise>
+            </choose>
             <if test="post.createTime!=null">
                 and a.create_time = #{post.createTime}
             </if>
@@ -137,6 +158,19 @@
     <select id="findByUsername" resultMap="mapVoResultMap">
         <include refid="baseQueryBody"></include>
         where a.username = #{username}
+        and a.status != 99
+    </select>
+    <select id="countOfKey" resultType="java.lang.Integer">
+        select count(*) cnt
+        form sys_user
+        where user_name=#{key}
+        and status != 99
+        <if test="excludesIds!=null and excludesIds.size>0">
+            and id not in
+            <foreach collection="excludesIds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
     </select>
 
     <insert id="insertSelective">
@@ -288,7 +322,40 @@
     <delete id="deleteByPk">
         delete from sys_user
         where id = #{id}
+        and del_flag=1
+        and sys_flag=0
     </delete>
+
+    <update id="deleteLogicalByPk">
+        update sys_user
+        <set>
+            status=99,
+            <if test="post.updateTime!=null">
+                update_time = #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user = #{post.updateUser},
+            </if>
+        </set>
+        where id=#{post.id}
+        and del_flag=1
+        and sys_flag=0
+    </update>
+
+    <update id="disableByPk">
+        update sys_user
+        <set>
+            status=0,
+            <if test="post.updateTime!=null">
+                update_time = #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user = #{post.updateUser},
+            </if>
+        </set>
+        where id=#{post.id}
+        and sys_flag=0
+    </update>
 
     <insert id="insert">
         insert into sys_user
@@ -348,6 +415,7 @@
         where id = #{post.id}
     </update>
 
+
     <delete id="deleteSelective">
         delete from sys_user
         where
@@ -396,6 +464,7 @@
             </if>
         </trim>
     </delete>
+
 
     <insert id="insertBatch">
         insert into sys_user

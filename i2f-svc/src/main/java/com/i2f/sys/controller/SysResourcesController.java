@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/sysResources")
+@RequestMapping("/api/sys/resources")
 public class SysResourcesController {
 
 

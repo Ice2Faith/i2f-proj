@@ -17,6 +17,7 @@
         <result property="remark" column="remark"/>
         <result property="parentId" column="parent_id"/>
         <result property="status" column="status"/>
+        <result property="orderIndex" column="order_index"/>
         <result property="createTime" column="create_time"/>
         <result property="createUser" column="create_user"/>
         <result property="updateTime" column="update_time"/>
@@ -39,6 +40,7 @@
          ,a.remark
          ,a.parent_id as parentId
          ,a.status
+         ,a.order_index
          ,a.create_time as createTime
          ,a.create_user as createUser
          ,a.update_time as updateTime
@@ -61,6 +63,7 @@
               ,a.remark
               ,a.parent_id
               ,a.status
+              ,a.order_index
               ,a.create_time
               ,a.create_user
               ,a.update_time
@@ -95,8 +98,16 @@
             <if test="post.parentId!=null">
                 and a.parent_id = #{post.parentId}
             </if>
-            <if test="post.status!=null">
-                and a.status = #{post.status}
+            <choose>
+                <when test="post.status!=null">
+                    and a.status = #{post.status}
+                </when>
+                <otherwise>
+                    and a.status != 99
+                </otherwise>
+            </choose>
+            <if test="post.orderIndex!=null">
+                and a.order_index = #{post.orderIndex}
             </if>
             <if test="post.createTime!=null">
                 and a.create_time = #{post.createTime}
@@ -111,6 +122,7 @@
                 and instr(a.update_user,#{post.updateUser}) &gt; 0
             </if>
         </where>
+        order by a.order_index
     </sql>
 
     <select id="page" resultMap="mapVoResultMap">
@@ -124,6 +136,76 @@
     <select id="findByPk" resultMap="mapVoResultMap">
         <include refid="baseQueryBody"></include>
         where a.id = #{id}
+    </select>
+
+    <select id="findRoleResources" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where exists (
+        select 1 from sys_role_resources m
+        where m.role_id=#{roleId}
+        and m.res_id=a.id
+        )
+        and a.status=1
+    </select>
+
+    <select id="findRolePermKeys" resultType="java.lang.String">
+        select distinct perm_key
+        from sys_resources a
+        where a.perm_key is not null
+        and exists (
+            select 1 from sys_role_resources m
+            where m.role_id=#{roleId}
+            and m.res_id=a.id
+        )
+        and a.status=1
+    </select>
+
+    <select id="findUserResources" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where exists (
+            select 1 from sys_role_resources m
+            inner join sys_user_role n on m.role_id=n.role_id
+            where n.user_id=#{userId}
+            and m.res_id=a.id
+        )
+        and a.status=1
+    </select>
+
+    <select id="findUserPermKeys" resultType="java.lang.String">
+        select distinct perm_key
+        from sys_resources a
+        where a.perm_key is not null
+        and exists (
+            select 1 from sys_role_resources m
+            inner join sys_user_role n on m.role_id=n.role_id
+            where n.user_id=#{userId}
+            and m.res_id=a.id
+        )
+        and a.status=1
+    </select>
+    <select id="countOfMenuKey" resultType="java.lang.Integer">
+        select count(*) cnt
+        form sys_resources
+        where menu_key=#{key}
+        and status != 99
+        <if test="excludesIds!=null and excludesIds.size>0">
+            and id not in
+            <foreach collection="excludesIds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <select id="countOfPermKey" resultType="java.lang.Integer">
+        select count(*) cnt
+        form sys_resources
+        where perm_key=#{key}
+        and status != 99
+        <if test="excludesIds!=null and excludesIds.size>0">
+            and id not in
+            <foreach collection="excludesIds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
     </select>
 
     <insert id="insertSelective">
@@ -156,6 +238,9 @@
             </if>
             <if test="post.status!=null">
                 status,
+            </if>
+            <if test="post.orderIndex!=null">
+                order_index,
             </if>
             <if test="post.createTime!=null">
                 create_time,
@@ -200,6 +285,9 @@
             </if>
             <if test="post.status!=null">
                 #{post.status},
+            </if>
+            <if test="post.orderIndex!=null">
+                #{post.orderIndex},
             </if>
             <if test="post.createTime!=null">
                 #{post.createTime},
@@ -247,6 +335,9 @@
             <if test="post.status!=null">
                 status = #{post.status},
             </if>
+            <if test="post.orderIndex!=null">
+                order_index = #{post.orderIndex},
+            </if>
             <if test="post.createTime!=null">
                 create_time = #{post.createTime},
             </if>
@@ -280,6 +371,7 @@
              ,remark
              ,parent_id
              ,status
+             ,order_index
              ,create_time
              ,create_user
              ,update_time
@@ -296,6 +388,7 @@
              ,#{post.remark}
              ,#{post.parentId}
              ,#{post.status}
+             ,#{post.orderIndex}
              ,#{post.createTime}
              ,#{post.createUser}
              ,#{post.updateTime}
@@ -315,6 +408,7 @@
             remark = #{post.remark},
             parent_id = #{post.parentId},
             status = #{post.status},
+            order_index = #{post.orderIndex},
             create_time = #{post.createTime},
             create_user = #{post.createUser},
             update_time = #{post.updateTime},
@@ -354,6 +448,9 @@
             <if test="post.status!=null">
                 and status = #{post.status}
             </if>
+            <if test="post.orderIndex!=null">
+                and order_index = #{post.orderIndex}
+            </if>
             <if test="post.createTime!=null">
                 and create_time = #{post.createTime}
             </if>
@@ -381,6 +478,7 @@
         ,remark
         ,parent_id
         ,status
+        ,order_index
         ,create_time
         ,create_user
         ,update_time
@@ -398,6 +496,7 @@
             ,#{item.remark}
             ,#{item.parentId}
             ,#{item.status}
+            ,#{item.order_index}
             ,#{item.createTime}
             ,#{item.createUser}
             ,#{item.updateTime}

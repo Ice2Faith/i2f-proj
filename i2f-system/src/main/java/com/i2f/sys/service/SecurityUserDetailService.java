@@ -1,10 +1,14 @@
 package com.i2f.sys.service;
 
+import com.i2f.sys.data.vo.SysDeptVo;
+import com.i2f.sys.data.vo.SysResourcesVo;
+import com.i2f.sys.data.vo.SysRoleVo;
 import com.i2f.sys.data.vo.SysUserVo;
-import com.i2f.sys.mapper.SysUserMapper;
+import i2f.core.check.CheckUtil;
 import i2f.springboot.security.model.SecurityGrantedAuthority;
 import i2f.springboot.security.model.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,8 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Ice2Faith
@@ -25,34 +31,89 @@ public class SecurityUserDetailService implements UserDetailsService {
     @Autowired
     protected PasswordEncoder passwordEncoder;
 
-    @Resource
-    private SysUserMapper sysUserMapper;
+    @Autowired
+    private ISysUserService sysUserService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        SysUserVo userVo = sysUserMapper.findByUsername(username);
+        SysUserVo userVo = sysUserService.findByUsername(username);
         if (userVo == null) {
             throw new UsernameNotFoundException("user[" + username + "] not found in system");
         }
         if (StringUtils.isEmpty(userVo.getPassword())
                 || "-".equals(userVo.getPassword())) {
-            String encPass = this.passwordEncoder.encode("123456");
-            SysUserVo updInfo = new SysUserVo();
-            updInfo.setId(userVo.getId());
-            updInfo.setPassword(encPass);
-            sysUserMapper.updateSelectiveByPk(updInfo);
-            userVo = sysUserMapper.findByPk(userVo.getId());
+            sysUserService.changePassword(userVo.getId(),"123456");
+            userVo = sysUserService.find(userVo.getId());
         }
+
+        List<SysRoleVo> roles=sysUserService.findUserRoles(userVo.getId());
+        List<SysResourcesVo> resources=sysUserService.findUserResources(userVo.getId());
+        List<SysDeptVo> depts=sysUserService.findUserDepts(userVo.getId());
+
+        Set<String> urlsSet=new TreeSet<>();
+        Set<String> permsSet=new TreeSet<>();
+        Set<String> menusSet=new TreeSet<>();
+        Set<String> rolesSet=new TreeSet<>();
+        Set<String> deptsSet=new TreeSet<>();
+
+        Set<String> resSet=new TreeSet<>();
+
+        for (SysRoleVo role : roles) {
+            String roleKey = role.getRoleKey();
+            if(!CheckUtil.isEmptyStr(roleKey)){
+                rolesSet.add(roleKey);
+                resSet.add("ROLE_"+roleKey);
+            }
+        }
+
+        for (SysDeptVo dept : depts) {
+            String deptKey = dept.getDeptKey();
+            if(!CheckUtil.isEmptyStr(deptKey)){
+                deptsSet.add(deptKey);
+                resSet.add("DEPT_"+deptKey);
+            }
+        }
+
+        for (SysResourcesVo resource : resources) {
+            String permKey = resource.getPermKey();
+            if(!CheckUtil.isEmptyStr(permKey)){
+                permsSet.add(permKey);
+                resSet.add(permKey);
+            }
+            String menuKey = resource.getMenuKey();
+            if(!CheckUtil.isEmptyStr(menuKey)){
+                menusSet.add(menuKey);
+                resSet.add("MENU_"+menuKey);
+            }
+            String url = resource.getUrl();
+            if(!CheckUtil.isEmptyStr(url)){
+                urlsSet.add(url);
+                resSet.add("URL_"+url);
+            }
+        }
+
+        userVo.setUrls(urlsSet);
+        userVo.setPerms(permsSet);
+        userVo.setMenus(menusSet);
+        userVo.setRoles(rolesSet);
+        userVo.setDepts(deptsSet);
+
+        List<GrantedAuthority> authorities=new ArrayList<>(300);
+        for (String item : resSet) {
+            authorities.add(new SecurityGrantedAuthority(item));
+        }
+
 
         SecurityUser ret = new SecurityUser(userVo.getUsername(),
                 userVo.getPassword(),
-                Arrays.asList(
-                        new SecurityGrantedAuthority("ROLE_admin"),
-                        new SecurityGrantedAuthority("index:home"),
-                        new SecurityGrantedAuthority("/home")
-                )
+                authorities
         );
+
+        userVo.setPassword(null);
+        ret.setEnabled(userVo.getStatus()==1);
+        ret.setTag(userVo);
+
         return ret;
     }
 }
