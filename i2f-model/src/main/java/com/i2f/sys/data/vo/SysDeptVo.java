@@ -2,10 +2,14 @@ package com.i2f.sys.data.vo;
 
 
 import com.i2f.sys.data.dom.SysDeptDo;
+import i2f.core.convert.ITreeNode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Ice2Faith
@@ -16,8 +20,12 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-public class SysDeptVo extends SysDeptDo {
+public class SysDeptVo extends SysDeptDo implements ITreeNode<SysDeptVo> {
 
+    /**
+     * 子节点列表
+     */
+    protected List<SysDeptVo> children;
 
     /**
      * 层级 desc
@@ -32,5 +40,33 @@ public class SysDeptVo extends SysDeptDo {
         return (SysDeptDo) this;
     }
 
+    @Override
+    public void asMyChild(SysDeptVo val) {
+        if (children == null) {
+            children = new LinkedList<>();
+        }
+        children.add(val);
+    }
 
+    @Override
+    public boolean isMyChild(SysDeptVo val) {
+        if (this.id == null) {
+            return false;
+        }
+        if (val.parentId == null) {
+            return false;
+        }
+        return (long) this.id == val.parentId;
+    }
+
+    @Override
+    public boolean isMyParent(SysDeptVo val) {
+        if (this.parentId == null) {
+            return false;
+        }
+        if (val.id == null) {
+            return false;
+        }
+        return (long) this.parentId == val.id;
+    }
 }

@@ -1,6 +1,7 @@
 ﻿package com.i2f.sys.controller;
 
 
+import com.i2f.sys.data.vo.SysConfigItemVo;
 import com.i2f.sys.data.vo.SysConfigVo;
 import com.i2f.sys.service.ISysConfigService;
 import i2f.core.std.api.ApiPage;
@@ -66,5 +67,67 @@ public class SysConfigController {
         return ApiResp.success("ok");
     }
 
+    @GetMapping(value = "/items/id/{configId}")
+    public ApiResp<?> findItemByConfigId(@PathVariable(value = "configId") Long configId) {
+        List<SysConfigItemVo> list = baseService.findConfigItems(configId);
+        return ApiResp.success(list);
+    }
 
+    @GetMapping(value = "/items/key/{configKey}")
+    public ApiResp<?> findItemByConfigKey(@PathVariable(value = "configKey") String configKey) {
+        List<SysConfigItemVo> list = baseService.findConfigItems(configKey);
+        return ApiResp.success(list);
+    }
+
+    @GetMapping(value = "/items/tree/id/{configId}")
+    public ApiResp<?> findItemTreeByConfigId(@PathVariable(value = "configId") Long configId) {
+        List<SysConfigItemVo> list = baseService.treeConfigItems(configId);
+        return ApiResp.success(list);
+    }
+
+    @GetMapping(value = "/items/tree/key/{configKey}")
+    public ApiResp<?> findItemTreeByConfigKey(@PathVariable(value = "configKey") String configKey) {
+        List<SysConfigItemVo> list = baseService.treeConfigItems(configKey);
+        return ApiResp.success(list);
+    }
+
+    @GetMapping(value = "/item/find/{configItemId}")
+    public ApiResp<?> findConfigItem(@PathVariable(value = "configItemId") Long configItemId) {
+        SysConfigItemVo ret = baseService.findConfigItem(configItemId);
+        return ApiResp.success(ret);
+    }
+
+    @PostMapping(value = "/item/add")
+    public ApiResp<?> addConfigItem(@RequestBody SysConfigItemVo webVo) {
+        baseService.addConfigItem(webVo.getConfigId(), webVo);
+        return ApiResp.success("ok");
+    }
+
+    @PutMapping(value = "/item/update/{configItemId}")
+    public ApiResp<?> updateConfigItem(@PathVariable(value = "configItemId") Long configItemId,
+                                       @RequestBody SysConfigItemVo webVo) {
+        webVo.setId(configItemId);
+        baseService.updateConfigItem(webVo);
+        return ApiResp.success("ok");
+    }
+
+    @DeleteMapping(value = "/item/delete/{configItemId}")
+    public ApiResp<?> deleteConfigItem(@PathVariable(value = "configItemId") Long configItemId) {
+        baseService.deleteConfigItem(configItemId);
+        return ApiResp.success("ok");
+    }
+
+    @PutMapping(value = "/items/update/{configId}")
+    public ApiResp<?> updateConfigItems(@PathVariable(value = "configId") Long configId,
+                                        @RequestBody List<SysConfigItemVo> items) {
+
+        baseService.updateConfigItems(configId, items);
+        return ApiResp.success("ok");
+    }
+
+    @DeleteMapping(value = "/items/delete/{configId}")
+    public ApiResp<?> deleteConfigItems(@PathVariable(value = "configId") Long configId) {
+        baseService.deleteConfigItems(configId);
+        return ApiResp.success("ok");
+    }
 }

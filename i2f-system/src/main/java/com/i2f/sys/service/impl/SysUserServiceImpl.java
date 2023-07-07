@@ -14,6 +14,7 @@ import com.i2f.sys.mapper.SysUserMapper;
 import com.i2f.sys.service.ISysUserService;
 import i2f.core.check.CheckUtil;
 import i2f.core.check.Checker;
+import i2f.core.convert.TreeConvertUtil;
 import i2f.core.std.api.ApiPage;
 import i2f.springboot.redisson.annotation.RedisLock;
 import lombok.extern.slf4j.Slf4j;
@@ -218,7 +219,26 @@ public class SysUserServiceImpl implements ISysUserService {
 
     @Override
     public List<SysResourcesVo> findUserResources(Long userId) {
-        return sysResourcesMapper.findUserResources(userId);
+        return sysResourcesMapper.findUserResources(userId, null);
+    }
+
+    @Override
+    public List<SysResourcesVo> treeUserResources(Long userId) {
+        List<SysResourcesVo> list = sysResourcesMapper.findUserResources(userId, null);
+        List<SysResourcesVo> tree = TreeConvertUtil.list2Tree(list);
+        return tree;
+    }
+
+    @Override
+    public List<SysResourcesVo> findUserResourcesMenu(Long userId) {
+        return sysResourcesMapper.findUserResources(userId, "0");
+    }
+
+    @Override
+    public List<SysResourcesVo> treeUserResourcesMenu(Long userId) {
+        List<SysResourcesVo> list = sysResourcesMapper.findUserResources(userId, "0");
+        List<SysResourcesVo> tree = TreeConvertUtil.list2Tree(list);
+        return tree;
     }
 
     @Override

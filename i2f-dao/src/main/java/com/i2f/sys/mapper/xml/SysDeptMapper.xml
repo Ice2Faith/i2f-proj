@@ -55,6 +55,12 @@
               ,a.parent_id
               ,a.level
               ,a.status
+              ,case
+              when a.status=0 then '禁用'
+              when a.status=1 then '启用'
+              when a.status=99 then '删除'
+              else ''
+              end status_desc
               ,a.create_time
               ,a.create_user
               ,a.update_time

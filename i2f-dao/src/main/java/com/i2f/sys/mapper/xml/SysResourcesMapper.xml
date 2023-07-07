@@ -18,6 +18,8 @@
         <result property="parentId" column="parent_id"/>
         <result property="status" column="status"/>
         <result property="orderIndex" column="order_index"/>
+        <result property="icon" column="icon"/>
+        <result property="style" column="style"/>
         <result property="createTime" column="create_time"/>
         <result property="createUser" column="create_user"/>
         <result property="updateTime" column="update_time"/>
@@ -41,6 +43,8 @@
          ,a.parent_id as parentId
          ,a.status
          ,a.order_index
+         ,a.icon
+         ,a.style
          ,a.create_time as createTime
          ,a.create_user as createUser
          ,a.update_time as updateTime
@@ -58,12 +62,25 @@
               ,a.name
               ,a.menu_key
               ,a.type
+              ,case
+              when a.type=0 then '菜单'
+              when a.type=1 then '权限'
+              else ''
+              end type_desc
               ,a.url
               ,a.perm_key
               ,a.remark
               ,a.parent_id
               ,a.status
+              ,case
+              when a.status=0 then '禁用'
+              when a.status=1 then '启用'
+              when a.status=99 then '删除'
+              else ''
+              end status_desc
               ,a.order_index
+              ,a.icon
+              ,a.style
               ,a.create_time
               ,a.create_user
               ,a.update_time
@@ -108,6 +125,12 @@
             </choose>
             <if test="post.orderIndex!=null">
                 and a.order_index = #{post.orderIndex}
+            </if>
+            <if test="post.icon!=null and post.icon!=''">
+                and instr(a.icon,#{post.icon}) &gt; 0
+            </if>
+            <if test="post.style!=null and post.style!=''">
+                and instr(a.style,#{post.style}) &gt; 0
             </if>
             <if test="post.createTime!=null">
                 and a.create_time = #{post.createTime}
@@ -163,12 +186,18 @@
     <select id="findUserResources" resultMap="mapVoResultMap">
         <include refid="baseQueryBody"></include>
         where exists (
-            select 1 from sys_role_resources m
-            inner join sys_user_role n on m.role_id=n.role_id
-            where n.user_id=#{userId}
-            and m.res_id=a.id
+        select 1 from sys_role_resources m
+        inner join sys_user_role n on m.role_id=n.role_id
+        where n.user_id=#{userId}
+        and m.res_id=a.id
         )
         and a.status=1
+        <if test="type!=null and type!=''">
+            and a.type in
+            <foreach collection="type.split(',')" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
     </select>
 
     <select id="findUserPermKeys" resultType="java.lang.String">
@@ -242,6 +271,12 @@
             <if test="post.orderIndex!=null">
                 order_index,
             </if>
+            <if test="post.icon!=null">
+                icon,
+            </if>
+            <if test="post.style!=null">
+                style,
+            </if>
             <if test="post.createTime!=null">
                 create_time,
             </if>
@@ -288,6 +323,12 @@
             </if>
             <if test="post.orderIndex!=null">
                 #{post.orderIndex},
+            </if>
+            <if test="post.icon!=null">
+                #{post.icon},
+            </if>
+            <if test="post.style!=null">
+                #{post.style},
             </if>
             <if test="post.createTime!=null">
                 #{post.createTime},
@@ -338,6 +379,12 @@
             <if test="post.orderIndex!=null">
                 order_index = #{post.orderIndex},
             </if>
+            <if test="post.icon!=null">
+                icon = #{post.icon},
+            </if>
+            <if test="post.style!=null">
+                style = #{post.style},
+            </if>
             <if test="post.createTime!=null">
                 create_time = #{post.createTime},
             </if>
@@ -372,6 +419,8 @@
              ,parent_id
              ,status
              ,order_index
+             ,icon
+             ,style
              ,create_time
              ,create_user
              ,update_time
@@ -389,6 +438,8 @@
              ,#{post.parentId}
              ,#{post.status}
              ,#{post.orderIndex}
+             ,#{post.icon}
+             ,#{post.style}
              ,#{post.createTime}
              ,#{post.createUser}
              ,#{post.updateTime}
@@ -409,6 +460,8 @@
             parent_id = #{post.parentId},
             status = #{post.status},
             order_index = #{post.orderIndex},
+            icon = #{post.icon},
+            style = #{post.style},
             create_time = #{post.createTime},
             create_user = #{post.createUser},
             update_time = #{post.updateTime},
@@ -451,6 +504,12 @@
             <if test="post.orderIndex!=null">
                 and order_index = #{post.orderIndex}
             </if>
+            <if test="post.icon!=null">
+                and icon = #{post.icon}
+            </if>
+            <if test="post.style!=null">
+                and style = #{post.style}
+            </if>
             <if test="post.createTime!=null">
                 and create_time = #{post.createTime}
             </if>
@@ -479,6 +538,8 @@
         ,parent_id
         ,status
         ,order_index
+        ,icon
+        ,style
         ,create_time
         ,create_user
         ,update_time
@@ -497,6 +558,8 @@
             ,#{item.parentId}
             ,#{item.status}
             ,#{item.order_index}
+            ,#{item.icon}
+            ,#{item.style}
             ,#{item.createTime}
             ,#{item.createUser}
             ,#{item.updateTime}

@@ -7,6 +7,7 @@ import com.i2f.sys.data.vo.SysDeptVo;
 import com.i2f.sys.mapper.SysDeptMapper;
 import com.i2f.sys.service.ISysDeptService;
 import i2f.core.check.Checker;
+import i2f.core.convert.TreeConvertUtil;
 import i2f.core.std.api.ApiPage;
 import i2f.springboot.redisson.annotation.RedisLock;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +52,13 @@ public class SysDeptServiceImpl implements ISysDeptService {
     }
 
     @Override
+    public List<SysDeptVo> tree(SysDeptVo webVo) {
+        List<SysDeptVo> list = baseMapper.list(webVo);
+        List<SysDeptVo> tree = TreeConvertUtil.list2Tree(list);
+        return tree;
+    }
+
+    @Override
     public SysDeptVo find(Long id) {
 
         SysDeptVo ret = baseMapper.findByPk(id);
@@ -58,7 +66,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
     }
 
 
-    public void prepare(SysDeptVo webVo){
+    public void prepare(SysDeptVo webVo) {
         Date now=new Date();
         String currentUserId = SecurityUtils.currentUserIdStr();
         if(webVo.getId()==null){

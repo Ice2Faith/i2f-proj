@@ -206,6 +206,89 @@
         where role_id=#{roleId}
     </delete>
 
+    <update id="grantAllResourcesByRoleId">
+        insert into sys_role_resources
+        (role_id,res_id,create_user,create_time)
+
+        select
+        b.id as role_id,a.id as res_id,
+        'sys' as create_user,now() as create_time
+        from sys_resources a,
+        (
+            select id from sys_role
+            where id = #{roleId}
+        ) b
+        where not exists (
+            select 1 from sys_role_resources m
+            where m.role_id=b.id
+            and m.res_id=a.id
+        )
+    </update>
+
+    <update id="grantAllResourcesByRoleKey">
+        insert into sys_role_resources
+        (role_id,res_id,create_user,create_time)
+
+        select
+        b.id as role_id,a.id as res_id,
+        'sys' as create_user,now() as create_time
+        from sys_resources a,
+        (
+            select id from sys_role
+            where role_key = #{roleKey}
+        ) b
+        where not exists (
+            select 1 from sys_role_resources m
+            where m.role_id=b.id
+            and m.res_id=a.id
+        )
+    </update>
+
+    <update id="grantLikeResourcesByRoleId">
+        insert into sys_role_resources
+        (role_id,res_id,create_user,create_time)
+
+        select b.id as role_id,a.res_id
+        from (
+            select a.res_id
+            from sys_role_resources a
+            left join sys_role b on a.role_id =b.id
+            where b.id = #{fromRoleId}
+        ) a,
+        (
+            select id from sys_role
+            where id = #{toRoleId}
+        ) b
+        where not exists (
+            select 1 from sys_role_resources m
+            where m.role_id=b.id
+            and m.res_id=a.res_id
+        )
+    </update>
+
+    <update id="grantLikeResourcesByRoleKey">
+        insert into sys_role_resources
+        (role_id,res_id,create_user,create_time)
+
+        select b.id as role_id,a.res_id
+        from (
+            select a.res_id
+            from sys_role_resources a
+            left join sys_role b on a.role_id =b.id
+            where b.role_key = #{fromRoleKey}
+        ) a,
+        (
+            select id from sys_role
+            where role_key = #{toRoleKey}
+        ) b
+        where not exists (
+            select 1 from sys_role_resources m
+            where m.role_id=b.id
+            and m.res_id=a.res_id
+        )
+    </update>
+
+
     <insert id="insertBatch">
         insert into sys_role_resources
         (

@@ -42,6 +42,12 @@ public interface ISysUserService {
 
     List<SysResourcesVo> findUserResources(Long userId);
 
+    List<SysResourcesVo> treeUserResources(Long userId);
+
+    List<SysResourcesVo> findUserResourcesMenu(Long userId);
+
+    List<SysResourcesVo> treeUserResourcesMenu(Long userId);
+
     List<String> findUserPermKeys(Long userId);
 
     List<SysDeptVo> findUserDepts(Long userId);

@@ -72,6 +72,16 @@ public class SysResourcesDo {
     protected Integer orderIndex;
 
     /**
+     * ICON
+     */
+    protected String icon;
+
+    /**
+     * 样式
+     */
+    protected String style;
+
+    /**
      * 创建时间
      */
     protected Date createTime;

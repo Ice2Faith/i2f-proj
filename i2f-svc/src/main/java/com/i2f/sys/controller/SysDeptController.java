@@ -40,6 +40,12 @@ public class SysDeptController {
         return ApiResp.success(ret);
     }
 
+    @GetMapping(value = "/tree")
+    public ApiResp<?> tree(SysDeptVo webVo) {
+        List<SysDeptVo> ret = baseService.tree(webVo);
+        return ApiResp.success(ret);
+    }
+
     @GetMapping(value = "/find/{id}")
     public ApiResp<?> find(@PathVariable(value = "id") Long id) {
         SysDeptVo ret = baseService.find(id);
@@ -66,5 +72,15 @@ public class SysDeptController {
         return ApiResp.success("ok");
     }
 
+    @PutMapping(value = "/enable/{id}")
+    public ApiResp<?> enable(@PathVariable(value = "id") Long id) {
+        baseService.enable(id);
+        return ApiResp.success("ok");
+    }
 
+    @PutMapping(value = "/disable/{id}")
+    public ApiResp<?> disable(@PathVariable(value = "id") Long id) {
+        baseService.disable(id);
+        return ApiResp.success("ok");
+    }
 }

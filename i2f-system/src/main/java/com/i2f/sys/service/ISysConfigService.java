@@ -30,15 +30,19 @@ public interface ISysConfigService {
 
     List<SysConfigItemVo> findConfigItems(String configKey);
 
+    List<SysConfigItemVo> treeConfigItems(Long configId);
+
+    List<SysConfigItemVo> treeConfigItems(String configKey);
+
     SysConfigItemVo findConfigItem(Long configItemId);
 
-    void addConfigItem(Long configId,SysConfigItemVo webVo);
+    void addConfigItem(Long configId, SysConfigItemVo webVo);
 
     void updateConfigItem(SysConfigItemVo webVo);
 
     void deleteConfigItem(Long configItemId);
 
-    void updateConfigItems(Long configId,List<SysConfigItemVo> items);
+    void updateConfigItems(Long configId, List<SysConfigItemVo> items);
 
     void deleteConfigItems(Long configId);
 }

@@ -2,10 +2,14 @@
 
 
 import com.i2f.sys.data.dom.SysConfigItemDo;
+import i2f.core.convert.ITreeNode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Ice2Faith
@@ -16,7 +20,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-public class SysConfigItemVo extends SysConfigItemDo {
+public class SysConfigItemVo extends SysConfigItemDo implements ITreeNode<SysConfigItemVo> {
 
 
     public SysConfigItemDo parent() {
@@ -49,5 +53,38 @@ public class SysConfigItemVo extends SysConfigItemDo {
      */
     protected String sysFlagDesc;
 
+    /**
+     * 子节点列表
+     */
+    protected List<SysConfigItemVo> children;
 
+    @Override
+    public void asMyChild(SysConfigItemVo val) {
+        if (children == null) {
+            children = new LinkedList<>();
+        }
+        children.add(val);
+    }
+
+    @Override
+    public boolean isMyChild(SysConfigItemVo val) {
+        if (this.id == null) {
+            return false;
+        }
+        if (val.parentEntryId == null) {
+            return false;
+        }
+        return (long) this.id == val.parentEntryId;
+    }
+
+    @Override
+    public boolean isMyParent(SysConfigItemVo val) {
+        if (this.parentEntryId == null) {
+            return false;
+        }
+        if (val.id == null) {
+            return false;
+        }
+        return (long) this.parentEntryId == val.id;
+    }
 }

@@ -9,6 +9,7 @@ import com.i2f.sys.mapper.SysRoleResourcesMapper;
 import com.i2f.sys.service.ISysResourcesService;
 import i2f.core.check.CheckUtil;
 import i2f.core.check.Checker;
+import i2f.core.convert.TreeConvertUtil;
 import i2f.core.std.api.ApiPage;
 import i2f.springboot.redisson.annotation.RedisLock;
 import lombok.extern.slf4j.Slf4j;
@@ -56,14 +57,21 @@ public class SysResourcesServiceImpl implements ISysResourcesService {
     }
 
     @Override
+    public List<SysResourcesVo> tree(SysResourcesVo webVo) {
+        List<SysResourcesVo> list = baseMapper.list(webVo);
+        List<SysResourcesVo> tree = TreeConvertUtil.list2Tree(list);
+        return tree;
+    }
+
+    @Override
     public SysResourcesVo find(Long id) {
 
         SysResourcesVo ret = baseMapper.findByPk(id);
         return ret;
     }
 
-    public void prepare(SysResourcesVo webVo){
-        Date now=new Date();
+    public void prepare(SysResourcesVo webVo) {
+        Date now = new Date();
         String currentUserId = SecurityUtils.currentUserIdStr();
         if(webVo.getId()==null){
             webVo.setCreateTime(now);

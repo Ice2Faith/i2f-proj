@@ -11,6 +11,7 @@ import com.i2f.sys.mapper.SysRoleMapper;
 import com.i2f.sys.mapper.SysRoleResourcesMapper;
 import com.i2f.sys.service.ISysRoleService;
 import i2f.core.check.Checker;
+import i2f.core.convert.TreeConvertUtil;
 import i2f.core.std.api.ApiPage;
 import i2f.springboot.redisson.annotation.RedisLock;
 import lombok.extern.slf4j.Slf4j;
@@ -160,10 +161,16 @@ public class SysRoleServiceImpl implements ISysRoleService {
     }
 
 
-
     @Override
     public List<SysResourcesVo> findRoleResources(Long roleId) {
         return sysResourcesMapper.findRoleResources(roleId);
+    }
+
+    @Override
+    public List<SysResourcesVo> treeRoleResources(Long roleId) {
+        List<SysResourcesVo> list = sysResourcesMapper.findRoleResources(roleId);
+        List<SysResourcesVo> tree = TreeConvertUtil.list2Tree(list);
+        return tree;
     }
 
     @Override
@@ -209,5 +216,23 @@ public class SysRoleServiceImpl implements ISysRoleService {
         sysRoleResourcesMapper.insertBatch(list);
     }
 
+    @Override
+    public void grantAllResources(Long roleId) {
+        sysRoleResourcesMapper.grantAllResourcesByRoleId(roleId);
+    }
 
+    @Override
+    public void grantAllResources(String roleKey) {
+        sysRoleResourcesMapper.grantAllResourcesByRoleKey(roleKey);
+    }
+
+    @Override
+    public void grantLikeResources(Long toRoleId, Long fromRoleId) {
+        sysRoleResourcesMapper.grantLikeResourcesByRoleId(toRoleId, fromRoleId);
+    }
+
+    @Override
+    public void grantLikeResources(String toRoleKey, String fromRoleKey) {
+        sysRoleResourcesMapper.grantLikeResourcesByRoleKey(toRoleKey, fromRoleKey);
+    }
 }

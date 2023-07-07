@@ -99,12 +99,33 @@
               ,a.param4
               ,a.param5
               ,a.status
+              ,case
+              when a.status=0 then '禁用'
+              when a.status=1 then '启用'
+              when a.status=99 then '删除'
+              else ''
+              end status_desc
               ,a.level
               ,a.valid_time
               ,a.invalid_time
               ,a.mod_flag
+              ,case
+              when a.mod_flag=0 then '否'
+              when a.mod_flag=1 then '是'
+              else ''
+              end mod_flag_desc
               ,a.del_flag
+              ,case
+              when a.del_flag=0 then '否'
+              when a.del_flag=1 then '是'
+              else ''
+              end del_flag_desc
               ,a.sys_flag
+              ,case
+              when a.sys_flag=0 then '否'
+              when a.sys_flag=1 then '是'
+              else ''
+              end sys_flag_desc
               ,a.create_time
               ,a.create_user
               ,a.update_time

@@ -17,6 +17,8 @@ public interface ISysResourcesService {
 
     List<SysResourcesVo> list(SysResourcesVo webVo);
 
+    List<SysResourcesVo> tree(SysResourcesVo webVo);
+
     SysResourcesVo find(Long id);
 
     void add(SysResourcesVo webVo);

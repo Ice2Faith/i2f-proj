@@ -33,11 +33,20 @@ public interface ISysRoleService {
 
     List<SysResourcesVo> findRoleResources(Long roleId);
 
+    List<SysResourcesVo> treeRoleResources(Long roleId);
+
     List<String> findRolePermKeys(Long roleId);
 
     void deleteRoleResources(Long roleId);
 
     void updateRoleResources(Long roleId, Collection<Long> resIds);
 
+    void grantAllResources(Long roleId);
+
+    void grantAllResources(String roleKey);
+
+    void grantLikeResources(Long toRoleId, Long fromRoleId);
+
+    void grantLikeResources(String toRoleKey, String fromRoleKey);
 
 }

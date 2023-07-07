@@ -10,6 +10,7 @@ import com.i2f.sys.mapper.SysConfigMapper;
 import com.i2f.sys.service.ISysConfigService;
 import i2f.core.check.CheckUtil;
 import i2f.core.check.Checker;
+import i2f.core.convert.TreeConvertUtil;
 import i2f.core.std.api.ApiPage;
 import i2f.springboot.redisson.annotation.RedisLock;
 import lombok.extern.slf4j.Slf4j;
@@ -122,7 +123,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
         SysConfigVo exInfo = find(webVo.getId());
 
         Checker.begin(true)
-                .isExTrueMsg("配置不允许更新",exInfo.getModFlag()==1);
+                .isExTrueMsg("配置不允许更新", exInfo.getModFlag() == 0);
 
         if(exInfo.getSysFlag()==1){
             webVo.setConfigKey(null);
@@ -166,12 +167,12 @@ public class SysConfigServiceImpl implements ISysConfigService {
     public void delete(Long id) {
         SysConfigVo exInfo = find(id);
         Checker.begin(true)
-                .isExTrueMsg("配置不允许删除",exInfo.getDelFlag()==1)
+                .isExTrueMsg("配置不允许删除", exInfo.getDelFlag() == 0)
                 .isExTrueMsg("系统配置不允许删除",exInfo.getSysFlag()==1);
 
         int cnt=baseMapper.countOfNotDeleteableItems(id);
         Checker.begin(true)
-                .isExTrueMsg("配置存在不允许删除的项",exInfo.getDelFlag()==1);
+                .isExTrueMsg("配置存在不允许删除的项", cnt > 0);
 
         baseMapper.deleteByPk(id);
 
@@ -192,13 +193,27 @@ public class SysConfigServiceImpl implements ISysConfigService {
     }
 
     @Override
+    public List<SysConfigItemVo> treeConfigItems(Long configId) {
+        List<SysConfigItemVo> list = sysConfigItemMapper.findConfigItemsByConfigId(configId);
+        List<SysConfigItemVo> tree = TreeConvertUtil.list2Tree(list);
+        return tree;
+    }
+
+    @Override
+    public List<SysConfigItemVo> treeConfigItems(String configKey) {
+        List<SysConfigItemVo> list = sysConfigItemMapper.findConfigItemsByConfigKey(configKey);
+        List<SysConfigItemVo> tree = TreeConvertUtil.list2Tree(list);
+        return tree;
+    }
+
+    @Override
     public SysConfigItemVo findConfigItem(Long configItemId) {
         return sysConfigItemMapper.findByPk(configItemId);
     }
 
     @Override
     public void addConfigItem(Long configId, SysConfigItemVo webVo) {
-        if(webVo.getStatus()==null){
+        if (webVo.getStatus() == null) {
             webVo.setStatus(1);
         }
         if(webVo.getEntryOrder()==null){
@@ -235,8 +250,8 @@ public class SysConfigServiceImpl implements ISysConfigService {
                 .isNullMsg(webVo.getId(),"ID必填参数");
         SysConfigItemVo exInfo = findConfigItem(webVo.getId());
         Checker.begin(true)
-                .isNullMsg(exInfo,"找不到配置项")
-                .isExTrueMsg("配置项不允许修改",exInfo.getModFlag()==1)
+                .isNullMsg(exInfo, "找不到配置项")
+                .isExTrueMsg("配置项不允许修改", exInfo.getModFlag() == 0)
                 .isExTrueMsg("配置项已删除",exInfo.getStatus()==99);
         exInfo.setConfigId(null);
         prepareItem(webVo);
@@ -251,8 +266,8 @@ public class SysConfigServiceImpl implements ISysConfigService {
                 .isNullMsg(configItemId,"ID必填参数");
         SysConfigItemVo exInfo = findConfigItem(configItemId);
         Checker.begin(true)
-                .isNullMsg(exInfo,"找不到配置项")
-                .isExTrueMsg("配置项不允许删除",exInfo.getDelFlag()==1)
+                .isNullMsg(exInfo, "找不到配置项")
+                .isExTrueMsg("配置项不允许删除", exInfo.getDelFlag() == 0)
                 .isExTrueMsg("系统配置项不允许删除",exInfo.getSysFlag()==1)
                 .isExTrueMsg("配置项已删除",exInfo.getStatus()==99);
 
