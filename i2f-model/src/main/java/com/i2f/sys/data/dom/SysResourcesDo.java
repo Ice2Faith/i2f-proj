@@ -37,7 +37,7 @@ public class SysResourcesDo {
     protected String menuKey;
 
     /**
-     * 类型：0 菜单，1 接口，2 按钮，3 权限
+     * 类型：0 菜单，1 权限
      */
     protected Integer type;
 

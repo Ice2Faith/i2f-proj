@@ -28,7 +28,7 @@ public class SysResourcesVo extends SysResourcesDo implements ITreeNode<SysResou
     protected List<SysResourcesVo> children;
 
     /**
-     * 类型：0 菜单，1 接口，2 按钮，3 权限 desc
+     * 类型：0 菜单，1 权限
      */
     protected String typeDesc;
     /**

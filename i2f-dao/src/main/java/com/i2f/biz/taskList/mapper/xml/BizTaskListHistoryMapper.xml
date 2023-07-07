@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.i2f.biz.taskList.mapper.BizTaskListHistoryMapper">
+    <!--
+    * @author Ice2Faith
+    * @date 2023-07-07 13:54:52
+    * @desc biz_task_list_history 任务处理历史表
+    -->
+
+    <resultMap id="mapDoResultMap" type="com.i2f.biz.taskList.data.dom.BizTaskListHistoryDo">
+        <id property="id" column="id"/>
+        <result property="taskId" column="task_id"/>
+        <result property="level" column="level"/>
+        <result property="value" column="value"/>
+        <result property="progress" column="progress"/>
+        <result property="process" column="process"/>
+        <result property="deadline" column="deadline"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <resultMap id="mapVoResultMap" type="com.i2f.biz.taskList.data.vo.BizTaskListHistoryVo"
+               extends="mapDoResultMap">
+        <result property="levelDesc" column="level_desc"/>
+        <result property="valueDesc" column="value_desc"/>
+        <result property="statusDesc" column="status_desc"/>
+    </resultMap>
+
+    <sql id="columnsAsCamel">
+          a.id
+         ,a.task_id as taskId
+         ,a.level
+         ,a.value
+         ,a.progress
+         ,a.process
+         ,a.deadline
+         ,a.status
+         ,a.remark
+         ,a.create_time as createTime
+    </sql>
+
+    <sql id="columnDescAsCamel">
+          a.level_desc as levelDesc
+         ,a.value_desc as valueDesc
+         ,a.status_desc as statusDesc
+    </sql>
+
+    <sql id="baseQueryBody">
+        select
+               a.id
+              ,a.task_id
+              ,a.level
+              ,a.value
+              ,a.progress
+              ,a.process
+              ,a.deadline
+              ,a.status
+              ,a.remark
+              ,a.create_time
+        from biz_task_list_history a
+    </sql>
+
+    <sql id="baseQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.taskId!=null">
+                and a.task_id = #{post.taskId}
+            </if>
+            <if test="post.level!=null">
+                and a.level = #{post.level}
+            </if>
+            <if test="post.value!=null">
+                and a.value = #{post.value}
+            </if>
+            <if test="post.progress!=null">
+                and a.progress = #{post.progress}
+            </if>
+            <if test="post.process!=null and post.process!=''">
+                and instr(a.process,#{post.process}) &gt; 0
+            </if>
+            <if test="post.deadline!=null">
+                and a.deadline = #{post.deadline}
+            </if>
+            <if test="post.status!=null">
+                and a.status = #{post.status}
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                and instr(a.remark,#{post.remark}) &gt; 0
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="list" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="findByPk" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.id = #{id}
+    </select>
+
+    <select id="historyList" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.task_id = #{taskId}
+        order by a.create_time desc
+    </select>
+
+    <insert id="insertSelective">
+        insert into biz_task_list_history
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                id,
+            </if>
+            <if test="post.taskId!=null">
+                task_id,
+            </if>
+            <if test="post.level!=null">
+                level,
+            </if>
+            <if test="post.value!=null">
+                value,
+            </if>
+            <if test="post.progress!=null">
+                progress,
+            </if>
+            <if test="post.process!=null and post.process!=''">
+                process,
+            </if>
+            <if test="post.deadline!=null">
+                deadline,
+            </if>
+            <if test="post.status!=null">
+                status,
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                remark,
+            </if>
+            <if test="post.createTime!=null">
+                create_time,
+            </if>
+        </trim>
+        )
+        values
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                #{post.id},
+            </if>
+            <if test="post.taskId!=null">
+                #{post.taskId},
+            </if>
+            <if test="post.level!=null">
+                #{post.level},
+            </if>
+            <if test="post.value!=null">
+                #{post.value},
+            </if>
+            <if test="post.progress!=null">
+                #{post.progress},
+            </if>
+            <if test="post.process!=null and post.process!=''">
+                #{post.process},
+            </if>
+            <if test="post.deadline!=null">
+                #{post.deadline},
+            </if>
+            <if test="post.status!=null">
+                #{post.status},
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                #{post.remark},
+            </if>
+            <if test="post.createTime!=null">
+                #{post.createTime},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateSelectiveByPk">
+        update biz_task_list_history
+        <set>
+            <if test="post.id!=null">
+                id = #{post.id},
+            </if>
+            <if test="post.taskId!=null">
+                task_id = #{post.taskId},
+            </if>
+            <if test="post.level!=null">
+                level = #{post.level},
+            </if>
+            <if test="post.value!=null">
+                value = #{post.value},
+            </if>
+            <if test="post.progress!=null">
+                progress = #{post.progress},
+            </if>
+            <if test="post.process!=null and post.process!=''">
+                process = #{post.process},
+            </if>
+            <if test="post.deadline!=null">
+                deadline = #{post.deadline},
+            </if>
+            <if test="post.status!=null">
+                status = #{post.status},
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                remark = #{post.remark},
+            </if>
+            <if test="post.createTime!=null">
+                create_time = #{post.createTime},
+            </if>
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteByPk">
+        delete from biz_task_list_history
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteByTaskId">
+        delete from biz_task_list_history
+        where task_id=#{taskId}
+    </delete>
+
+    <insert id="insert">
+        insert into biz_task_list_history
+        (
+                    id
+             ,task_id
+             ,level
+             ,value
+             ,progress
+             ,process
+             ,deadline
+             ,status
+             ,remark
+             ,create_time
+                            )
+        values
+        (
+                    #{post.id}
+             ,#{post.taskId}
+             ,#{post.level}
+             ,#{post.value}
+             ,#{post.progress}
+             ,#{post.process}
+             ,#{post.deadline}
+             ,#{post.status}
+             ,#{post.remark}
+             ,#{post.createTime}
+                            )
+    </insert>
+
+    <update id="updateByPk">
+        update biz_task_list_history
+        <set>
+            id = #{post.id},
+            task_id = #{post.taskId},
+            level = #{post.level},
+            value = #{post.value},
+            progress = #{post.progress},
+            process = #{post.process},
+            deadline = #{post.deadline},
+            status = #{post.status},
+            remark = #{post.remark},
+            create_time = #{post.createTime},
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteSelective">
+        delete from biz_task_list_history
+        where
+        <trim suffixOverrides="and|or" prefixOverrides="and|or">
+            <if test="post.id!=null">
+                and id = #{post.id}
+            </if>
+            <if test="post.taskId!=null">
+                and task_id = #{post.taskId}
+            </if>
+            <if test="post.level!=null">
+                and level = #{post.level}
+            </if>
+            <if test="post.value!=null">
+                and value = #{post.value}
+            </if>
+            <if test="post.progress!=null">
+                and progress = #{post.progress}
+            </if>
+            <if test="post.process!=null and post.process!=''">
+                and instr(process,#{post.process}) &gt; 0
+            </if>
+            <if test="post.deadline!=null">
+                and deadline = #{post.deadline}
+            </if>
+            <if test="post.status!=null">
+                and status = #{post.status}
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                and instr(remark,#{post.remark}) &gt; 0
+            </if>
+            <if test="post.createTime!=null">
+                and create_time = #{post.createTime}
+            </if>
+        </trim>
+    </delete>
+
+    <insert id="insertBatch">
+        insert into biz_task_list_history
+        (
+        id
+        ,task_id
+        ,level
+        ,value
+        ,progress
+        ,process
+        ,deadline
+        ,status
+        ,remark
+        ,create_time
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}
+            ,#{item.taskId}
+            ,#{item.level}
+            ,#{item.value}
+            ,#{item.progress}
+            ,#{item.process}
+            ,#{item.deadline}
+            ,#{item.status}
+            ,#{item.remark}
+            ,#{item.createTime}
+            )
+        </foreach>
+
+    </insert>
+</mapper>

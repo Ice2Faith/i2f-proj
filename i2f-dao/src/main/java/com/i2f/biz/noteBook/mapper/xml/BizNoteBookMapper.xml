@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.i2f.biz.noteBook.mapper.BizNoteBookMapper">
+    <!--
+    * @author Ice2Faith
+    * @date 2023-07-07 13:57:13
+    * @desc biz_note_book 笔记本
+    -->
+
+    <resultMap id="mapDoResultMap" type="com.i2f.biz.noteBook.data.dom.BizNoteBookDo">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="keywords" column="keywords"/>
+        <result property="content" column="content"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap id="mapVoResultMap" type="com.i2f.biz.noteBook.data.vo.BizNoteBookVo"
+               extends="mapDoResultMap">
+    </resultMap>
+
+    <sql id="columnsAsCamel">
+          a.id
+         ,a.user_id as userId
+         ,a.title
+         ,a.keywords
+         ,a.content
+         ,a.parent_id as parentId
+         ,a.remark
+         ,a.create_time as createTime
+         ,a.update_time as updateTime
+    </sql>
+
+    <sql id="columnDescAsCamel">
+    </sql>
+
+    <sql id="baseQueryBody">
+        select
+               a.id
+              ,a.user_id
+              ,a.title
+              ,a.keywords
+              ,a.content
+              ,a.parent_id
+              ,a.remark
+              ,a.create_time
+              ,a.update_time
+        from biz_note_book a
+    </sql>
+
+    <sql id="baseQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.userId!=null">
+                and a.user_id = #{post.userId}
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                and instr(a.title,#{post.title}) &gt; 0
+            </if>
+            <if test="post.keywords!=null and post.keywords!=''">
+                and instr(a.keywords,#{post.keywords}) &gt; 0
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                and instr(a.content,#{post.content}) &gt; 0
+            </if>
+            <if test="post.parentId!=null">
+                and a.parent_id = #{post.parentId}
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                and instr(a.remark,#{post.remark}) &gt; 0
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.updateTime!=null">
+                and a.update_time = #{post.updateTime}
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="list" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="findByPk" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSelective">
+        insert into biz_note_book
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                id,
+            </if>
+            <if test="post.userId!=null">
+                user_id,
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                title,
+            </if>
+            <if test="post.keywords!=null and post.keywords!=''">
+                keywords,
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                content,
+            </if>
+            <if test="post.parentId!=null">
+                parent_id,
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                remark,
+            </if>
+            <if test="post.createTime!=null">
+                create_time,
+            </if>
+            <if test="post.updateTime!=null">
+                update_time,
+            </if>
+        </trim>
+        )
+        values
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                #{post.id},
+            </if>
+            <if test="post.userId!=null">
+                #{post.userId},
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                #{post.title},
+            </if>
+            <if test="post.keywords!=null and post.keywords!=''">
+                #{post.keywords},
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                #{post.content},
+            </if>
+            <if test="post.parentId!=null">
+                #{post.parentId},
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                #{post.remark},
+            </if>
+            <if test="post.createTime!=null">
+                #{post.createTime},
+            </if>
+            <if test="post.updateTime!=null">
+                #{post.updateTime},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateSelectiveByPk">
+        update biz_note_book
+        <set>
+            <if test="post.id!=null">
+                id = #{post.id},
+            </if>
+            <if test="post.userId!=null">
+                user_id = #{post.userId},
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                title = #{post.title},
+            </if>
+            <if test="post.keywords!=null and post.keywords!=''">
+                keywords = #{post.keywords},
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                content = #{post.content},
+            </if>
+            <if test="post.parentId!=null">
+                parent_id = #{post.parentId},
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                remark = #{post.remark},
+            </if>
+            <if test="post.createTime!=null">
+                create_time = #{post.createTime},
+            </if>
+            <if test="post.updateTime!=null">
+                update_time = #{post.updateTime},
+            </if>
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteByPk">
+        delete from biz_note_book
+        where id = #{id}
+    </delete>
+
+    <insert id="insert">
+        insert into biz_note_book
+        (
+                    id
+             ,user_id
+             ,title
+             ,keywords
+             ,content
+             ,parent_id
+             ,remark
+             ,create_time
+             ,update_time
+                            )
+        values
+        (
+                    #{post.id}
+             ,#{post.userId}
+             ,#{post.title}
+             ,#{post.keywords}
+             ,#{post.content}
+             ,#{post.parentId}
+             ,#{post.remark}
+             ,#{post.createTime}
+             ,#{post.updateTime}
+                            )
+    </insert>
+
+    <update id="updateByPk">
+        update biz_note_book
+        <set>
+            id = #{post.id},
+            user_id = #{post.userId},
+            title = #{post.title},
+            keywords = #{post.keywords},
+            content = #{post.content},
+            parent_id = #{post.parentId},
+            remark = #{post.remark},
+            create_time = #{post.createTime},
+            update_time = #{post.updateTime},
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteSelective">
+        delete from biz_note_book
+        where
+        <trim suffixOverrides="and|or" prefixOverrides="and|or">
+            <if test="post.id!=null">
+                and id = #{post.id}
+            </if>
+            <if test="post.userId!=null">
+                and user_id = #{post.userId}
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                and instr(title,#{post.title}) &gt; 0
+            </if>
+            <if test="post.keywords!=null and post.keywords!=''">
+                and instr(keywords,#{post.keywords}) &gt; 0
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                and instr(content,#{post.content}) &gt; 0
+            </if>
+            <if test="post.parentId!=null">
+                and parent_id = #{post.parentId}
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                and instr(remark,#{post.remark}) &gt; 0
+            </if>
+            <if test="post.createTime!=null">
+                and create_time = #{post.createTime}
+            </if>
+            <if test="post.updateTime!=null">
+                and update_time = #{post.updateTime}
+            </if>
+        </trim>
+    </delete>
+
+    <insert id="insertBatch">
+        insert into biz_note_book
+        (
+        id
+        ,user_id
+        ,title
+        ,keywords
+        ,content
+        ,parent_id
+        ,remark
+        ,create_time
+        ,update_time
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}
+            ,#{item.userId}
+            ,#{item.title}
+            ,#{item.keywords}
+            ,#{item.content}
+            ,#{item.parentId}
+            ,#{item.remark}
+            ,#{item.createTime}
+            ,#{item.updateTime}
+            )
+        </foreach>
+
+    </insert>
+</mapper>
