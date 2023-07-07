@@ -1,4 +1,4 @@
-package com.i2f.sys.sys.controller;
+package com.i2f.sys.controller;
 
 import i2f.spring.security.SecurityUtil;
 import i2f.springboot.security.model.SecurityUser;
