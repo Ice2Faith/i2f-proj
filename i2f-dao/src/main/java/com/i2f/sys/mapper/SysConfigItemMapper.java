@@ -50,4 +50,6 @@ public interface SysConfigItemMapper {
     int countOfEntryKey(@Param("key")String key,
                         @Param("configId")Long configId,
                         @Param("excludesIds")Collection<Object> excludesIds);
+
+    int deleteLogicalByPk(@Param("post")SysConfigItemVo post);
 }

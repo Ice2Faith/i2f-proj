@@ -192,6 +192,11 @@ public class SysConfigServiceImpl implements ISysConfigService {
     }
 
     @Override
+    public SysConfigItemVo findConfigItem(Long configItemId) {
+        return sysConfigItemMapper.findByPk(configItemId);
+    }
+
+    @Override
     public void addConfigItem(Long configId, SysConfigItemVo webVo) {
         if(webVo.getStatus()==null){
             webVo.setStatus(1);
@@ -226,21 +231,54 @@ public class SysConfigServiceImpl implements ISysConfigService {
 
     @Override
     public void updateConfigItem(SysConfigItemVo webVo) {
+        Checker.begin(true)
+                .isNullMsg(webVo.getId(),"ID必填参数");
+        SysConfigItemVo exInfo = findConfigItem(webVo.getId());
+        Checker.begin(true)
+                .isNullMsg(exInfo,"找不到配置项")
+                .isExTrueMsg("配置项不允许修改",exInfo.getModFlag()==1)
+                .isExTrueMsg("配置项已删除",exInfo.getStatus()==99);
+        exInfo.setConfigId(null);
+        prepareItem(webVo);
+        uniqueCheckItem(webVo);
 
+        sysConfigItemMapper.updateSelectiveByPk(webVo);
     }
 
     @Override
     public void deleteConfigItem(Long configItemId) {
+        Checker.begin(true)
+                .isNullMsg(configItemId,"ID必填参数");
+        SysConfigItemVo exInfo = findConfigItem(configItemId);
+        Checker.begin(true)
+                .isNullMsg(exInfo,"找不到配置项")
+                .isExTrueMsg("配置项不允许删除",exInfo.getDelFlag()==1)
+                .isExTrueMsg("系统配置项不允许删除",exInfo.getSysFlag()==1)
+                .isExTrueMsg("配置项已删除",exInfo.getStatus()==99);
 
+        SysConfigItemVo updInfo=new SysConfigItemVo();
+        updInfo.setId(configItemId);
+        prepareItem(updInfo);
+        sysConfigItemMapper.deleteLogicalByPk(updInfo);
     }
 
     @Override
     public void updateConfigItems(Long configId, List<SysConfigItemVo> items) {
-
+        deleteConfigItems(configId);
+        for (SysConfigItemVo item : items) {
+            if(item.getId()!=null){
+                updateConfigItem(item);
+            }else{
+                addConfigItem(configId,item);
+            }
+        }
     }
 
     @Override
     public void deleteConfigItems(Long configId) {
-
+        SysConfigVo updInfo=new SysConfigVo();
+        updInfo.setId(configId);
+        prepare(updInfo);
+        sysConfigItemMapper.deleteItemsLogical(updInfo);
     }
 }

@@ -30,6 +30,8 @@ public interface ISysConfigService {
 
     List<SysConfigItemVo> findConfigItems(String configKey);
 
+    SysConfigItemVo findConfigItem(Long configItemId);
+
     void addConfigItem(Long configId,SysConfigItemVo webVo);
 
     void updateConfigItem(SysConfigItemVo webVo);

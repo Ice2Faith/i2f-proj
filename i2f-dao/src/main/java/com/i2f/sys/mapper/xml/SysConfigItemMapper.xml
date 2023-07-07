@@ -256,6 +256,22 @@
         </if>
     </select>
 
+    <update id="deleteLogicalByPk">
+        update sys_config_item
+        <set>
+            status=99,
+            <if test="post.updateTime!=null">
+                update_time = #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user = #{post.updateUser},
+            </if>
+        </set>
+        where id=#{post.id}
+        and del_flag=1
+        and sys_flag=0
+    </update>
+
     <insert id="insertSelective">
         insert into sys_config_item
         (
@@ -678,6 +694,7 @@
             </if>
         </trim>
     </delete>
+
     <delete id="deleteItemsLogical">
         update sys_config_item
         <set>
@@ -689,7 +706,7 @@
                 update_user = #{post.updateUser},
             </if>
         </set>
-        where id=#{post.id}
+        where config_id=#{post.id}
         and del_flag=1
         and sys_flag=0
     </delete>
