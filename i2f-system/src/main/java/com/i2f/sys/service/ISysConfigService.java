@@ -1,4 +1,4 @@
-﻿package com.i2f.sys.service;
+package com.i2f.sys.service;
 
 import com.i2f.sys.data.vo.SysConfigItemVo;
 import com.i2f.sys.data.vo.SysConfigVo;

@@ -1,4 +1,4 @@
-﻿package com.i2f.sys.data.vo;
+package com.i2f.sys.data.vo;
 
 
 import com.i2f.sys.data.dom.SysConfigItemDo;

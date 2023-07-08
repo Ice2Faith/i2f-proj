@@ -1,4 +1,4 @@
-﻿package com.i2f.sys.data.dom;
+package com.i2f.sys.data.dom;
 
 
 import lombok.Data;

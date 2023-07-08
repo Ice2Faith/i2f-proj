@@ -1,4 +1,4 @@
-﻿package com.i2f.sys.service.impl;
+package com.i2f.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

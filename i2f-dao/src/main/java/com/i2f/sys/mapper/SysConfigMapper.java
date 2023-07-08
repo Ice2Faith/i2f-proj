@@ -1,4 +1,4 @@
-﻿package com.i2f.sys.mapper;
+package com.i2f.sys.mapper;
 
 import com.i2f.sys.data.dom.SysConfigDo;
 import com.i2f.sys.data.vo.SysConfigVo;
