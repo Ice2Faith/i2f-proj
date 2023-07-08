@@ -33,7 +33,7 @@ Router.beforeEach((to, from, next) => {
     // 没有资源权限
     if (routes.indexOf(to.path) < 0) {
         Message.noticeError("没有资源访问权限")
-        next(Auth.getNextRedirect(to.path,to.query))
+        // next(Auth.getNextRedirect(to.path,to.query))
         return
     }
     next()
