@@ -12,7 +12,93 @@
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
         Please enable it to continue.</strong>
 </noscript>
-<div id="app"></div>
-<!-- built files will be auto injected -->
+<div id="app">
+    <div class="space-layer">
+        <div class="space-holder">
+            <div class="space-text">
+                资源加载中...
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+<style>
+    .space-layer {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+    }
+
+    .space-holder {
+        background: rgba(255, 255, 255, 0.8);
+        width: 40vh;
+        height: 40vh;
+        box-shadow: 16px 14px 20px #5c5c5c;
+        border-radius: 10px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .space-holder::before {
+        content: "";
+        background-image: conic-gradient(#53ffdd 20deg, transparent 120deg);
+        width: 150%;
+        height: 150%;
+        position: absolute;
+        animation: rotate 2s linear infinite;
+    }
+
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(-360deg);
+        }
+    }
+
+    .space-holder::after {
+        content: "";
+        width: 35vh;
+        height: 35vh;
+        background: rgba(0, 180, 255, 0.6);
+        position: absolute;
+        border-radius: 10px;
+        display: flex;
+        box-shadow: inset 0px 0px 20px #d8faff;
+    }
+
+    .space-text {
+        justify-content: center;
+        align-items: center;
+        z-index: 200;
+        font-size: 50px;
+        color: white;
+        overflow: hidden;
+        animation: move 3s linear infinite;
+    }
+
+    @keyframes move {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+    .space-holder:hover::before {
+        animation-play-state: paused;
+    }
+
+</style>
 </html>

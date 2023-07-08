@@ -35,6 +35,21 @@ const Routes = [
         component: () => import(/* webpackChunkName: "about" */ '@/views/NoticeCenter.vue')
       },
       {
+        path: '/pri/noteBook',
+        name: 'noteBook',
+        component: () => import('@/views/pri/noteBook/NoteBook.vue')
+      },
+      {
+        path: '/pri/passwordBook',
+        name: 'passwordBook',
+        component: () => import('@/views/pri/passwordBook/PasswordBook.vue')
+      },
+      {
+        path: '/pri/taskList',
+        name: 'passwordBook',
+        component: () => import('@/views/pri/taskList/TaskList.vue')
+      },
+      {
         path: '/about',
         name: 'about',
         // route level code-splitting

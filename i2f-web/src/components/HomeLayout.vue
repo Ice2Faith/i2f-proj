@@ -62,7 +62,7 @@
         <a-layout-content style="margin: 0 16px">
           <a-tabs v-model:activeKey="activeTab"
                   hide-add
-                  style="margin: 16px 0"
+                  style="margin: 5px 0px -8px 0px"
                   type="editable-card"
                   @edit="onTabEdit"
                   @tabClick="onClickTab">
