@@ -62,14 +62,8 @@ const SubMenu = {
         url: item[this.config.url]
       }, item)
     },
-    popClickMenu(item) {
-      this.$emit('click', {
-        key: item[this.config.key],
-        title: item[this.config.title],
-        icon: item[this.config.icon],
-        children: item[this.config.children],
-        url: item[this.config.url]
-      }, item)
+    popClickMenu(item, originItem) {
+      this.$emit('click', item, originItem)
     }
   },
   setup() {
@@ -85,7 +79,7 @@ const SubMenu = {
       <template v-if="!item[config.children]">
         <a-menu-item :key="item[config.key]" @click="onClickMenu(item)">
           <template v-if="item[config.icon]" #icon>
-            <component :is="menu[config.icon]"/>
+            <component :is="item[config.icon]"/>
           </template>
           {{ item[config.title] }}
         </a-menu-item>
@@ -191,14 +185,8 @@ export default defineComponent({
         url: item[this.config.url]
       }, item)
     },
-    popClickMenu(item) {
-      this.$emit('click', {
-        key: item[this.config.key],
-        title: item[this.config.title],
-        icon: item[this.config.icon],
-        children: item[this.config.children],
-        url: item[this.config.url]
-      }, item)
+    popClickMenu(item, originItem) {
+      this.$emit('click', item, originItem)
     }
   },
   setup() {

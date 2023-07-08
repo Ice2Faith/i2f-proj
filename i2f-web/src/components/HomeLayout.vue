@@ -168,10 +168,13 @@ export default {
       if (idx >= 0) {
         this.tabs.splice(idx, 1)
       }
-      if (idx > 0) {
-        let menu = this.tabs[idx - 1]
-        this.onClickTab(menu.key)
+      if (this.tabs.length > 0) {
+        if (idx >= 0) {
+          let menu = this.tabs[Math.max(idx - 1, 0)]
+          this.onClickTab(menu.key)
+        }
       }
+
     },
     onClickMenu(menu) {
       if (!menu.key) {
@@ -194,6 +197,7 @@ export default {
           if (!item.url || item.url == '') {
             return
           }
+          this.activeTab = item.key
           if (item.url.indexOf('://') >= 0) {
             window.open(item.url, '_blank')
           } else {

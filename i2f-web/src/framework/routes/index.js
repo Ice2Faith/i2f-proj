@@ -42,20 +42,20 @@ const Routes = [
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '@/views/AboutView.vue')
       },
+      // 定义错误页
+      {
+        path: '/404',
+        component: Error404,
+        meta: {
+          // 明确指定，不需要访问权限
+          // 未指定的活明确指定为true的，则都需要对应的权限
+          permission: false
+        }
+      },
     ]
   },
 
 
-  // 定义错误页
-  {
-    path: '/404',
-    component: Error404,
-    meta: {
-      // 明确指定，不需要访问权限
-      // 未指定的活明确指定为true的，则都需要对应的权限
-      permission: false
-    }
-  },
   // 最后捕获所有路径，走到这里，表示没有任何路由匹配，也就是404了
   {
     path: '/:pathMatch(.*)*',
