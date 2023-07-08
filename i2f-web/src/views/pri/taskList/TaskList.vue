@@ -31,24 +31,91 @@
         <a-row :gutter="20" justify="center" type="flex">
           <a-col>
             <a-spin :spinning="controls.loading">
-              <a-button type="primary" @click="doSearch">搜索</a-button>
+              <a-button type="primary" @click="doSearch">
+                <template #icon>
+                  <SearchOutlined/>
+                </template>
+                搜索
+              </a-button>
             </a-spin>
           </a-col>
           <a-col>
-            <a-button @click="doReset">重置</a-button>
+            <a-button @click="doReset">
+              <template #icon>
+                <clear-outlined/>
+              </template>
+              重置
+            </a-button>
           </a-col>
         </a-row>
       </a-form-item>
     </a-form>
 
+    <a-row style="margin: 10px;">
+      <a-col :span="12">
+        <a-row :gutter="20">
+          <a-col>
+            <a-button type="primary" @click="doImport">
+              <template #icon>
+                <import-outlined/>
+              </template>
+              导入
+            </a-button>
+          </a-col>
+          <a-col>
+            <a-button type="primary" @click="doExport">
+              <template #icon>
+                <export-outlined/>
+              </template>
+              导出
+            </a-button>
+          </a-col>
+        </a-row>
+      </a-col>
+      <a-col :span="12">
+        <a-row :gutter="20" justify="end">
+          <a-col>
+            <a-button type="primary" @click="doAdd">
+              <template #icon>
+                <plus-outlined/>
+              </template>
+              新增
+            </a-button>
+          </a-col>
+        </a-row>
+      </a-col>
+    </a-row>
     <a-table
       :columns="table.columns"
       :data-source="table.data"
       :loading="controls.loading"
       :pagination="table.page"
+      :scroll="{ x: 1500 }"
+      bordered
       :row-key="record => record[table.rowKey]"
       @change="handleTableChange"
     >
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+        <span>
+          <a-button size="small" @click="doView(record)">
+            <template #icon><eye-outlined/></template>
+            详情
+          </a-button>
+          <a-divider type="vertical"/>
+          <a-button size="small" type="primary" @click="doEdit(record)">
+            <template #icon><edit-outlined/></template>
+            编辑
+          </a-button>
+          <a-divider type="vertical"/>
+          <a-button size="small" style="background-color: orangered;border:solid 1px orangered" type="primary"
+                    @click="doDelete(record)">
+            <template #icon><delete-outlined/></template>
+            删除
+          </a-button>
+        </span>
+        </template>
+      </template>
     </a-table>
   </div>
 </template>
@@ -129,6 +196,13 @@ export default {
             title: '创建日期',
             dataIndex: 'createTime',
           },
+          {
+            title: '操作',
+            key: 'action',
+            fixed: 'right',
+            width: '280px',
+            align: 'center'
+          },
         ]
       }
     }
@@ -163,6 +237,24 @@ export default {
     },
     handleTableChange(pagination, filters, sorter, {currentDataSource}) {
       this.table.page = pagination
+    },
+    doAdd() {
+
+    },
+    doImport() {
+
+    },
+    doExport() {
+
+    },
+    doView(record) {
+
+    },
+    doEdit(record) {
+
+    },
+    doDelete(record) {
+
     }
   }
 }
