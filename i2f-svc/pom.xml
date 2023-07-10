@@ -89,9 +89,7 @@
 						</manifest>
 						<manifestEntries>
 							<!-- 添加自己的classpath，多个classpath之间直接空格隔开，写成多个Class-Path标签将被后面的覆盖 -->
-							<Class-Path>. ./resources/ lib/i2f-core-1.0.jar lib/i2f-j2ee-1.0.jar lib/i2f-spring-1.0.jar
-								lib/i2f-springboot-1.0.jar lib/i2f-extension-1.0.jar
-							</Class-Path>
+							<Class-Path>. ./resources/ lib/i2f-core-1.0.jar lib/i2f-core-j2ee-1.0.jar lib/i2f-spring-1.0.jar lib/i2f-springboot-1.0.jar lib/i2f-extension-1.0.jar</Class-Path>
 							<Timestamp>${maven.build.timestamp}</Timestamp>
 						</manifestEntries>
 					</archive>

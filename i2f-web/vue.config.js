@@ -108,16 +108,16 @@ module.exports = defineConfig({
 
     if (process.env.NODE_ENV != 'dev') {
       // 不是开发环境时，启用gzip压缩
-      config.plugin('compressionPlugin')
-        .use(new CompressionPlugin({
-          filename: '[path].gz[query]',
-          algorithm: 'gzip', // 使用gzip压缩
-          test: productionGzipExtensions, // 匹配文件名
-          threshold: 10240, // 对超过10k的数据压缩
-          minRatio: 0.8, // 压缩率小于0.8才会压缩
-          deleteOriginalAssets: true // 是否删除未压缩的源文件，谨慎设置，如果希望提供非gzip的资源，可不设置或者设置为false（比如删除打包后的gz后还可以加载到原始资源文件）
-        }))
-        .end()
+      // config.plugin('compressionPlugin')
+      //   .use(new CompressionPlugin({
+      //     filename: '[path].gz[query]',
+      //     algorithm: 'gzip', // 使用gzip压缩
+      //     test: productionGzipExtensions, // 匹配文件名
+      //     threshold: 10240, // 对超过10k的数据压缩
+      //     minRatio: 0.8, // 压缩率小于0.8才会压缩
+      //     deleteOriginalAssets: true // 是否删除未压缩的源文件，谨慎设置，如果希望提供非gzip的资源，可不设置或者设置为false（比如删除打包后的gz后还可以加载到原始资源文件）
+      //   }))
+      //   .end()
     }
 
   }

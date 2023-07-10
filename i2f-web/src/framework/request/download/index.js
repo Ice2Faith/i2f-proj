@@ -10,7 +10,7 @@ axios.defaults.timeout = Config.REQUEST_DEFAULT_TIMEOUT
 
 // 定义默认请求
 const DownloadRequest = axios.create({
-  baseURL: Config.REQUEST_PROXY_URL,
+  baseURL: process.env.VUE_APP_BASE_URL,
   timeout: Config.REQUEST_DEFAULT_TIMEOUT,
   responseType: "blob"
 })
