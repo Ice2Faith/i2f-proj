@@ -44,6 +44,16 @@ module.exports = defineConfig({
     hot: true,
     // 是否启用压缩
     compress: process.env.NODE_ENV != 'dev' ? true : false,
+    // 客户端配置
+    client: {
+      // 当出现编译错误或警告时，在浏览器中是否显示全屏覆盖。
+      // 示例为只显示错误信息
+      overlay: {
+        errors: false,
+        warnings: false,
+        runtimeErrors: false
+      },
+    },
     // 代理配置
     proxy: {
       // 代理的接口路径

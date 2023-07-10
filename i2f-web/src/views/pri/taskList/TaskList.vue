@@ -95,7 +95,25 @@
       :row-key="record => record[table.rowKey]"
       @change="handleTableChange"
     >
+      <template #expandedRowRender="{ record }">
+        内容：
+        <p style="margin: 0">
+          {{ record.content }}
+        </p>
+      </template>
       <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'level'">
+          <a-rate style="zoom: 0.7" :value="record.level" :count="10" />
+        </template>
+        <template v-if="column.key === 'value'">
+          <a-rate style="zoom: 0.7" :value="record.value" :count="10" />
+        </template>
+        <template v-if="column.key === 'progress'">
+          <a-slider :value="record.progress" :min="0" :max="100"  />
+        </template>
+        <template v-if="column.key === 'status'">
+          <a-button :style="getRecordStatusStyle(record)">{{record.statusDesc}}</a-button>
+        </template>
         <template v-if="column.key === 'action'">
           <a-row :gutter="5">
             <a-col>
@@ -114,13 +132,35 @@
               </a-button>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item key="1" style="background-color: dodgerblue;color:white" @click="doEdit(record)">
+                  <a-menu-item style="background-color: dodgerblue;color:white" @click="doEdit(record)">
                     <template #icon>
                       <edit-outlined/>
                     </template>
                     编辑
                   </a-menu-item>
-                  <a-menu-item key="2" style="background-color: orangered;color: white" @click="doDelete(record)">
+                  <a-menu-divider />
+                  <a-menu-item :style="getRecordStatusStyle({status: 0})" @click="doRun(record)">
+                    <template #icon>
+                      <tool-outlined />
+                    </template>
+                    运行
+                  </a-menu-item>
+                  <a-menu-divider />
+                  <a-menu-item :style="getRecordStatusStyle({status: 2})" @click="doSuspend(record)">
+                    <template #icon>
+                      <tool-outlined />
+                    </template>
+                    挂起
+                  </a-menu-item>
+                  <a-menu-divider />
+                  <a-menu-item :style="getRecordStatusStyle({status: 1})" @click="doFinish(record)">
+                    <template #icon>
+                      <tool-outlined />
+                    </template>
+                    结束
+                  </a-menu-item>
+                  <a-menu-divider />
+                  <a-menu-item style="background-color: orangered;color: white" @click="doDelete(record)">
                     <template #icon>
                       <delete-outlined/>
                     </template>
@@ -129,37 +169,34 @@
                 </a-menu>
               </template>
             </a-dropdown>
-
-            <a-col>
-
-            </a-col>
-            <a-col>
-
-            </a-col>
           </a-row>
         </template>
       </template>
     </a-table>
 
     <a-modal
-      v-model:visible="dialogs.add.show"
-      :title="dialogs.add.title"
+      v-if="dialogs.detail.show"
+      v-model:visible="dialogs.detail.show"
+      :title="dialogs.detail.title"
       :footer="null"
       width="800px"
     >
-      <AddTaskList @cancel="handleAddCancel"
-                   @submit="handleAddOk"></AddTaskList>
+      <Detail :mode="dialogs.detail.mode"
+              :record="dialogs.detail.record"
+              @cancel="handleDetailCancel"
+              @submit="handleDetailOk"></Detail>
     </a-modal>
   </div>
 </template>
 <script>
 
-import AddTaskList from "@/views/pri/taskList/components/AddTaskList";
+import Detail from "@/views/pri/taskList/components/Detail";
+import FormDetailMode from "@/framework/consts/FormDetailMode";
 
 export default {
   name: 'TaskList',
   components: {
-    AddTaskList
+    Detail
   },
   data() {
     return {
@@ -175,10 +212,28 @@ export default {
         password: [{required: true, message: '请输入密码!'}],
       },
       dialogs: {
-        add: {
+        detail: {
           title: '新增',
           show: false,
+          mode: FormDetailMode.ADD(),
+          record: {},
         }
+      },
+      metas:{
+        baseUrl: '/api/biz/taskList',
+        statusList:[{
+          value: 0,
+          label: '运行',
+          color: '#00cc44'
+        }, {
+          value: 1,
+          label: '结束',
+          color: '#444444'
+        }, {
+          value: 2,
+          label: '挂起',
+          color: '#ff7700'
+        }]
       },
       table: {
         data: [{
@@ -201,20 +256,19 @@ export default {
             dataIndex: 'name',
           },
           {
-            title: '内容',
-            dataIndex: 'content',
-          },
-          {
             title: '等级',
             dataIndex: 'level',
+            key: 'level',
           },
           {
             title: '价值',
             dataIndex: 'value',
+            key: 'value',
           },
           {
             title: '进度',
             dataIndex: 'progress',
+            key: 'progress',
           },
           {
             title: '处理',
@@ -227,6 +281,7 @@ export default {
           {
             title: '状态',
             dataIndex: 'statusDesc',
+            key: 'status',
           },
           {
             title: '备注',
@@ -267,7 +322,7 @@ export default {
       }
       this.controls.loading = true
       this.$axios({
-        url: '/api/biz/taskList/page/' + this.table.page.pageSize + "/" + (this.table.page.current - 1),
+        url: `${this.metas.baseUrl}/page/${this.table.page.pageSize}/${(this.table.page.current - 1)}`,
         method: 'get',
         params: this.form
       }).then(({data}) => {
@@ -282,15 +337,30 @@ export default {
     handleTableChange(pagination, filters, sorter, {currentDataSource}) {
       this.table.page = pagination
     },
+    getRecordStatusStyle(record){
+      for(let key in this.metas.statusList){
+        let item=this.metas.statusList[key]
+        if(item.value==record.status){
+          return {
+            backgroundColor: item.color,
+            border:  `solid 1px ${item.color}`,
+            color: 'white'
+          }
+        }
+      }
+      return {}
+    },
     doAdd() {
-      this.dialogs.add.show = true
-
+      this.dialogs.detail.mode=FormDetailMode.ADD()
+      this.dialogs.detail.title='新增'
+      this.dialogs.detail.show = true
     },
-    handleAddOk() {
-      this.dialogs.add.show = false
+    handleDetailOk() {
+      this.dialogs.detail.show = false
+      this.doSearch()
     },
-    handleAddCancel() {
-      this.dialogs.add.show = false
+    handleDetailCancel() {
+      this.dialogs.detail.show = false
     },
     doImport() {
 
@@ -299,13 +369,52 @@ export default {
 
     },
     doView(record) {
-
+      this.dialogs.detail.mode=FormDetailMode.VIEW()
+      this.dialogs.detail.title='详情'
+      this.dialogs.detail.record=record
+      this.dialogs.detail.show = true
+    },
+    doRun(record){
+      this.$axios({
+        url: `${this.metas.baseUrl}/run/${record.id}`,
+        method: 'put',
+        data: {}
+      }).then(()=>{
+        this.doSearch()
+      })
+    },
+    doSuspend(record){
+      this.$axios({
+        url: `${this.metas.baseUrl}/suspend/${record.id}`,
+        method: 'put',
+        data: {}
+      }).then(()=>{
+        this.doSearch()
+      })
+    },
+    doFinish(record){
+      this.$axios({
+        url: `${this.metas.baseUrl}/finish/${record.id}`,
+        method: 'put',
+        data: {}
+      }).then(()=>{
+        this.doSearch()
+      })
     },
     doEdit(record) {
-
+      this.dialogs.detail.mode=FormDetailMode.EDIT()
+      this.dialogs.detail.title='编辑'
+      this.dialogs.detail.record=record
+      this.dialogs.detail.show = true
     },
     doDelete(record) {
-
+      this.$axios({
+        url: `${this.metas.baseUrl}/delete/${record.id}`,
+        method: 'delete',
+        data: {}
+      }).then(()=>{
+        this.doSearch()
+      })
     }
   }
 }

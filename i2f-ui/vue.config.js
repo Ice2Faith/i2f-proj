@@ -30,6 +30,16 @@ module.exports = defineConfig({
   runtimeCompiler: true,
   // 是否保留代码定位信息
   productionSourceMap: process.env.NODE_ENV == 'prod' ? false : true,
+  // 客户端配置
+  client: {
+    // 当出现编译错误或警告时，在浏览器中是否显示全屏覆盖。
+    // 示例为只显示错误信息
+    overlay: {
+      errors: false,
+      warnings: false,
+      runtimeErrors: false
+    },
+  },
   // 开发服务配置
   devServer: {
     // 主机，绑定任意地址

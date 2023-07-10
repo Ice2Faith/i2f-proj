@@ -9,6 +9,7 @@
         </div>
         <a-form
           :label-col="{ span: 6 }"
+          ref="form"
           :model="form"
           :wrapper-col="{ span: 18 }"
           autocomplete
@@ -76,27 +77,28 @@ export default {
   },
   methods: {
     doLogin() {
-      this.controls.loading = true
-      this.$axios({
-        url: '/login',
-        method: 'post',
-        data: this.form
-      }).then(data => {
-        let token = data.data
-        Auth.setToken(token)
+      this.$refs.form.validateFields().then(()=>{
+        this.controls.loading = true
         this.$axios({
-          url: 'sys/user/info',
-          method: 'post'
+          url: '/login',
+          method: 'post',
+          data: this.form
         }).then(data => {
-          Auth.setUser(data)
-          let user = Auth.getUser()
-          Auth.setRoutes(user.tag.urls)
-          Auth.resolveRedirect('/home')
+          let token = data.data
+          Auth.setToken(token)
+          this.$axios({
+            url: 'sys/user/info',
+            method: 'post'
+          }).then(data => {
+            Auth.setUser(data)
+            let user = Auth.getUser()
+            Auth.setRoutes(user.tag.urls)
+            Auth.resolveRedirect('/home')
+          })
+        }).finally(() => {
+          this.controls.loading = false
         })
-      }).finally(() => {
-        this.controls.loading = false
       })
-
     },
     logout() {
       this.$axios({

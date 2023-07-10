@@ -131,6 +131,7 @@ public class BizTaskListServiceImpl implements IBizTaskListService {
         updInfo.setId(id);
         updInfo.setStatus(2);
         prepare(updInfo);
+        baseMapper.updateSelectiveByPk(updInfo);
         backupHistory(updInfo.getId());
     }
 
@@ -143,6 +144,7 @@ public class BizTaskListServiceImpl implements IBizTaskListService {
         updInfo.setId(id);
         updInfo.setStatus(0);
         prepare(updInfo);
+        baseMapper.updateSelectiveByPk(updInfo);
         backupHistory(updInfo.getId());
     }
 
@@ -155,6 +157,7 @@ public class BizTaskListServiceImpl implements IBizTaskListService {
         updInfo.setId(id);
         updInfo.setStatus(1);
         prepare(updInfo);
+        baseMapper.updateSelectiveByPk(updInfo);
         backupHistory(updInfo.getId());
     }
 

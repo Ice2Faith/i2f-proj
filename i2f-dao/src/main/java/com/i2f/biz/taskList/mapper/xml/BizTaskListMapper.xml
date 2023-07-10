@@ -64,6 +64,11 @@
               ,a.process
               ,a.deadline
               ,a.status
+              ,case
+              when a.status=0 then '运行'
+              when a.status=1 then '结束'
+              when a.status=2 then '挂起'
+              end status_desc
               ,a.remark
               ,a.create_time
               ,a.update_time

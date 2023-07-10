@@ -46,7 +46,7 @@ const Routes = [
       },
       {
         path: '/pri/taskList',
-        name: 'passwordBook',
+        name: 'taskList',
         component: () => import('@/views/pri/taskList/TaskList.vue')
       },
       {
