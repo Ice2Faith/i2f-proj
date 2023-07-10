@@ -97,26 +97,58 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
-        <span>
-          <a-button size="small" @click="doView(record)">
-            <template #icon><eye-outlined/></template>
-            详情
-          </a-button>
-          <a-divider type="vertical"/>
-          <a-button size="small" type="primary" @click="doEdit(record)">
-            <template #icon><edit-outlined/></template>
-            编辑
-          </a-button>
-          <a-divider type="vertical"/>
-          <a-button size="small" style="background-color: orangered;border:solid 1px orangered" type="primary"
-                    @click="doDelete(record)">
-            <template #icon><delete-outlined/></template>
-            删除
-          </a-button>
-        </span>
+          <a-row :gutter="5">
+            <a-col>
+              <a-button @click="doView(record)">
+                <template #icon>
+                  <eye-outlined/>
+                </template>
+                详情
+              </a-button>
+            </a-col>
+
+            <a-dropdown>
+              <a-button>
+                更多
+                <more-outlined/>
+              </a-button>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item key="1" style="background-color: dodgerblue;color:white" @click="doEdit(record)">
+                    <template #icon>
+                      <edit-outlined/>
+                    </template>
+                    编辑
+                  </a-menu-item>
+                  <a-menu-item key="2" style="background-color: orangered;color: white" @click="doDelete(record)">
+                    <template #icon>
+                      <delete-outlined/>
+                    </template>
+                    删除
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
+
+            <a-col>
+
+            </a-col>
+            <a-col>
+
+            </a-col>
+          </a-row>
         </template>
       </template>
     </a-table>
+
+    <a-modal
+      v-model:visible="dialogs.add.show"
+      :confirm-loading="dialogs.add.confirmLoading"
+      :title="dialogs.add.title"
+      @ok="handleAddOk"
+    >
+
+    </a-modal>
   </div>
 </template>
 <script>
@@ -135,6 +167,13 @@ export default {
       rules: {
         username: [{required: true, message: '请输入用户名!'}],
         password: [{required: true, message: '请输入密码!'}],
+      },
+      dialogs: {
+        add: {
+          title: '新增',
+          show: false,
+          confirmLoading: false,
+        }
       },
       table: {
         data: [{
@@ -200,7 +239,7 @@ export default {
             title: '操作',
             key: 'action',
             fixed: 'right',
-            width: '280px',
+            width: '200px',
             align: 'center'
           },
         ]
@@ -239,7 +278,17 @@ export default {
       this.table.page = pagination
     },
     doAdd() {
+      this.dialogs.add.show = true
+      this.dialogs.add.confirmLoading = false
 
+    },
+    handleAddOk() {
+      let _this = this
+      this.dialogs.add.confirmLoading = true
+      setTimeout(() => {
+        _this.dialogs.add.confirmLoading = false
+        _this.dialogs.add.show = false
+      }, 1000)
     },
     doImport() {
 

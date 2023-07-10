@@ -5,7 +5,7 @@
       </div>
       <div class="login-box login-form">
         <div class="login-title">
-          开放、安全
+          念
         </div>
         <a-form
           :label-col="{ span: 6 }"
@@ -42,7 +42,7 @@
         </a-form>
       </div>
       <div class="login-footer">
-        开放、安全 @Copyright 2023 created by Ice2Faith
+        念 @Copyright 2023 created by Ice2Faith
       </div>
     </div>
   </div>

@@ -3,7 +3,7 @@
     <a-layout style="min-height: 100vh">
       <a-layout-sider v-model:collapsed="collapsed" collapsible>
         <div class="logo">
-          开放、安全
+          念
         </div>
         <MenuTree :config="menuConfig" :menus="menus" @click="onClickMenu"></MenuTree>
       </a-layout-sider>
@@ -77,7 +77,7 @@
           </div>
         </a-layout-content>
         <a-layout-footer style="text-align: center">
-          开放、安全 @Copyright 2023 created by Ice2Faith
+          念 @Copyright 2023 created by Ice2Faith
         </a-layout-footer>
       </a-layout>
     </a-layout>

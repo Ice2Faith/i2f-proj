@@ -8,6 +8,7 @@
 
 import SecureTransfer from "@/framework/secure/core/secure-transfer";
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
+import '../resizer/DebounceResizeObserver'
 
 export default {
   name: 'App',
