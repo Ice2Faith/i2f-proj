@@ -143,18 +143,24 @@
 
     <a-modal
       v-model:visible="dialogs.add.show"
-      :confirm-loading="dialogs.add.confirmLoading"
       :title="dialogs.add.title"
-      @ok="handleAddOk"
+      :footer="null"
+      width="800px"
     >
-
+      <AddTaskList @cancel="handleAddCancel"
+                   @submit="handleAddOk"></AddTaskList>
     </a-modal>
   </div>
 </template>
 <script>
 
+import AddTaskList from "@/views/pri/taskList/components/AddTaskList";
+
 export default {
   name: 'TaskList',
+  components: {
+    AddTaskList
+  },
   data() {
     return {
       form: {
@@ -172,7 +178,6 @@ export default {
         add: {
           title: '新增',
           show: false,
-          confirmLoading: false,
         }
       },
       table: {
@@ -279,16 +284,13 @@ export default {
     },
     doAdd() {
       this.dialogs.add.show = true
-      this.dialogs.add.confirmLoading = false
 
     },
     handleAddOk() {
-      let _this = this
-      this.dialogs.add.confirmLoading = true
-      setTimeout(() => {
-        _this.dialogs.add.confirmLoading = false
-        _this.dialogs.add.show = false
-      }, 1000)
+      this.dialogs.add.show = false
+    },
+    handleAddCancel() {
+      this.dialogs.add.show = false
     },
     doImport() {
 
