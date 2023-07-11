@@ -162,7 +162,7 @@
     </select>
     <select id="countOfKey" resultType="java.lang.Integer">
         select count(*) cnt
-        form sys_user
+        from sys_user
         where user_name=#{key}
         and status != 99
         <if test="excludesIds!=null and excludesIds.size>0">

@@ -67,7 +67,7 @@ public class SysRoleDo {
     protected Date updateTime;
 
     /**
-     * 更新时间
+     * 更新人
      */
     protected String updateUser;
 

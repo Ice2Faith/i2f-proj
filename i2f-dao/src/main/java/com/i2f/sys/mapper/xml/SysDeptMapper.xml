@@ -143,7 +143,7 @@
 
     <select id="countOfKey" resultType="java.lang.Integer">
         select count(*) cnt
-        form sys_dept
+        from sys_dept
         where dept_key=#{key}
         and status != 99
         <if test="excludesIds!=null and excludesIds.size>0">

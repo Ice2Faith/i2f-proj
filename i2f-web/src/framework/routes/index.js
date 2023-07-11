@@ -23,6 +23,16 @@ const Routes = [
     component: Home,
     children: [
       {
+        path: '/sys/role',
+        name: 'sysRole',
+        component: () => import('@/views/sys/role/SysRole.vue')
+      },
+      {
+        path: '/sys/resources',
+        name: 'sysResources',
+        component: () => import('@/views/sys/resources/SysResources.vue')
+      },
+      {
         path: '/home',
         component: Hello
       },
