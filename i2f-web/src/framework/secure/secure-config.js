@@ -20,7 +20,7 @@ const SecureConfig = {
    parameterName: SecureConsts.DEFAULT_SECURE_PARAMETER_NAME(),
    // 是否开启详细日志
    // 在正式环境中，请禁用
-   enableDebugLog: true,
+   enableDebugLog: process.env.NODE_ENV!='prod',
    // 加密配置的白名单url
    whileList: ['/secure/key', '/secure/clientKey'],
    // 加密URL的URL白名单

@@ -90,15 +90,17 @@ public class BizPasswordBookServiceImpl implements IBizPasswordBookService {
                 .isExTrueMsg("您无法访问该资源", (long) exInfo.getUserId() != currentUserId);
     }
 
-    public Pair<String, String> getAesKey() {
+    public Pair<String, String> getAesKey(String salt) {
         try {
             SysUserVo user = SecurityUtils.currentUser();
             String username = user.getUsername();
-            String salt = CodeUtil.makeCheckCode(16, false);
+            if(CheckUtil.isEmptyStr(salt)){
+                salt = CodeUtil.makeCheckCode(16, false);
+            }
             String signText = username + ":" + salt;
             String sign = MessageDigestUtil.SHA256.mdsBase64(CodecUtil.toUtf8(signText));
             String originPass = CodecUtil.toBase64(CodecUtil.toUtf8(sign + ":" + signText));
-            SecretKey secretKey = CipherUtil.genSecretKey(AesType.ECB_ISO10126PADDING, CodecUtil.toUtf8(originPass), 16);
+            SecretKey secretKey = CipherUtil.genSecretKey(AesType.ECB_ISO10126PADDING, CodecUtil.toUtf8(originPass), 128);
             String aesKey = CodecUtil.toHexString(secretKey.getEncoded());
             return new Pair<>(aesKey, salt);
         } catch (Exception e) {
@@ -112,7 +114,7 @@ public class BizPasswordBookServiceImpl implements IBizPasswordBookService {
         if (webVo == null) {
             return;
         }
-        Pair<String, String> key = getAesKey();
+        Pair<String, String> key = getAesKey(null);
         String aesKey = key.key;
 
         if (!CheckUtil.isEmptyStr(webVo.getAccount())) {
@@ -136,7 +138,7 @@ public class BizPasswordBookServiceImpl implements IBizPasswordBookService {
         if (webVo == null) {
             return;
         }
-        Pair<String, String> key = getAesKey();
+        Pair<String, String> key = getAesKey(webVo.getSalt());
         String aesKey = key.key;
 
         if (!CheckUtil.isEmptyStr(webVo.getAccount())) {

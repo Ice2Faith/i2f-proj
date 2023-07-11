@@ -105,6 +105,12 @@
             <if test="post.deadline!=null">
                 and a.deadline = #{post.deadline}
             </if>
+            <if test="post.deadlineBegin!=null and post.deadlineBegin!=''">
+                and a.deadline &gt;= concat( #{post.deadlineBegin},' 00:00:00')
+            </if>
+            <if test="post.deadlineEnd!=null and post.deadlineEnd!=''">
+                and a.deadline &lt;= concat( #{post.deadlineEnd},' 23:59:59')
+            </if>
             <if test="post.status!=null">
                 and a.status = #{post.status}
             </if>

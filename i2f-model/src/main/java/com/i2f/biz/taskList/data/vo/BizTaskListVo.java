@@ -17,6 +17,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class BizTaskListVo extends BizTaskListDo {
+    public BizTaskListDo parent() {
+        return (BizTaskListDo) this;
+    }
 
 
     /**
@@ -32,9 +35,9 @@ public class BizTaskListVo extends BizTaskListDo {
      */
     protected String statusDesc;
 
-    public BizTaskListDo parent() {
-        return (BizTaskListDo) this;
-    }
 
+    protected String deadlineBegin;
+
+    protected String deadlineEnd;
 
 }

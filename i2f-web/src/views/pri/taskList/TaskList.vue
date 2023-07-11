@@ -11,21 +11,55 @@
       @keyup.enter="doSearch"
     >
       <a-form-item
-        :rules="rules.username"
-        label="用户名"
-        name="username"
+        label="截止时间"
+        name="name">
+        <a-range-picker v-model:value="beforeForm.deadline"
+                        valueFormat="YYYY-MM-DD"
+                        format="YYYY-MM-DD"
+                        @change="onDeadlineRangeChange" />
+      </a-form-item>
+      <a-form-item
+        label="名称"
+        name="name"
       >
-        <a-input v-model:value="form.username"/>
+        <a-input v-model:value="form.name" allow-clear/>
       </a-form-item>
 
       <a-form-item
-        :rules="rules.password"
-        label="密码"
-        name="password"
+        label="状态"
+        name="status"
       >
-        <a-input-password v-model:value="form.password"/>
+        <a-select
+          v-model:value="form.status"
+          show-search
+          allow-clear
+          placeholder="请选择"
+          :options="metas.statusList"
+          :filter-option="filterOption"
+        >
+        </a-select>
       </a-form-item>
 
+      <a-form-item
+        label="内容"
+        name="content"
+      >
+        <a-input v-model:value="form.content" allow-clear/>
+      </a-form-item>
+
+      <a-form-item
+        label="处理"
+        name="process"
+      >
+        <a-input v-model:value="form.process" allow-clear/>
+      </a-form-item>
+
+      <a-form-item
+        label="备注"
+        name="remark"
+      >
+        <a-input v-model:value="form.remark" allow-clear/>
+      </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 0, span: 24 }">
         <a-row :gutter="20" justify="center" type="flex">
@@ -194,22 +228,28 @@ import Detail from "@/views/pri/taskList/components/Detail";
 import FormDetailMode from "@/framework/consts/FormDetailMode";
 
 export default {
-  name: 'TaskList',
   components: {
     Detail
   },
   data() {
     return {
+      beforeForm:{
+        deadline: []
+      },
       form: {
-        username: '',
-        password: ''
+        name: '',
+        status: null,
+        content: '',
+        process: '',
+        remark: '',
+        deadlineBegin: '',
+        deadlineEnd: ''
       },
       controls: {
         loading: false,
       },
       rules: {
-        username: [{required: true, message: '请输入用户名!'}],
-        password: [{required: true, message: '请输入密码!'}],
+
       },
       dialogs: {
         detail: {
@@ -310,6 +350,19 @@ export default {
     this.doSearch()
   },
   methods: {
+    filterOption(input, option) {
+      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    },
+    onDeadlineRangeChange(){
+      let range=this.beforeForm.deadline
+      if(range && range.length==2){
+        this.form.deadlineBegin=range[0]
+        this.form.deadlineEnd=range[1]
+      }else{
+        this.form.deadlineBegin=''
+        this.form.deadlineEnd=''
+      }
+    },
     doSearch() {
       this.getData(true)
     },

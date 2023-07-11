@@ -120,15 +120,21 @@
           <a-timeline-item v-for="(item,index) in historyList"
                            :color="getRecordStatusColor(item)">
             <h4>
-              <span style="font-weight: bold">{{item.progress}}%</span> {{item.process}}
+              <span style="font-weight: bold">{{ item.progress }}%</span> {{ item.process }}
             </h4>
             <div style="zoom: 0.6">
-              <a-rate :value="item.level" :count="10" />
-              <a-rate :value="item.value" :count="10" />
-              <a-slider :value="item.progress" :min="0" :max="100"  />
+              <a-rate :value="item.level" :count="10"/>
+              <a-rate :value="item.value" :count="10"/>
+              <a-slider :value="item.progress" :min="0" :max="100"/>
             </div>
             <p>
-              {{item.createTime}}
+              <a-popover title="内容" trigger="click">
+                <template #content>
+                    备注：{{item.remark}}<br/>
+                    截止时间：{{item.deadline}}<br/>
+                </template>
+                  <a-button type="link">{{ item.createTime }}</a-button>
+                </a-popover>
             </p>
           </a-timeline-item>
         </a-timeline>
