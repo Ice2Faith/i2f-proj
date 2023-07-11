@@ -224,7 +224,6 @@ export default {
       return this.mode==FormDetailMode.ADD() || this.mode==FormDetailMode.EDIT()
     },
     filterOption(input, option) {
-      debugger
       return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     },
     doCancel() {
