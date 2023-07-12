@@ -72,7 +72,7 @@
                         :tab="pane.title">
             </a-tab-pane>
           </a-tabs>
-          <div :style="{ padding: '24px', background: '#fff', minHeight: '75vh' }">
+          <div class="main-content">
             <router-view></router-view>
           </div>
         </a-layout-content>
@@ -253,5 +253,23 @@ export default {
 
 [data-theme='dark'] .site-layout .site-layout-background {
   background: #141414;
+}
+</style>
+<style>
+.main-content{
+  padding: 24px;
+  background: #fff;
+  height: 75vh;
+  overflow: auto;
+}
+@media (min-width:769px) and (max-width: 1280px) {
+  .main-content{
+    height: 122vh;
+  }
+}
+@media (max-width: 768px) {
+  .main-content{
+    height: 170vh;
+  }
 }
 </style>

@@ -64,4 +64,5 @@ export default {
 #app .ant-form-item .ant-select{
   min-width: 195px;
 }
+
 </style>

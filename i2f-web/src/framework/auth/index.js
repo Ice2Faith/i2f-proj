@@ -16,17 +16,35 @@ const Auth = {
   isAuth() {
     return this.getToken() && this.getToken() != ''
   },
+  getStorageItem(key){
+    let ret=sessionStorage.getItem(key)
+    if(ret==null || ret==undefined){
+      ret=localStorage.getItem(key)
+    }
+    if(ret!=null && ret!=undefined){
+      sessionStorage.setItem(key,ret)
+    }
+    return ret
+  },
+  setStorageItem(key,value){
+    sessionStorage.setItem(key,value)
+    localStorage.setItem(key,value)
+  },
+  removeStorageItem(key){
+    sessionStorage.removeItem(key)
+    localStorage.removeItem(key)
+  },
   // 获取登录令牌
   getToken() {
-    return sessionStorage.getItem(this.TOKEN_STORE_KEY())
+    return this.getStorageItem(this.TOKEN_STORE_KEY())
   },
   // 设置登录令牌
   setToken(token) {
-    sessionStorage.setItem(this.TOKEN_STORE_KEY(), token)
+    this.setStorageItem(this.TOKEN_STORE_KEY(), token)
   },
   // 移除登录令牌
   removeToken() {
-    sessionStorage.removeItem(this.TOKEN_STORE_KEY())
+    this.removeStorageItem(this.TOKEN_STORE_KEY())
   },
   // 常量，表示存储routes的键
   ROUTES_STORE_KEY() {
@@ -35,11 +53,11 @@ const Auth = {
   // 设置账号所拥有的的路由
   setRoutes(arr) {
     let dt = Base64Util.encodeObj(arr)
-    sessionStorage.setItem(this.ROUTES_STORE_KEY(), dt)
+    this.setStorageItem(this.ROUTES_STORE_KEY(), dt)
   },
   // 获取账号所拥有的路由
   getRoutes() {
-    let dt = sessionStorage.getItem(this.ROUTES_STORE_KEY())
+    let dt = this.getStorageItem(this.ROUTES_STORE_KEY())
     if (!dt || dt == '') {
       return []
     }
@@ -87,11 +105,11 @@ const Auth = {
   // 设置账号所拥有的的路由
   setUser(arr) {
     let dt = this.localEncrypt(arr)
-    sessionStorage.setItem(this.USER_STORE_KEY(), dt)
+    this.setStorageItem(this.USER_STORE_KEY(), dt)
   },
   // 获取账号所拥有的路由
   getUser() {
-    let dt = sessionStorage.getItem(this.USER_STORE_KEY())
+    let dt = this.getStorageItem(this.USER_STORE_KEY())
     let ret = this.localDecrypt(dt)
     return ret
   },

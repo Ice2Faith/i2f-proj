@@ -120,18 +120,20 @@ export default {
   background-size: 100% 100%;
   background-repeat: no-repeat;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  position: fixed;
 }
 
 .login-box {
   min-width: 420px;
   width: 25%;
-  height: 30vh;
+  height: 250px;
   position: fixed;
   right: 15%;
-  top: 25vh;
-  padding: 8vh;
-  border-radius: 2vh;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 36px;
+  border-radius: 12px;
 }
 
 .login-mask {
