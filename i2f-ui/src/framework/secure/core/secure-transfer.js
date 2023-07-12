@@ -17,7 +17,7 @@ const SecureTransfer = {
   },
   // 添加安全请求头到headers中，openSecureParams表示是否启用安全参数，openSecureUrl表示是否启用安全URL编码
   getSecureHeaderInto(headers, openSecureParams, openSecureUrl) {
-    headers[SecureConsts.SECURE_DATA_HEADER()]=SecureConsts.FLAG_ENABLE();
+    headers[SecureConsts.SECURE_DATA_HEADER()] = SecureConsts.FLAG_ENABLE();
 
     if (openSecureParams) {
       headers[SecureConsts.SECURE_PARAMS_HEADER()] = SecureConsts.FLAG_ENABLE();
@@ -28,17 +28,35 @@ const SecureTransfer = {
 
     return headers;
   },
+  getStorageItem(key){
+    let ret=sessionStorage.getItem(key)
+    if(ret==null || ret==undefined){
+      ret=localStorage.getItem(key)
+    }
+    if(ret!=null &&ret!=undefined){
+      sessionStorage.setItem(key,ret)
+    }
+    return ret
+  },
+  setStorageItem(key,value){
+    sessionStorage.setItem(key,value)
+    localStorage.setItem(key,value)
+  },
+  removeStorageItem(key){
+    sessionStorage.removeItem(key)
+    localStorage.removeItem(key)
+  },
   // 存储asym公钥的键名
   ASYM_PUBKEY_NAME() {
     return "SECURE_PUB";
   },
   // 保存asym公钥
   saveAsymPubKey(pubKey) {
-    return sessionStorage.setItem(this.ASYM_PUBKEY_NAME(), pubKey);
+    return this.setStorageItem(this.ASYM_PUBKEY_NAME(), pubKey);
   },
   // 加载asym公钥
   loadAsymPubKey() {
-    let pubKey = sessionStorage.getItem(this.ASYM_PUBKEY_NAME());
+    let pubKey = this.getStorageItem(this.ASYM_PUBKEY_NAME());
     return Base64Obfuscator.decode(pubKey);
   },
   ASYM_PRIKEY_NAME() {
@@ -46,15 +64,15 @@ const SecureTransfer = {
   },
   // 保存asym公钥
   saveAsymPriKey(priKey) {
-    return sessionStorage.setItem(this.ASYM_PRIKEY_NAME(), priKey);
+    return this.setStorageItem(this.ASYM_PRIKEY_NAME(), priKey);
   },
   // 加载asym公钥
   loadAsymPriKey() {
-    let priKey = sessionStorage.getItem(this.ASYM_PRIKEY_NAME());
+    let priKey = this.getStorageItem(this.ASYM_PRIKEY_NAME());
     return Base64Obfuscator.decode(priKey);
   },
   existsAsymPriKey() {
-    let priKey = sessionStorage.getItem(this.ASYM_PRIKEY_NAME());
+    let priKey = this.getStorageItem(this.ASYM_PRIKEY_NAME());
     return !StringUtils.isEmpty(priKey)
   },
   // 随机生成symm秘钥
