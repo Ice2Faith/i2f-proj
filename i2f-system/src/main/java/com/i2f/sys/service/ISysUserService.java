@@ -56,5 +56,5 @@ public interface ISysUserService {
 
     SysUserVo findByUsername(String username);
 
-
+    String findUserPassword(Long id);
 }

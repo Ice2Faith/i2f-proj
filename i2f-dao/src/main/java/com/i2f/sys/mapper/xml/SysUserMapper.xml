@@ -505,4 +505,9 @@
         </foreach>
 
     </insert>
+    <select id="findUserPassword" resultType="java.lang.String">
+        select password
+         from  sys_user
+        where id=#{id}
+    </select>
 </mapper>

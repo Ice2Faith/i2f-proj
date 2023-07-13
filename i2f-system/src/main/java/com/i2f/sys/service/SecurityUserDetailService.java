@@ -41,6 +41,8 @@ public class SecurityUserDetailService implements UserDetailsService {
         if (userVo == null) {
             throw new UsernameNotFoundException("user[" + username + "] not found in system");
         }
+        String pass = sysUserService.findUserPassword(userVo.getId());
+        userVo.setPassword(pass);
         if (StringUtils.isEmpty(userVo.getPassword())
                 || "-".equals(userVo.getPassword())) {
             sysUserService.changePassword(userVo.getId(),"123456");

@@ -260,4 +260,9 @@ public class SysUserServiceImpl implements ISysUserService {
     public SysUserVo findByUsername(String username) {
         return baseMapper.findByUsername(username);
     }
+
+    @Override
+    public String findUserPassword(Long id){
+        return baseMapper.findUserPassword(id);
+    }
 }

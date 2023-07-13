@@ -44,4 +44,6 @@ public interface SysUserMapper {
 
     int countOfKey(@Param("key")String key,
                    @Param("excludesIds")Collection<Object> excludesIds);
+
+    String findUserPassword(@Param("id")Long id);
 }
