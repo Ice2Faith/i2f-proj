@@ -8,10 +8,10 @@
           念
         </div>
         <a-form
-          :label-col="{ span: 6 }"
+          :label-col="{ span: 4 }"
           ref="form"
           :model="form"
-          :wrapper-col="{ span: 18 }"
+          :wrapper-col="{ span: 20 }"
           autocomplete
           name="basic"
           @keyup.enter="doLogin"

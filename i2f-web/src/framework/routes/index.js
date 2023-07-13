@@ -33,6 +33,21 @@ const Routes = [
         component: () => import('@/views/sys/resources/SysResources.vue')
       },
       {
+        path: '/sys/dept',
+        name: 'sysDept',
+        component: () => import('@/views/sys/dept/SysDept.vue')
+      },
+      {
+        path: '/sys/config',
+        name: 'sysConfig',
+        component: () => import('@/views/sys/config/SysConfig.vue')
+      },
+      {
+        path: '/sys/user',
+        name: 'sysUser',
+        component: () => import('@/views/sys/user/SysUser.vue')
+      },
+      {
         path: '/home',
         component: Hello
       },

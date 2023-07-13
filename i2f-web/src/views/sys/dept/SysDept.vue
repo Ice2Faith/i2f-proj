@@ -11,17 +11,32 @@
       @keyup.enter="doSearch"
     >
       <a-form-item
-        label="标题"
-        name="title"
+        label="部门键"
+        name="deptKey"
       >
-        <a-input v-model:value="form.title" allow-clear/>
+        <a-input v-model:value="form.deptKey" allow-clear/>
       </a-form-item>
 
       <a-form-item
-        label="关键字"
-        name="keywords"
+        label="名称"
+        name="name"
       >
-        <a-input v-model:value="form.keywords" allow-clear/>
+        <a-input v-model:value="form.name" allow-clear/>
+      </a-form-item>
+
+      <a-form-item
+        label="状态"
+        name="status"
+      >
+        <a-select
+          v-model:value="form.status"
+          show-search
+          allow-clear
+          placeholder="请选择"
+          :options="metas.statusList"
+          :filter-option="filterOption"
+        >
+        </a-select>
       </a-form-item>
 
       <a-form-item
@@ -118,12 +133,6 @@
               </a-button>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item style="background-color: lightseagreen;color:white" @click="doPreview(record)">
-                    <template #icon>
-                      <eye-outlined/>
-                    </template>
-                    阅览
-                  </a-menu-item>
                   <a-menu-item style="background-color: dodgerblue;color:white" @click="doEdit(record)">
                     <template #icon>
                       <edit-outlined/>
@@ -158,61 +167,57 @@
               @submit="handleDetailOk"></Detail>
     </a-modal>
 
-    <a-modal
-      v-if="dialogs.preview.show"
-      v-model:visible="dialogs.preview.show"
-      :title="dialogs.preview.title"
-      @ok="dialogs.preview.show=false"
-      width="100%"
-      wrap-class-name="full-modal"
-    >
-      <markdown-editor :text="dialogs.preview.record.content"
-                       :fullscreen="false"
-                       :height="'auto'"
-                       :edit="false">
-      </markdown-editor>
-    </a-modal>
   </div>
 </template>
 <script>
 
 import Detail from "./components/Detail";
-import MarkdownEditor from "@/components/MarkdownEditor";
 
 import ListManageMixin from "@/mixins/ListManageMixin";
 
 export default {
   components: {
-    MarkdownEditor,
     Detail
   },
   mixins: [ListManageMixin],
   data() {
     return {
-      moduleBaseUrl: '/api/biz/noteBook',
+      moduleBaseUrl: '/api/sys/dept',
 
       form: {
-        title: '',
-        keywords: '',
+        deptKey: '',
+        name: '',
+        status: '',
         remark: ''
       },
       rules: {},
       dialogs: {
-        preview: {
-          title: '阅览',
-          show: false,
-          record: {},
-        }
+
       },
-      metas: {},
+      metas: {
+        statusList:[{
+          value: 0,
+          label: '禁用',
+        }, {
+          value: 1,
+          label: '启用',
+        }, {
+          value: 99,
+          label: '删除',
+        }],
+      },
       tableColumns: [
         {
-          title: '标题',
-          dataIndex: 'title',
+          title: '部门键',
+          dataIndex: 'deptKey',
         },
         {
-          title: '关键字',
-          dataIndex: 'keywords',
+          title: '名称',
+          dataIndex: 'name',
+        },
+        {
+          title: '状态',
+          dataIndex: 'statusDesc',
         },
         {
           title: '备注',
@@ -223,8 +228,16 @@ export default {
           dataIndex: 'updateTime',
         },
         {
+          title: '更新人',
+          dataIndex: 'updateUser',
+        },
+        {
           title: '创建日期',
           dataIndex: 'createTime',
+        },
+        {
+          title: '创建人',
+          dataIndex: 'createUser',
         },
         {
           title: '操作',
@@ -244,38 +257,6 @@ export default {
     doExport() {
 
     },
-    doPreview(record) {
-      this.dialogs.preview.title = '阅览'
-      this.dialogs.preview.record = record
-      this.dialogs.preview.show = true
-    },
-    doRun(record) {
-      this.$axios({
-        url: `${this.moduleBaseUrl}/run/${record.id}`,
-        method: 'put',
-        data: {}
-      }).then(() => {
-        this.doSearch()
-      })
-    },
-    doSuspend(record) {
-      this.$axios({
-        url: `${this.moduleBaseUrl}/suspend/${record.id}`,
-        method: 'put',
-        data: {}
-      }).then(() => {
-        this.doSearch()
-      })
-    },
-    doFinish(record) {
-      this.$axios({
-        url: `${this.moduleBaseUrl}/finish/${record.id}`,
-        method: 'put',
-        data: {}
-      }).then(() => {
-        this.doSearch()
-      })
-    }
   }
 }
 </script>

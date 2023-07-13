@@ -129,7 +129,7 @@ public class SysUserServiceImpl implements ISysUserService {
                 .isEmptyStrMsg(webVo.getPassword(),"密码不能为空")
                 .notInMsg("不正确的删除标志位",webVo.getDelFlag(),0,1)
                 .notInMsg("不正确的系统标志位",webVo.getSysFlag(),0,1)
-                .notIn("不正确的状态标志位",webVo.getStatus(),0,1);
+                .notInMsg("不正确的状态标志位",webVo.getStatus(),0,1);
 
         uniqueCheck(webVo);
         webVo.setPassword(passwordEncoder.encode(webVo.getPassword()));

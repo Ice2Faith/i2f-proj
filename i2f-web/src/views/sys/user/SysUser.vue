@@ -11,24 +11,76 @@
       @keyup.enter="doSearch"
     >
       <a-form-item
-        label="标题"
-        name="title"
+        label="登录用户名"
+        name="username"
       >
-        <a-input v-model:value="form.title" allow-clear/>
+        <a-input v-model:value="form.username" allow-clear/>
       </a-form-item>
 
       <a-form-item
-        label="关键字"
-        name="keywords"
+        label="用户名"
+        name="realname"
       >
-        <a-input v-model:value="form.keywords" allow-clear/>
+        <a-input v-model:value="form.realname" allow-clear/>
       </a-form-item>
 
       <a-form-item
-        label="备注"
-        name="remark"
+        label="电话号码"
+        name="phone"
       >
-        <a-input v-model:value="form.remark" allow-clear/>
+        <a-input v-model:value="form.phone" allow-clear/>
+      </a-form-item>
+
+      <a-form-item
+        label="电子邮箱"
+        name="email"
+      >
+        <a-input v-model:value="form.email" allow-clear/>
+      </a-form-item>
+
+      <a-form-item
+        label="状态"
+        name="status"
+      >
+        <a-select
+          v-model:value="form.status"
+          show-search
+          allow-clear
+          placeholder="请选择"
+          :options="metas.statusList"
+          :filter-option="filterOption"
+        >
+        </a-select>
+      </a-form-item>
+
+      <a-form-item
+        label="是否可删除"
+        name="delFlag"
+      >
+        <a-select
+          v-model:value="form.delFlag"
+          show-search
+          allow-clear
+          placeholder="请选择"
+          :options="metas.boolList"
+          :filter-option="filterOption"
+        >
+        </a-select>
+      </a-form-item>
+
+      <a-form-item
+        label="是否系统"
+        name="sysFlag"
+      >
+        <a-select
+          v-model:value="form.sysFlag"
+          show-search
+          allow-clear
+          placeholder="请选择"
+          :options="metas.boolList"
+          :filter-option="filterOption"
+        >
+        </a-select>
       </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 0, span: 24 }">
@@ -118,12 +170,6 @@
               </a-button>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item style="background-color: lightseagreen;color:white" @click="doPreview(record)">
-                    <template #icon>
-                      <eye-outlined/>
-                    </template>
-                    阅览
-                  </a-menu-item>
                   <a-menu-item style="background-color: dodgerblue;color:white" @click="doEdit(record)">
                     <template #icon>
                       <edit-outlined/>
@@ -158,73 +204,103 @@
               @submit="handleDetailOk"></Detail>
     </a-modal>
 
-    <a-modal
-      v-if="dialogs.preview.show"
-      v-model:visible="dialogs.preview.show"
-      :title="dialogs.preview.title"
-      @ok="dialogs.preview.show=false"
-      width="100%"
-      wrap-class-name="full-modal"
-    >
-      <markdown-editor :text="dialogs.preview.record.content"
-                       :fullscreen="false"
-                       :height="'auto'"
-                       :edit="false">
-      </markdown-editor>
-    </a-modal>
   </div>
 </template>
 <script>
 
 import Detail from "./components/Detail";
-import MarkdownEditor from "@/components/MarkdownEditor";
 
 import ListManageMixin from "@/mixins/ListManageMixin";
 
 export default {
   components: {
-    MarkdownEditor,
     Detail
   },
   mixins: [ListManageMixin],
   data() {
     return {
-      moduleBaseUrl: '/api/biz/noteBook',
+      moduleBaseUrl: '/api/sys/user',
 
       form: {
-        title: '',
-        keywords: '',
-        remark: ''
+        username: '',
+        realname: '',
+        phone: '',
+        email: '',
+        delFlag: '',
+        sysFlag: '',
+        status: ''
       },
       rules: {},
       dialogs: {
-        preview: {
-          title: '阅览',
-          show: false,
-          record: {},
-        }
+
       },
-      metas: {},
+      metas: {
+        statusList:[{
+          value: 0,
+          label: '禁用',
+        }, {
+          value: 1,
+          label: '启用',
+        }, {
+          value: 99,
+          label: '删除',
+        }],
+        boolList:[{
+          value: 0,
+          label: '否',
+        }, {
+          value: 1,
+          label: '是',
+        }],
+      },
       tableColumns: [
         {
-          title: '标题',
-          dataIndex: 'title',
+          title: '登录用户名',
+          dataIndex: 'username',
         },
         {
-          title: '关键字',
-          dataIndex: 'keywords',
+          title: '用户名',
+          dataIndex: 'realname',
         },
         {
-          title: '备注',
-          dataIndex: 'remark',
+          title: '电话号码',
+          dataIndex: 'phone',
+        },
+        {
+          title: '电子邮箱',
+          dataIndex: 'email',
+        },
+        {
+          title: '注册时间',
+          dataIndex: 'regDate',
+        },
+        {
+          title: '状态',
+          dataIndex: 'statusDesc',
+        },
+        {
+          title: '是否可删除',
+          dataIndex: 'delFlagDesc',
+        },
+        {
+          title: '是否系统',
+          dataIndex: 'sysFlagDesc',
         },
         {
           title: '更新日期',
           dataIndex: 'updateTime',
         },
         {
+          title: '更新人',
+          dataIndex: 'updateUser',
+        },
+        {
           title: '创建日期',
           dataIndex: 'createTime',
+        },
+        {
+          title: '创建人',
+          dataIndex: 'createUser',
         },
         {
           title: '操作',
@@ -244,38 +320,6 @@ export default {
     doExport() {
 
     },
-    doPreview(record) {
-      this.dialogs.preview.title = '阅览'
-      this.dialogs.preview.record = record
-      this.dialogs.preview.show = true
-    },
-    doRun(record) {
-      this.$axios({
-        url: `${this.moduleBaseUrl}/run/${record.id}`,
-        method: 'put',
-        data: {}
-      }).then(() => {
-        this.doSearch()
-      })
-    },
-    doSuspend(record) {
-      this.$axios({
-        url: `${this.moduleBaseUrl}/suspend/${record.id}`,
-        method: 'put',
-        data: {}
-      }).then(() => {
-        this.doSearch()
-      })
-    },
-    doFinish(record) {
-      this.$axios({
-        url: `${this.moduleBaseUrl}/finish/${record.id}`,
-        method: 'put',
-        data: {}
-      }).then(() => {
-        this.doSearch()
-      })
-    }
   }
 }
 </script>

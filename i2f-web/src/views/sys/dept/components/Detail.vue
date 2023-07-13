@@ -10,24 +10,24 @@
       name="basic"
     >
       <a-form-item
-        :rules="rules.title"
-        label="标题"
-        name="title"
+        :rules="rules.deptKey"
+        label="部门键"
+        name="deptKey"
       >
-        <a-input v-model:value="form.title"/>
+        <a-input v-model:value="form.deptKey"/>
       </a-form-item>
 
       <a-form-item
-        :rules="rules.keywords"
-        label="关键字"
-        name="keywords"
+        :rules="rules.name"
+        label="名称"
+        name="name"
       >
-        <a-input v-model:value="form.keywords"/>
+        <a-input v-model:value="form.name"/>
       </a-form-item>
 
       <a-form-item
         :rules="rules.parentId"
-        label="父笔记"
+        label="上级部门"
         name="parentId"
       >
         <a-select
@@ -41,12 +41,30 @@
       </a-form-item>
 
       <a-form-item
+        :rules="rules.level"
+        label="层级"
+        name="level"
+      >
+        <a-input-number v-model:value="form.level"/>
+      </a-form-item>
+
+      <a-form-item
+        :rules="rules.status"
+        label="状态"
+        name="status"
+      >
+        <a-radio-group v-model:value="form.status"
+                       :options="metas.statusList" />
+      </a-form-item>
+
+      <a-form-item
         :rules="rules.remark"
         label="备注"
         name="remark"
       >
         <a-input v-model:value="form.remark"/>
       </a-form-item>
+
       <a-form-item
         :rules="rules.updateTime"
         disabled
@@ -54,6 +72,15 @@
         name="updateTime"
       >
         <a-input disabled v-model:value="form.updateTime"/>
+      </a-form-item>
+
+      <a-form-item
+        :rules="rules.updateUser"
+        disabled
+        label="更新人"
+        name="updateUser"
+      >
+        <a-input disabled v-model:value="form.updateUser"/>
       </a-form-item>
 
       <a-form-item
@@ -65,13 +92,12 @@
       </a-form-item>
 
       <a-form-item
-        :rules="rules.content"
-        label="内容"
-        name="content"
+        :rules="rules.createUser"
+        label="创建人"
+        name="createUser"
       >
-        <markdown-editor v-model:text="form.content"></markdown-editor>
+        <a-input disabled v-model:value="form.createUser"/>
       </a-form-item>
-
     </a-form>
 
     <a-row :gutter="20" justify="end" type="flex" style="margin-top:12px">
@@ -88,37 +114,46 @@
 </template>
 <script>
 
-import MarkdownEditor from "@/components/MarkdownEditor";
 import ListDetailMixin from "@/mixins/ListDetailMixin";
 export default {
-  components: {MarkdownEditor},
+  components: {},
   mixins:[ListDetailMixin],
   data() {
     return {
-      moduleBaseUrl: '/api/biz/noteBook',
+      moduleBaseUrl: '/api/sys/dept',
       form: {
-        title: '',
-        keywords: '',
-        content: '',
-        parentId: null,
+        deptKey: '',
+        name: '',
         remark: '',
+        parentId: null,
+        level: 0,
+        status: 1,
         updateTime: '',
+        updateUser: '',
         createTime: '',
+        createUser: ''
       },
       rules: {
-        title: [{required: true, message: '请输入标题!'}],
+        deptKey: [{required: true, message: '请输入部门键!'}],
+        name: [{required: true, message: '请输入名称!'}],
       },
       metas: {
-        parentList: []
+        parentList: [],
+        statusList:[{
+          value: 0,
+          label: '禁用',
+        }, {
+          value: 1,
+          label: '启用',
+        }, {
+          value: 99,
+          label: '删除',
+        }],
       },
     }
   },
   methods: {
-    hookAfterMounted(){
-      if(this.form.content==null || this.form.content==undefined){
-        this.form.content=''
-      }
-    }
+
   }
 }
 </script>

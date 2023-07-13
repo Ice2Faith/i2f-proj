@@ -35,6 +35,12 @@ const ListDetailMixin={
     hookAfterMounted(){
 
     },
+    hasAddMode() {
+      return this.mode == FormDetailMode.ADD()
+    },
+    hasEditMode(){
+      return this.mode == FormDetailMode.EDIT()
+    },
     hasSubmitButton() {
       return this.mode == FormDetailMode.ADD() || this.mode == FormDetailMode.EDIT()
     },

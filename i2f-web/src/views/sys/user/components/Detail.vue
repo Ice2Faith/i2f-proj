@@ -10,19 +10,44 @@
       name="basic"
     >
       <a-form-item
-        :rules="rules.roleKey"
-        label="角色键"
-        name="roleKey"
+        :rules="rules.username"
+        label="登录用户名"
+        name="username"
       >
-        <a-input v-model:value="form.roleKey"/>
+        <a-input v-model:value="form.username"/>
       </a-form-item>
 
       <a-form-item
-        :rules="rules.roleName"
-        label="角色名称"
-        name="roleName"
+        v-if="hasAddMode()"
+        :rules="rules.password"
+        label="密码"
+        name="password"
       >
-        <a-input v-model:value="form.roleName"/>
+        <a-input-password v-model:value="form.password"/>
+      </a-form-item>
+
+      <a-form-item
+        :rules="rules.realname"
+        label="用户名"
+        name="realname"
+      >
+        <a-input v-model:value="form.realname"/>
+      </a-form-item>
+
+      <a-form-item
+        :rules="rules.phone"
+        label="电话号码"
+        name="phone"
+      >
+        <a-input v-model:value="form.phone"/>
+      </a-form-item>
+
+      <a-form-item
+        :rules="rules.email"
+        label="电子邮箱"
+        name="email"
+      >
+        <a-input v-model:value="form.email"/>
       </a-form-item>
 
       <a-form-item
@@ -50,6 +75,15 @@
       >
         <a-radio-group v-model:value="form.sysFlag"
                        :options="metas.boolList" />
+      </a-form-item>
+
+      <a-form-item
+        :rules="rules.regDate"
+        disabled
+        label="注册时间"
+        name="regDate"
+      >
+        <a-input disabled v-model:value="form.regDate"/>
       </a-form-item>
 
       <a-form-item
@@ -92,7 +126,7 @@
         <a-button @click="doCancel">取消</a-button>
       </a-col>
       <a-col v-if="hasSubmitButton()">
-        <a-spin :spinning="controls.loading">
+        <a-spin :spinning="submitLoading">
           <a-button type="primary" @click="doSubmit">提交</a-button>
         </a-spin>
       </a-col>
@@ -101,41 +135,33 @@
 </template>
 <script>
 
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-
+import ListDetailMixin from "@/mixins/ListDetailMixin";
 export default {
-  props: {
-    mode: {
-      type: String,
-      default: FormDetailMode.ADD()
-    },
-    record: {
-      type: Object,
-      default: {}
-    }
-  },
+  components: {},
+  mixins:[ListDetailMixin],
   data() {
     return {
+      moduleBaseUrl: '/api/sys/user',
       form: {
-        roleKey: '',
-        roleName: '',
-        status: 1,
+        username: '',
+        password: '',
+        realname: '',
+        phone: '',
+        email: '',
         delFlag: 1,
         sysFlag: 0,
+        status: 1,
+        regDate: '',
         updateTime: '',
         updateUser: '',
         createTime: '',
         createUser: ''
       },
-      controls: {
-        loading: false,
-      },
       rules: {
-        roleKey: [{required: true, message: '请输入角色键!'}],
-        roleName: [{required: true, message: '请输入角色名称!'}],
+        username: [{required: true, message: '请输入登录用户名!'}],
+        password: [{required: true, message: '请输入登录密码!'}],
       },
       metas: {
-        baseUrl: '/api/sys/role',
         statusList:[{
           value: 0,
           label: '禁用',
@@ -156,54 +182,8 @@ export default {
       },
     }
   },
-  mounted() {
-    if (this.record) {
-      this.form = Object.assign({}, this.form, this.record)
-    }
-    if (this.mode == FormDetailMode.ADD()) {
-      this.form.id = null
-    }
-  },
   methods: {
-    hasSubmitButton() {
-      return this.mode == FormDetailMode.ADD() || this.mode == FormDetailMode.EDIT()
-    },
-    filterOption(input, option) {
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    },
-    doCancel() {
-      this.$emit('cancel')
-    },
-    doSubmit() {
-      this.$refs.form.validateFields().then(() => {
-        let _this = this
-        _this.controls.loading = true
-        let reqConfig = null
-        if (this.mode == FormDetailMode.ADD()) {
-          reqConfig = {
-            url: `${this.metas.baseUrl}/add`,
-            method: 'post',
-            data: this.form
-          }
-        }
-        if (this.mode == FormDetailMode.EDIT()) {
-          reqConfig = {
-            url: `${this.metas.baseUrl}/update/${this.form.id}`,
-            method: 'put',
-            data: this.form
-          }
-        }
-        if (reqConfig) {
-          this.$axios(reqConfig).then(resp => {
-          })
-            .finally(() => {
-              _this.controls.loading = false
-              _this.$emit('submit')
-            })
-        }
-      })
 
-    }
   }
 }
 </script>

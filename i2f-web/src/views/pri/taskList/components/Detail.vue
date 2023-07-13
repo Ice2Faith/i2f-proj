@@ -4,9 +4,9 @@
       <a-col :span="hasTimeline()?16:24">
         <a-form
           ref="form"
-          :label-col="{ span: 6 }"
+          :label-col="{ span: 4 }"
           :model="form"
-          :wrapper-col="{ span: 18 }"
+          :wrapper-col="{ span: 20 }"
           autocomplete="off"
           name="basic"
         >

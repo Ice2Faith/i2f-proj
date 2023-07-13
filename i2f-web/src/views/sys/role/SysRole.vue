@@ -2,9 +2,9 @@
   <div>
     <a-form
       ref="form"
-      :label-col="{ span: 6 }"
+      :label-col="{ span: 4 }"
       :model="form"
-      :wrapper-col="{ span: 18 }"
+      :wrapper-col="{ span: 20 }"
       autocomplete="off"
       layout="inline"
       name="basic"
@@ -183,7 +183,7 @@
       v-model:visible="dialogs.detail.show"
       :title="dialogs.detail.title"
       :footer="null"
-      width="800px"
+      width="1200px"
     >
       <Detail :mode="dialogs.detail.mode"
               :record="dialogs.detail.record"

@@ -11,17 +11,62 @@
       @keyup.enter="doSearch"
     >
       <a-form-item
-        label="标题"
-        name="title"
+        label="配置键"
+        name="configKey"
       >
-        <a-input v-model:value="form.title" allow-clear/>
+        <a-input v-model:value="form.configKey" allow-clear/>
       </a-form-item>
 
       <a-form-item
-        label="关键字"
-        name="keywords"
+        label="名称"
+        name="name"
       >
-        <a-input v-model:value="form.keywords" allow-clear/>
+        <a-input v-model:value="form.name" allow-clear/>
+      </a-form-item>
+
+      <a-form-item
+        label="是否可修改"
+        name="modFlag"
+      >
+        <a-select
+          v-model:value="form.modFlag"
+          show-search
+          allow-clear
+          placeholder="请选择"
+          :options="metas.boolList"
+          :filter-option="filterOption"
+        >
+        </a-select>
+      </a-form-item>
+
+      <a-form-item
+        label="是否可删除"
+        name="delFlag"
+      >
+        <a-select
+          v-model:value="form.delFlag"
+          show-search
+          allow-clear
+          placeholder="请选择"
+          :options="metas.boolList"
+          :filter-option="filterOption"
+        >
+        </a-select>
+      </a-form-item>
+
+      <a-form-item
+        label="是否系统"
+        name="sysFlag"
+      >
+        <a-select
+          v-model:value="form.sysFlag"
+          show-search
+          allow-clear
+          placeholder="请选择"
+          :options="metas.boolList"
+          :filter-option="filterOption"
+        >
+        </a-select>
       </a-form-item>
 
       <a-form-item
@@ -118,12 +163,6 @@
               </a-button>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item style="background-color: lightseagreen;color:white" @click="doPreview(record)">
-                    <template #icon>
-                      <eye-outlined/>
-                    </template>
-                    阅览
-                  </a-menu-item>
                   <a-menu-item style="background-color: dodgerblue;color:white" @click="doEdit(record)">
                     <template #icon>
                       <edit-outlined/>
@@ -158,61 +197,64 @@
               @submit="handleDetailOk"></Detail>
     </a-modal>
 
-    <a-modal
-      v-if="dialogs.preview.show"
-      v-model:visible="dialogs.preview.show"
-      :title="dialogs.preview.title"
-      @ok="dialogs.preview.show=false"
-      width="100%"
-      wrap-class-name="full-modal"
-    >
-      <markdown-editor :text="dialogs.preview.record.content"
-                       :fullscreen="false"
-                       :height="'auto'"
-                       :edit="false">
-      </markdown-editor>
-    </a-modal>
   </div>
 </template>
 <script>
 
 import Detail from "./components/Detail";
-import MarkdownEditor from "@/components/MarkdownEditor";
 
 import ListManageMixin from "@/mixins/ListManageMixin";
 
 export default {
   components: {
-    MarkdownEditor,
     Detail
   },
   mixins: [ListManageMixin],
   data() {
     return {
-      moduleBaseUrl: '/api/biz/noteBook',
+      moduleBaseUrl: '/api/sys/config',
 
       form: {
-        title: '',
-        keywords: '',
+        configKey: '',
+        name: '',
+        modFlag: '',
+        delFlag: '',
+        sysFlag: '',
         remark: ''
       },
       rules: {},
       dialogs: {
-        preview: {
-          title: '阅览',
-          show: false,
-          record: {},
-        }
+
       },
-      metas: {},
+      metas: {
+        boolList:[{
+          value: 0,
+          label: '否',
+        }, {
+          value: 1,
+          label: '是',
+        }],
+      },
       tableColumns: [
         {
-          title: '标题',
-          dataIndex: 'title',
+          title: '配置键',
+          dataIndex: 'configKey',
         },
         {
-          title: '关键字',
-          dataIndex: 'keywords',
+          title: '名称',
+          dataIndex: 'name',
+        },
+        {
+          title: '是否可修改',
+          dataIndex: 'modFlagDesc',
+        },
+        {
+          title: '是否可删除',
+          dataIndex: 'delFlagDesc',
+        },
+        {
+          title: '是否系统',
+          dataIndex: 'sysFlagDesc',
         },
         {
           title: '备注',
@@ -223,8 +265,16 @@ export default {
           dataIndex: 'updateTime',
         },
         {
+          title: '更新人',
+          dataIndex: 'updateUser',
+        },
+        {
           title: '创建日期',
           dataIndex: 'createTime',
+        },
+        {
+          title: '创建人',
+          dataIndex: 'createUser',
         },
         {
           title: '操作',
@@ -244,38 +294,6 @@ export default {
     doExport() {
 
     },
-    doPreview(record) {
-      this.dialogs.preview.title = '阅览'
-      this.dialogs.preview.record = record
-      this.dialogs.preview.show = true
-    },
-    doRun(record) {
-      this.$axios({
-        url: `${this.moduleBaseUrl}/run/${record.id}`,
-        method: 'put',
-        data: {}
-      }).then(() => {
-        this.doSearch()
-      })
-    },
-    doSuspend(record) {
-      this.$axios({
-        url: `${this.moduleBaseUrl}/suspend/${record.id}`,
-        method: 'put',
-        data: {}
-      }).then(() => {
-        this.doSearch()
-      })
-    },
-    doFinish(record) {
-      this.$axios({
-        url: `${this.moduleBaseUrl}/finish/${record.id}`,
-        method: 'put',
-        data: {}
-      }).then(() => {
-        this.doSearch()
-      })
-    }
   }
 }
 </script>

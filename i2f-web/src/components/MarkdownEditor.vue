@@ -28,7 +28,7 @@
       v-model:visible="dialogs.detail.show"
       :title="dialogs.detail.title"
       @ok="dialogs.detail.show=false"
-      width="800px"
+      width="1200px"
     >
       <a-textarea :value="form.html"
                   :auto-size="{ minRows: 3, maxRows: 10 }"/>
