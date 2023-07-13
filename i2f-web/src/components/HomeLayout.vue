@@ -262,14 +262,5 @@ export default {
   height: 75vh;
   overflow: auto;
 }
-@media (min-width:769px) and (max-width: 1280px) {
-  .main-content{
-    height: 122vh;
-  }
-}
-@media (max-width: 768px) {
-  .main-content{
-    height: 170vh;
-  }
-}
+
 </style>

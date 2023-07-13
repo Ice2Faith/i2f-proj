@@ -58,11 +58,6 @@ export default {
   color: #2c3e50;
 }
 
-#app .ant-form-inline .ant-form-item {
-  margin-bottom: 16px;
-}
-#app .ant-form-item .ant-select{
-  min-width: 195px;
-}
+
 
 </style>

@@ -13,16 +13,72 @@ import Config from "@/framework/config"
 import Message from "@/framework/message"
 import DownloadRequest from "@/framework/request/download"
 import MultipartRequest from "@/framework/request/multipart"
+
+import '@/assets/css/scorll-bar.css'
+import '@/assets/css/media-adapt.css'
+import '@/assets/css/ant-design-adapt.css'
+
+// ant-design-vue
+//////////////////////////////////////////////////////////
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
-
 import * as AntIcons from '@ant-design/icons-vue'
+//////////////////////////////////////////////////////////
+
+// markdown editor
+//////////////////////////////////////////////////////////
+import VueMarkdownEditor from '@kangc/v-md-editor';
+import '@kangc/v-md-editor/lib/style/base-editor.css';
+import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
+import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
+// Prism
+import Prism from 'prismjs';
+// highlight code
+import 'prismjs/components/prism-json';
+VueMarkdownEditor.use(vuepressTheme, {
+  Prism,
+});
+
+import createTipPlugin from '@kangc/v-md-editor/lib/plugins/tip/index';
+import '@kangc/v-md-editor/lib/plugins/tip/tip.css';
+VueMarkdownEditor.use(createTipPlugin());
+
+import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index';
+import '@kangc/v-md-editor/lib/plugins/emoji/emoji.css';
+VueMarkdownEditor.use(createEmojiPlugin());
+
+import createTodoListPlugin from '@kangc/v-md-editor/lib/plugins/todo-list/index';
+import '@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css';
+VueMarkdownEditor.use(createTodoListPlugin());
+
+import createLineNumberPlugin from '@kangc/v-md-editor/lib/plugins/line-number/index';
+VueMarkdownEditor.use(createLineNumberPlugin());
+
+import createHighlightLinesPlugin from '@kangc/v-md-editor/lib/plugins/highlight-lines/index';
+import '@kangc/v-md-editor/lib/plugins/highlight-lines/highlight-lines.css';
+VueMarkdownEditor.use(createHighlightLinesPlugin());
+
+import createCopyCodePlugin from '@kangc/v-md-editor/lib/plugins/copy-code/index';
+import '@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css';
+VueMarkdownEditor.use(createCopyCodePlugin());
+
+import createAlignPlugin from '@kangc/v-md-editor/lib/plugins/align';
+VueMarkdownEditor.use(createAlignPlugin());
+
+import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/cdn';
+VueMarkdownEditor.use(createKatexPlugin());
+
+import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/cdn';
+import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css';
+VueMarkdownEditor.use(createMermaidPlugin());
+//////////////////////////////////////////////////////////
 
 // 使用路由创建App
 const VueApp = createApp(App)
   .use(Router)
   .use(Store)
   .use(Antd)
+  .use(VueMarkdownEditor)
 
 // 全局注册ant-icon
 Object.keys(AntIcons).forEach(key => {

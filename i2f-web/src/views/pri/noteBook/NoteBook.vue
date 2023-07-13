@@ -34,7 +34,7 @@
       <a-form-item :wrapper-col="{ offset: 0, span: 24 }">
         <a-row :gutter="20" justify="center" type="flex">
           <a-col>
-            <a-spin :spinning="controls.loading">
+            <a-spin :spinning="queryLoading">
               <a-button type="primary" @click="doSearch">
                 <template #icon>
                   <SearchOutlined/>
@@ -90,13 +90,13 @@
       </a-col>
     </a-row>
     <a-table
-      :columns="table.columns"
-      :data-source="table.data"
-      :loading="controls.loading"
-      :pagination="table.page"
+      :columns="tableColumns"
+      :data-source="tableData"
+      :loading="queryLoading"
+      :pagination="tablePage"
       :scroll="{ x: 1500 }"
       bordered
-      :row-key="record => record[table.rowKey]"
+      :row-key="record => record[tableRowKey]"
       @change="handleTableChange"
     >
       <template #bodyCell="{ column, record }">
@@ -118,13 +118,19 @@
               </a-button>
               <template #overlay>
                 <a-menu>
+                  <a-menu-item style="background-color: lightseagreen;color:white" @click="doPreview(record)">
+                    <template #icon>
+                      <eye-outlined/>
+                    </template>
+                    阅览
+                  </a-menu-item>
                   <a-menu-item style="background-color: dodgerblue;color:white" @click="doEdit(record)">
                     <template #icon>
                       <edit-outlined/>
                     </template>
                     编辑
                   </a-menu-item>
-                  <a-menu-divider />
+                  <a-menu-divider/>
                   <a-menu-item style="background-color: orangered;color: white" @click="doDelete(record)">
                     <template #icon>
                       <delete-outlined/>
@@ -140,214 +146,133 @@
     </a-table>
 
     <a-modal
-      v-if="dialogs.detail.show"
-      v-model:visible="dialogs.detail.show"
-      :title="dialogs.detail.title"
+      v-if="dialogDetail.show"
+      v-model:visible="dialogDetail.show"
+      :title="dialogDetail.title"
       :footer="null"
       width="800px"
     >
-      <Detail :mode="dialogs.detail.mode"
-              :record="dialogs.detail.record"
+      <Detail :mode="dialogDetail.mode"
+              :record="dialogDetail.record"
               @cancel="handleDetailCancel"
               @submit="handleDetailOk"></Detail>
+    </a-modal>
+
+    <a-modal
+      v-if="dialogs.preview.show"
+      v-model:visible="dialogs.preview.show"
+      :title="dialogs.preview.title"
+      @ok="dialogs.preview.show=false"
+      width="100%"
+      wrap-class-name="full-modal"
+    >
+      <markdown-editor :text="dialogs.preview.record.content"
+                       :fullscreen="false"
+                       :height="'auto'"
+                       :edit="false">
+      </markdown-editor>
     </a-modal>
   </div>
 </template>
 <script>
 
-import FormDetailMode from "@/framework/consts/FormDetailMode";
 import Detail from "./components/Detail";
+import MarkdownEditor from "@/components/MarkdownEditor";
+
+import ListManageMixin from "@/mixins/ListManageMixin";
 
 export default {
   components: {
+    MarkdownEditor,
     Detail
   },
+  mixins: [ListManageMixin],
   data() {
     return {
+      moduleBaseUrl: '/api/biz/noteBook',
+
       form: {
         title: '',
         keywords: '',
         remark: ''
       },
-      controls: {
-        loading: false,
-      },
-      rules: {
-
-      },
+      rules: {},
       dialogs: {
-        detail: {
-          title: '新增',
+        preview: {
+          title: '阅览',
           show: false,
-          mode: FormDetailMode.ADD(),
           record: {},
         }
       },
-      metas:{
-        baseUrl: '/api/biz/noteBook',
-      },
-      table: {
-        data: [{
-          name: '20'
-        }],
-        page: {
-          current: 1,
-          pageSize: 20,
-          total: 2000,
-          defaultPageSize: 20,
-          showQuickJumper: true,
-          showSizeChanger: true,
-          // showTotal: true,
-          pageSizeOptions: [10, 20, 50, 100, 300]
+      metas: {},
+      tableColumns: [
+        {
+          title: '标题',
+          dataIndex: 'title',
         },
-        rowKey: 'id',
-        columns: [
-          {
-            title: '标题',
-            dataIndex: 'title',
-          },
-          {
-            title: '关键字',
-            dataIndex: 'keywords',
-          },
-          {
-            title: '备注',
-            dataIndex: 'remark',
-          },
-          {
-            title: '更新日期',
-            dataIndex: 'updateTime',
-          },
-          {
-            title: '创建日期',
-            dataIndex: 'createTime',
-          },
-          {
-            title: '操作',
-            key: 'action',
-            fixed: 'right',
-            width: '200px',
-            align: 'center'
-          },
-        ]
-      }
+        {
+          title: '关键字',
+          dataIndex: 'keywords',
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark',
+        },
+        {
+          title: '更新日期',
+          dataIndex: 'updateTime',
+        },
+        {
+          title: '创建日期',
+          dataIndex: 'createTime',
+        },
+        {
+          title: '操作',
+          key: 'action',
+          fixed: 'right',
+          width: '200px',
+          align: 'center'
+        },
+      ]
     }
   },
-  mounted() {
-    this.doSearch()
-  },
+
   methods: {
-    filterOption(input, option) {
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    },
-    onClickUrl(url){
-      if(url &&url!=''){
-        window.open(url,'_blank')
-      }
-    },
-    doSearch() {
-      this.getData(true)
-    },
-    doReset() {
-      this.$refs.form.resetFields()
-    },
-    getData(reset) {
-      if (reset) {
-        this.table.page.current = 1
-      }
-      this.controls.loading = true
-      this.$axios({
-        url: `${this.metas.baseUrl}/page/${this.table.page.pageSize}/${(this.table.page.current - 1)}`,
-        method: 'get',
-        params: this.form
-      }).then(({data}) => {
-        this.table.data = data.list
-        this.table.page.current = data.index + 1
-        this.table.page.pageSize = data.size
-        this.table.page.total = data.total
-      }).finally(() => {
-        this.controls.loading = false
-      })
-    },
-    handleTableChange(pagination, filters, sorter, {currentDataSource}) {
-      this.table.page = pagination
-    },
-    getRecordStatusStyle(record){
-      for(let key in this.metas.statusList){
-        let item=this.metas.statusList[key]
-        if(item.value==record.status){
-          return {
-            backgroundColor: item.color,
-            border:  `solid 1px ${item.color}`,
-            color: 'white'
-          }
-        }
-      }
-      return {}
-    },
-    doAdd() {
-      this.dialogs.detail.mode=FormDetailMode.ADD()
-      this.dialogs.detail.title='新增'
-      this.dialogs.detail.show = true
-    },
-    handleDetailOk() {
-      this.dialogs.detail.show = false
-      this.doSearch()
-    },
-    handleDetailCancel() {
-      this.dialogs.detail.show = false
-    },
     doImport() {
 
     },
     doExport() {
 
     },
-    doView(record) {
-      this.dialogs.detail.mode=FormDetailMode.VIEW()
-      this.dialogs.detail.title='详情'
-      this.dialogs.detail.record=record
-      this.dialogs.detail.show = true
+    doPreview(record) {
+      this.dialogs.preview.title = '阅览'
+      this.dialogs.preview.record = record
+      this.dialogs.preview.show = true
     },
-    doRun(record){
+    doRun(record) {
       this.$axios({
-        url: `${this.metas.baseUrl}/run/${record.id}`,
+        url: `${this.moduleBaseUrl}/run/${record.id}`,
         method: 'put',
         data: {}
-      }).then(()=>{
+      }).then(() => {
         this.doSearch()
       })
     },
-    doSuspend(record){
+    doSuspend(record) {
       this.$axios({
-        url: `${this.metas.baseUrl}/suspend/${record.id}`,
+        url: `${this.moduleBaseUrl}/suspend/${record.id}`,
         method: 'put',
         data: {}
-      }).then(()=>{
+      }).then(() => {
         this.doSearch()
       })
     },
-    doFinish(record){
+    doFinish(record) {
       this.$axios({
-        url: `${this.metas.baseUrl}/finish/${record.id}`,
+        url: `${this.moduleBaseUrl}/finish/${record.id}`,
         method: 'put',
         data: {}
-      }).then(()=>{
-        this.doSearch()
-      })
-    },
-    doEdit(record) {
-      this.dialogs.detail.mode=FormDetailMode.EDIT()
-      this.dialogs.detail.title='编辑'
-      this.dialogs.detail.record=record
-      this.dialogs.detail.show = true
-    },
-    doDelete(record) {
-      this.$axios({
-        url: `${this.metas.baseUrl}/delete/${record.id}`,
-        method: 'delete',
-        data: {}
-      }).then(()=>{
+      }).then(() => {
         this.doSearch()
       })
     }

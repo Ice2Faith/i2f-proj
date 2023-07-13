@@ -1,0 +1,49 @@
+
+@media (min-width:769px) and (max-width: 1280px) {
+    .main-content{
+        height: 122vh;
+    }
+}
+@media (max-width: 768px) {
+    .main-content{
+        height: 170vh;
+    }
+}
+
+
+@media (min-width: 769px) and (max-width: 1280px) {
+    .full-modal .ant-modal-content {
+        height: 146vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .full-modal .ant-modal-content {
+        height: 220vh;
+    }
+}
+
+.ant-form-inline .ant-form-item {
+    margin-bottom: 16px;
+}
+.ant-form-item .ant-select{
+    min-width: 195px;
+}
+
+.full-modal .ant-modal {
+    max-width: 100%;
+    top: 0;
+    padding-bottom: 0;
+    margin: 0;
+}
+
+.full-modal .ant-modal-content {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh);
+    overflow: auto;
+}
+
+.full-modal .ant-modal-body {
+    flex: 1;
+}

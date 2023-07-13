@@ -128,3 +128,24 @@ i2f:
       # 多数据源配置
       datasource:
         enable: true
+      secure:
+        # 是否开启
+        enable: true
+        # 默认的安全控制策略，也就是当注解和白名单都未配置时的策略模式，默认关闭
+        defaultControl:
+          # 入站是否安全
+          in: true
+          # 出站是否安全
+          out: true
+        # 白名单配置列表项，符合ant-match模式
+        whiteList:
+          # 进出站都忽略的列表清单
+          bothPattens:
+            - /api/sys/file/**
+            - /secure/key
+          # 进站忽略的列表清单
+          inPattens:
+            - /api/sys/file/upload/**
+          # 出站忽略的列表清单
+          outPattens:
+            - /api/sys/file/download/**
