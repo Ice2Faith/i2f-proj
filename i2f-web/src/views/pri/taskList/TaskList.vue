@@ -64,7 +64,7 @@
       <a-form-item :wrapper-col="{ offset: 0, span: 24 }">
         <a-row :gutter="20" justify="center" type="flex">
           <a-col>
-            <a-spin :spinning="controls.loading">
+            <a-spin :spinning="queryLoading">
               <a-button type="primary" @click="doSearch">
                 <template #icon>
                   <SearchOutlined/>
@@ -120,13 +120,13 @@
       </a-col>
     </a-row>
     <a-table
-      :columns="table.columns"
-      :data-source="table.data"
-      :loading="controls.loading"
-      :pagination="table.page"
+      :columns="tableColumns"
+      :data-source="tableData"
+      :loading="queryLoading"
+      :pagination="tablePage"
       :scroll="{ x: 1500 }"
       bordered
-      :row-key="record => record[table.rowKey]"
+      :row-key="record => record[tableRowKey]"
       @change="handleTableChange"
     >
       <template #expandedRowRender="{ record }">
@@ -209,14 +209,14 @@
     </a-table>
 
     <a-modal
-      v-if="dialogs.detail.show"
-      v-model:visible="dialogs.detail.show"
-      :title="dialogs.detail.title"
+      v-if="dialogDetail.show"
+      v-model:visible="dialogDetail.show"
+      :title="dialogDetail.title"
       :footer="null"
       width="1200px"
     >
-      <Detail :mode="dialogs.detail.mode"
-              :record="dialogs.detail.record"
+      <Detail :mode="dialogDetail.mode"
+              :record="dialogDetail.record"
               @cancel="handleDetailCancel"
               @submit="handleDetailOk"></Detail>
     </a-modal>
@@ -226,13 +226,17 @@
 
 import Detail from "@/views/pri/taskList/components/Detail";
 import FormDetailMode from "@/framework/consts/FormDetailMode";
+import ListManageMixin from "@/mixins/ListManageMixin";
 
 export default {
   components: {
     Detail
   },
+  mixins:[ListManageMixin],
   data() {
     return {
+      moduleBaseUrl: '/api/biz/taskList',
+
       beforeForm:{
         deadline: []
       },
@@ -245,22 +249,13 @@ export default {
         deadlineBegin: '',
         deadlineEnd: ''
       },
-      controls: {
-        loading: false,
-      },
       rules: {
 
       },
       dialogs: {
-        detail: {
-          title: '新增',
-          show: false,
-          mode: FormDetailMode.ADD(),
-          record: {},
-        }
+
       },
       metas:{
-        baseUrl: '/api/biz/taskList',
         statusList:[{
           value: 0,
           label: '运行',
@@ -275,22 +270,7 @@ export default {
           color: '#ff7700'
         }]
       },
-      table: {
-        data: [{
-          name: '20'
-        }],
-        page: {
-          current: 1,
-          pageSize: 20,
-          total: 2000,
-          defaultPageSize: 20,
-          showQuickJumper: true,
-          showSizeChanger: true,
-          // showTotal: true,
-          pageSizeOptions: [10, 20, 50, 100, 300]
-        },
-        rowKey: 'id',
-        columns: [
+      tableColumns: [
           {
             title: '名称',
             dataIndex: 'name',
@@ -343,16 +323,12 @@ export default {
             align: 'center'
           },
         ]
-      }
+
     }
   },
-  mounted() {
-    this.doSearch()
-  },
+
   methods: {
-    filterOption(input, option) {
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    },
+
     onDeadlineRangeChange(){
       let range=this.beforeForm.deadline
       if(range && range.length==2){
@@ -362,33 +338,6 @@ export default {
         this.form.deadlineBegin=''
         this.form.deadlineEnd=''
       }
-    },
-    doSearch() {
-      this.getData(true)
-    },
-    doReset() {
-      this.$refs.form.resetFields()
-    },
-    getData(reset) {
-      if (reset) {
-        this.table.page.current = 1
-      }
-      this.controls.loading = true
-      this.$axios({
-        url: `${this.metas.baseUrl}/page/${this.table.page.pageSize}/${(this.table.page.current - 1)}`,
-        method: 'get',
-        params: this.form
-      }).then(({data}) => {
-        this.table.data = data.list
-        this.table.page.current = data.index + 1
-        this.table.page.pageSize = data.size
-        this.table.page.total = data.total
-      }).finally(() => {
-        this.controls.loading = false
-      })
-    },
-    handleTableChange(pagination, filters, sorter, {currentDataSource}) {
-      this.table.page = pagination
     },
     getRecordStatusStyle(record){
       for(let key in this.metas.statusList){
@@ -403,29 +352,11 @@ export default {
       }
       return {}
     },
-    doAdd() {
-      this.dialogs.detail.mode=FormDetailMode.ADD()
-      this.dialogs.detail.title='新增'
-      this.dialogs.detail.show = true
-    },
-    handleDetailOk() {
-      this.dialogs.detail.show = false
-      this.doSearch()
-    },
-    handleDetailCancel() {
-      this.dialogs.detail.show = false
-    },
     doImport() {
 
     },
     doExport() {
 
-    },
-    doView(record) {
-      this.dialogs.detail.mode=FormDetailMode.VIEW()
-      this.dialogs.detail.title='详情'
-      this.dialogs.detail.record=record
-      this.dialogs.detail.show = true
     },
     doRun(record){
       this.$axios({
@@ -454,21 +385,7 @@ export default {
         this.doSearch()
       })
     },
-    doEdit(record) {
-      this.dialogs.detail.mode=FormDetailMode.EDIT()
-      this.dialogs.detail.title='编辑'
-      this.dialogs.detail.record=record
-      this.dialogs.detail.show = true
-    },
-    doDelete(record) {
-      this.$axios({
-        url: `${this.metas.baseUrl}/delete/${record.id}`,
-        method: 'delete',
-        data: {}
-      }).then(()=>{
-        this.doSearch()
-      })
-    }
+
   }
 }
 </script>

@@ -92,7 +92,7 @@
         <a-button @click="doCancel">取消</a-button>
       </a-col>
       <a-col v-if="hasSubmitButton()">
-        <a-spin :spinning="controls.loading">
+        <a-spin :spinning="submitLoading">
           <a-button type="primary" @click="doSubmit">提交</a-button>
         </a-spin>
       </a-col>
@@ -102,6 +102,7 @@
 <script>
 
 import FormDetailMode from "@/framework/consts/FormDetailMode";
+import ListDetailMixin from "@/mixins/ListDetailMixin";
 
 export default {
   props: {
@@ -114,8 +115,10 @@ export default {
       default: {}
     }
   },
+  mixins:[ListDetailMixin],
   data() {
     return {
+      moduleBaseUrl: '/api/sys/role',
       form: {
         roleKey: '',
         roleName: '',
@@ -135,7 +138,6 @@ export default {
         roleName: [{required: true, message: '请输入角色名称!'}],
       },
       metas: {
-        baseUrl: '/api/sys/role',
         statusList:[{
           value: 0,
           label: '禁用',
@@ -156,54 +158,8 @@ export default {
       },
     }
   },
-  mounted() {
-    if (this.record) {
-      this.form = Object.assign({}, this.form, this.record)
-    }
-    if (this.mode == FormDetailMode.ADD()) {
-      this.form.id = null
-    }
-  },
   methods: {
-    hasSubmitButton() {
-      return this.mode == FormDetailMode.ADD() || this.mode == FormDetailMode.EDIT()
-    },
-    filterOption(input, option) {
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    },
-    doCancel() {
-      this.$emit('cancel')
-    },
-    doSubmit() {
-      this.$refs.form.validateFields().then(() => {
-        let _this = this
-        _this.controls.loading = true
-        let reqConfig = null
-        if (this.mode == FormDetailMode.ADD()) {
-          reqConfig = {
-            url: `${this.metas.baseUrl}/add`,
-            method: 'post',
-            data: this.form
-          }
-        }
-        if (this.mode == FormDetailMode.EDIT()) {
-          reqConfig = {
-            url: `${this.metas.baseUrl}/update/${this.form.id}`,
-            method: 'put',
-            data: this.form
-          }
-        }
-        if (reqConfig) {
-          this.$axios(reqConfig).then(resp => {
-          })
-            .finally(() => {
-              _this.controls.loading = false
-              _this.$emit('submit')
-            })
-        }
-      })
 
-    }
   }
 }
 </script>

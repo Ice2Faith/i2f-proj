@@ -145,7 +145,7 @@
         <a-button @click="doCancel">取消</a-button>
       </a-col>
       <a-col v-if="hasSubmitButton()">
-        <a-spin :spinning="controls.loading">
+        <a-spin :spinning="submitLoading">
           <a-button type="primary" @click="doSubmit">提交</a-button>
         </a-spin>
       </a-col>
@@ -155,6 +155,7 @@
 <script>
 
 import FormDetailMode from "@/framework/consts/FormDetailMode";
+import ListDetailMixin from "@/mixins/ListDetailMixin";
 
 export default {
   props:{
@@ -167,8 +168,11 @@ export default {
       default: {}
     }
   },
+  mixins:[ListDetailMixin],
   data() {
     return {
+      moduleBaseUrl: '/api/biz/taskList',
+
       form: {
         name: '',
         content: '',
@@ -182,14 +186,10 @@ export default {
         updateTime: '',
         createTime: '',
       },
-      controls: {
-        loading: false,
-      },
       rules: {
         name: [{required: true, message: '请输入名称!'}]
       },
       metas:{
-        baseUrl: '/api/biz/taskList',
         statusList:[{
           value: 0,
           label: '运行',
@@ -207,27 +207,12 @@ export default {
       historyList: [],
     }
   },
-  mounted() {
-    if(this.record){
-      this.form=Object.assign({},this.form,this.record)
-    }
-    if(this.mode==FormDetailMode.ADD()){
-      this.form.id=null
-    }
-    this.loadDetailHistory()
-  },
   methods: {
+    hookAfterMounted(){
+      this.loadDetailHistory()
+    },
     hasTimeline(){
       return this.mode!=FormDetailMode.ADD()
-    },
-    hasSubmitButton(){
-      return this.mode==FormDetailMode.ADD() || this.mode==FormDetailMode.EDIT()
-    },
-    filterOption(input, option) {
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-    },
-    doCancel() {
-      this.$emit('cancel')
     },
     getRecordStatusColor(record){
       for(let key in this.metas.statusList){
@@ -243,41 +228,12 @@ export default {
         return
       }
       this.$axios({
-        url: `${this.metas.baseUrl}/history/${this.record.id}`,
+        url: `${this.moduleBaseUrl}/history/${this.record.id}`,
         method:'get'
       }).then(({data})=>{
         this.historyList=data
       })
     },
-    doSubmit() {
-      this.$refs.form.validateFields().then(()=>{
-        let _this = this
-        _this.controls.loading = true
-        let reqConfig=null
-        if(this.mode==FormDetailMode.ADD()){
-          reqConfig={
-            url: `${this.metas.baseUrl}/add`,
-            method: 'post',
-            data: this.form
-          }
-        }
-        if(this.mode==FormDetailMode.EDIT()){
-          reqConfig={
-            url: `${this.metas.baseUrl}/update/${this.form.id}`,
-            method: 'put',
-            data: this.form
-          }
-        }
-        if(reqConfig){
-          this.$axios(reqConfig).then(resp=>{})
-            .finally(()=>{
-              _this.controls.loading = false
-              _this.$emit('submit')
-            })
-        }
-      })
-
-    }
   }
 }
 </script>
