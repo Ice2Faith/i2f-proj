@@ -177,6 +177,13 @@
                     编辑
                   </a-menu-item>
                   <a-menu-divider/>
+                  <a-menu-item style="background-color: lightseagreen;color: white" @click="doAuthUser(record)">
+                    <template #icon>
+                      <safety-certificate-outlined />
+                    </template>
+                    授权
+                  </a-menu-item>
+                  <a-menu-divider/>
                   <a-menu-item style="background-color: orangered;color: white" @click="doDelete(record)">
                     <template #icon>
                       <delete-outlined/>
@@ -204,6 +211,43 @@
               @submit="handleDetailOk"></Detail>
     </a-modal>
 
+
+    <a-drawer
+      v-model:visible="dialogs.auth.show"
+      :title="dialogs.auth.title"
+      width="30%"
+      placement="right"
+    >
+      <template #extra>
+        <a-button style="margin-right: 8px" @click="onAuthCancel">取消</a-button>
+        <a-button type="primary" @click="onAuthSubmit">提交</a-button>
+      </template>
+
+      <a-form>
+        <a-form-item label="担任角色">
+          <a-select
+            v-model:value="dialogs.auth.roleKeys"
+            show-search
+            mode="multiple"
+            allow-clear
+            placeholder="请选择"
+            :options="metas.roleList"
+            :filter-option="filterOption"
+          >
+          </a-select>
+        </a-form-item>
+        <a-form-item label="归属部门">
+          <a-tree
+            v-model:checkedKeys="dialogs.auth.deptKeys"
+            :fieldNames="{children:'children', title:'name', key:'id' }"
+            checkable
+            :tree-data="metas.deptTreeData"
+          >
+          </a-tree>
+        </a-form-item>
+      </a-form>
+
+    </a-drawer>
   </div>
 </template>
 <script>
@@ -232,7 +276,13 @@ export default {
       },
       rules: {},
       dialogs: {
-
+        auth:{
+          title: '用户授权',
+          show: false,
+          record:{},
+          roleKeys: [],
+          deptKeys:[],
+        }
       },
       metas: {
         statusList:[{
@@ -252,6 +302,8 @@ export default {
           value: 1,
           label: '是',
         }],
+        roleList:[],
+        deptTreeData:[]
       },
       tableColumns: [
         {
@@ -314,12 +366,75 @@ export default {
   },
 
   methods: {
+    hookAfterMounted(){
+      this.loadDeptTreeData()
+      this.loadRoleListData()
+    },
+    loadDeptTreeData(){
+      this.$axios({
+        url: `/api/sys/dept/tree`,
+        method: 'get'
+      }).then(({data})=>{
+        this.metas.deptTreeData=data
+      })
+    },
+    loadRoleListData(){
+      this.$axios({
+        url: `/api/sys/role/list`,
+        method: 'get'
+      }).then(({data})=>{
+        data.map(item=>{
+          item.value=item.id
+          item.label=item.roleName
+        })
+        this.metas.roleList=data
+      })
+    },
     doImport() {
 
     },
     doExport() {
 
     },
+    onAuthCancel(){
+      this.dialogs.auth.show=false
+
+    },
+    onAuthSubmit(){
+      Promise.all([
+        this.$axios({
+          url: `${this.moduleBaseUrl}/role/update/${this.dialogs.auth.record.id}`,
+          method: 'put',
+          data: this.dialogs.auth.roleKeys
+        }),
+        this.$axios({
+          url: `${this.moduleBaseUrl}/dept/update/${this.dialogs.auth.record.id}`,
+          method: 'put',
+          data: this.dialogs.auth.deptKeys
+        }),
+      ]).then(arr=>{
+        this.dialogs.auth.show=false
+      })
+    },
+    doAuthUser(record){
+      this.dialogs.auth.record=record
+      Promise.all([
+          this.$axios({
+          url: `${this.moduleBaseUrl}/role/ids/${this.dialogs.auth.record.id}`,
+          method: 'get',
+        }),
+        this.$axios({
+          url: `${this.moduleBaseUrl}/dept/ids/${this.dialogs.auth.record.id}`,
+          method: 'get',
+        }),
+        ]
+      ).then((arr)=>{
+        this.dialogs.auth.roleKeys=arr[0].data
+        this.dialogs.auth.deptKeys=arr[1].data
+        this.dialogs.auth.show=true
+      })
+
+    }
   }
 }
 </script>

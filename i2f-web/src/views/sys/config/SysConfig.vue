@@ -169,6 +169,13 @@
                     </template>
                     编辑
                   </a-menu-item>
+                  <a-menu-divider />
+                  <a-menu-item style="background-color: lightseagreen;color: white" @click="doConfigItems(record)">
+                    <template #icon>
+                      <tool-outlined />
+                    </template>
+                    配置
+                  </a-menu-item>
                   <a-menu-divider/>
                   <a-menu-item style="background-color: orangered;color: white" @click="doDelete(record)">
                     <template #icon>
@@ -197,6 +204,17 @@
               @submit="handleDetailOk"></Detail>
     </a-modal>
 
+    <a-drawer
+      v-model:visible="dialogs.config.show"
+      :title="dialogs.config.title"
+      width="100%"
+      placement="right"
+    >
+      <template #extra>
+        <a-button style="margin-right: 8px" @click="onConfigCancel">取消</a-button>
+      </template>
+      <SysConfigItems :record="dialogs.config.record"></SysConfigItems>
+    </a-drawer>
   </div>
 </template>
 <script>
@@ -204,9 +222,11 @@
 import Detail from "./components/Detail";
 
 import ListManageMixin from "@/mixins/ListManageMixin";
+import SysConfigItems from "@/views/sys/config/components/SysConfigItems";
 
 export default {
   components: {
+    SysConfigItems,
     Detail
   },
   mixins: [ListManageMixin],
@@ -224,7 +244,11 @@ export default {
       },
       rules: {},
       dialogs: {
-
+        config:{
+          title: '配置修改',
+          show: false,
+          record:{},
+        }
       },
       metas: {
         boolList:[{
@@ -294,6 +318,13 @@ export default {
     doExport() {
 
     },
+    doConfigItems(record){
+      this.dialogs.config.record=record
+      this.dialogs.config.show=true
+    },
+    onConfigCancel(){
+      this.dialogs.config.show=false
+    }
   }
 }
 </script>

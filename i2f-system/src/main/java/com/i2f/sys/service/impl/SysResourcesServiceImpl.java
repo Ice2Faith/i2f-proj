@@ -57,6 +57,13 @@ public class SysResourcesServiceImpl implements ISysResourcesService {
     }
 
     @Override
+    public List<SysResourcesVo> children(SysResourcesVo webVo) {
+        List<SysResourcesVo> list = baseMapper.children(webVo);
+
+        return list;
+    }
+
+    @Override
     public List<SysResourcesVo> tree(SysResourcesVo webVo) {
         List<SysResourcesVo> list = baseMapper.list(webVo);
         List<SysResourcesVo> tree = TreeConvertUtil.list2Tree(list);
@@ -115,9 +122,12 @@ public class SysResourcesServiceImpl implements ISysResourcesService {
         if(webVo.getOrderIndex()==null){
             webVo.setOrderIndex(0);
         }
+        if(webVo.getParentId()==null){
+            webVo.setParentId(0L);
+        }
         Checker.begin(true)
                 .notInMsg("不正确的类型标志位",webVo.getType(),0,1)
-                .notIn("不正确的状态标志位",webVo.getStatus(),0,1);
+                .notInMsg("不正确的状态标志位",webVo.getStatus(),0,1);
         uniqueCheck(webVo);
         baseMapper.insertSelective(webVo);
     }

@@ -142,6 +142,18 @@
         and a.status=1
     </select>
 
+    <select id="findUserRoleIds" resultType="java.lang.Long">
+        select
+            a.id
+        from sys_role a
+        where exists (
+            select 1 from sys_user_role m
+            where m.user_id=#{userId}
+            and m.role_id=a.id
+        )
+        and a.status=1
+    </select>
+
     <select id="findUserRoleKeys" resultType="java.lang.String">
         select distinct role_key
         from sys_role a

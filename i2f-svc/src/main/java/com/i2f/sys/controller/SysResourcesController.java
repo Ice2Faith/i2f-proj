@@ -40,6 +40,12 @@ public class SysResourcesController {
         return ApiResp.success(ret);
     }
 
+    @GetMapping(value = "/children")
+    public ApiResp<?> children(SysResourcesVo webVo) {
+        List<SysResourcesVo> ret = baseService.children(webVo);
+        return ApiResp.success(ret);
+    }
+
     @GetMapping(value = "/tree")
     public ApiResp<?> tree(SysResourcesVo webVo) {
         List<SysResourcesVo> ret = baseService.tree(webVo);

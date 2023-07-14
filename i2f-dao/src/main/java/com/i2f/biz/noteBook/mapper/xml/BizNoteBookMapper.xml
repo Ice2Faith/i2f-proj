@@ -83,6 +83,46 @@
                 and a.update_time = #{post.updateTime}
             </if>
         </where>
+        order by a.create_time desc,a.update_time desc
+    </sql>
+
+    <sql id="baseChildrenQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.userId!=null">
+                and a.user_id = #{post.userId}
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                and instr(a.title,#{post.title}) &gt; 0
+            </if>
+            <if test="post.keywords!=null and post.keywords!=''">
+                and instr(a.keywords,#{post.keywords}) &gt; 0
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                and instr(a.content,#{post.content}) &gt; 0
+            </if>
+            <choose>
+                <when test="post.parentId!=null">
+                    and a.parent_id = #{post.parentId}
+                </when>
+                <otherwise>
+                    and a.parent_id = 0
+                </otherwise>
+            </choose>
+            <if test="post.remark!=null and post.remark!=''">
+                and instr(a.remark,#{post.remark}) &gt; 0
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.updateTime!=null">
+                and a.update_time = #{post.updateTime}
+            </if>
+        </where>
+        order by a.create_time desc,a.update_time desc
     </sql>
 
     <select id="page" resultMap="mapVoResultMap">
@@ -91,6 +131,10 @@
 
     <select id="list" resultMap="mapVoResultMap">
         <include refid="baseQuery"></include>
+    </select>
+
+    <select id="children" resultMap="mapVoResultMap">
+        <include refid="baseChildrenQuery"></include>
     </select>
 
     <select id="findByPk" resultMap="mapVoResultMap">

@@ -17,6 +17,8 @@ public interface ISysDeptService {
 
     List<SysDeptVo> list(SysDeptVo webVo);
 
+    List<SysDeptVo> children(SysDeptVo webVo);
+
     List<SysDeptVo> tree(SysDeptVo webVo);
 
     SysDeptVo find(Long id);

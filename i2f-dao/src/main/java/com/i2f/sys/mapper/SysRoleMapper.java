@@ -46,4 +46,6 @@ public interface SysRoleMapper {
     int deleteLogicalByPk(@Param("post") SysRoleVo post);
 
     int disableByPk(@Param("post") SysRoleVo post);
+
+    List<Long> findUserRoleIds(@Param("userId")Long userId);
 }

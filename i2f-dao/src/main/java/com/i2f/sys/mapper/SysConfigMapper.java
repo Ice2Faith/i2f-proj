@@ -40,4 +40,6 @@ public interface SysConfigMapper {
                    @Param("excludesIds")Collection<Object> excludesIds);
 
     int countOfNotDeleteableItems(@Param("id")Long id);
+
+
 }

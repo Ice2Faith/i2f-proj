@@ -20,6 +20,8 @@ public interface BizNoteBookMapper {
 
     List<BizNoteBookVo> list(@Param("post") BizNoteBookVo post);
 
+    List<BizNoteBookVo> children(@Param("post") BizNoteBookVo post);
+
     BizNoteBookVo findByPk(@Param("id") Long id);
 
     <T extends BizNoteBookDo> int insertSelective(@Param("post") T post);
@@ -35,4 +37,6 @@ public interface BizNoteBookMapper {
     <T extends BizNoteBookDo> int deleteSelective(@Param("post") T post);
 
     int insertBatch(@Param("list") Collection<? extends BizNoteBookDo> list);
+
+
 }

@@ -107,7 +107,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
                 .isEmptyStrMsg(webVo.getName(),"name必填参数")
                 .notInMsg("不正确的修改标志位",webVo.getModFlag(),0,1)
                 .notInMsg("不正确的删除标志位",webVo.getDelFlag(),0,1)
-                .notIn("不正确的系统标志位",webVo.getSysFlag(),0,1);
+                .notInMsg("不正确的系统标志位",webVo.getSysFlag(),0,1);
         prepare(webVo);
         uniqueCheck(webVo);
         baseMapper.insertSelective(webVo);
@@ -228,6 +228,9 @@ public class SysConfigServiceImpl implements ISysConfigService {
         if(webVo.getSysFlag()==null){
             webVo.setSysFlag(0);
         }
+        if(webVo.getParentEntryId()==null){
+            webVo.setParentEntryId(0L);
+        }
         webVo.setConfigId(configId);
         prepareItem(webVo);
 
@@ -295,5 +298,14 @@ public class SysConfigServiceImpl implements ISysConfigService {
         updInfo.setId(configId);
         prepare(updInfo);
         sysConfigItemMapper.deleteItemsLogical(updInfo);
+    }
+
+    @Override
+    public List<SysConfigItemVo> findItemsChildren(Long configId, SysConfigItemVo webVo) {
+        webVo.setConfigId(configId);
+
+        List<SysConfigItemVo> list=sysConfigItemMapper.children(webVo);
+
+        return list;
     }
 }

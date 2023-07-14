@@ -164,6 +164,13 @@
                     编辑
                   </a-menu-item>
                   <a-menu-divider />
+                  <a-menu-item style="background-color: lightseagreen;color: white" @click="doAuthResources(record)">
+                    <template #icon>
+                      <safety-certificate-outlined />
+                    </template>
+                    授权
+                  </a-menu-item>
+                  <a-menu-divider />
                   <a-menu-item style="background-color: orangered;color: white" @click="doDelete(record)">
                     <template #icon>
                       <delete-outlined/>
@@ -190,6 +197,25 @@
               @cancel="handleDetailCancel"
               @submit="handleDetailOk"></Detail>
     </a-modal>
+
+    <a-drawer
+      v-model:visible="dialogs.auth.show"
+      :title="dialogs.auth.title"
+      width="30%"
+      placement="right"
+    >
+      <template #extra>
+        <a-button style="margin-right: 8px" @click="onAuthCancel">取消</a-button>
+        <a-button type="primary" @click="onAuthSubmit">提交</a-button>
+      </template>
+      <a-tree
+        v-model:checkedKeys="dialogs.auth.checkedKeys"
+        :fieldNames="{children:'children', title:'name', key:'id' }"
+        checkable
+        :tree-data="metas.resourceTreeData"
+      >
+      </a-tree>
+    </a-drawer>
   </div>
 </template>
 <script>
@@ -219,7 +245,12 @@ export default {
 
       },
       dialogs: {
-
+        auth:{
+          title: '角色授权',
+          show: false,
+          record:{},
+          checkedKeys: [],
+        }
       },
       metas:{
         statusList:[{
@@ -239,6 +270,7 @@ export default {
           value: 1,
           label: '是',
         }],
+        resourceTreeData:[]
       },
       tableColumns: [
           {
@@ -290,11 +322,47 @@ export default {
   },
 
   methods: {
+    hookAfterMounted(){
+      this.loadResourcesTreeData()
+    },
+    loadResourcesTreeData(){
+      this.$axios({
+        url: `/api/sys/resources/tree`,
+        method: 'get'
+      }).then(({data})=>{
+        this.metas.resourceTreeData=data
+      })
+    },
     doImport() {
 
     },
     doExport() {
 
+    },
+    onAuthCancel(){
+      this.dialogs.auth.show=false
+
+    },
+    onAuthSubmit(){
+
+      this.$axios({
+        url: `${this.moduleBaseUrl}/resources/update/${this.dialogs.auth.record.id}`,
+        method: 'put',
+        data: this.dialogs.auth.checkedKeys
+      }).then((data)=>{
+        this.dialogs.auth.show=false
+      })
+
+    },
+    doAuthResources(record){
+      this.dialogs.auth.record=record
+      this.$axios({
+        url:`${this.moduleBaseUrl}/resources/ids/${this.dialogs.auth.record.id}`,
+        method:'get'
+      }).then(({data})=>{
+        this.dialogs.auth.checkedKeys=data
+        this.dialogs.auth.show=true
+      })
     },
   }
 }

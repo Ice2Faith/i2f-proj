@@ -30,14 +30,18 @@
         label="上级部门"
         name="parentId"
       >
-        <a-select
+        <a-tree-select
           v-model:value="form.parentId"
           show-search
+          style="width: 100%"
+          :fieldNames="{children:'children', label:'name', value: 'id' }"
+          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
           placeholder="请选择"
-          :options="metas.parentList"
-          :filter-option="filterOption"
+          allow-clear
+          :tree-data="metas.deptTreeData"
+          tree-node-filter-prop="label"
         >
-        </a-select>
+        </a-tree-select>
       </a-form-item>
 
       <a-form-item
@@ -138,7 +142,7 @@ export default {
         name: [{required: true, message: '请输入名称!'}],
       },
       metas: {
-        parentList: [],
+        deptTreeData: [],
         statusList:[{
           value: 0,
           label: '禁用',
@@ -153,7 +157,21 @@ export default {
     }
   },
   methods: {
-
+    hookAfterMounted(){
+      this.loadDeptTreeData()
+    },
+    loadDeptTreeData(){
+      this.$axios({
+        url: `${this.moduleBaseUrl}/tree`,
+        method: 'get'
+      }).then(({data})=>{
+        this.metas.deptTreeData=[{
+          id: 0,
+          name: '根节点',
+          children: data
+        }]
+      })
+    }
   }
 }
 </script>

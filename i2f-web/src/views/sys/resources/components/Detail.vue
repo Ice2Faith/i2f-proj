@@ -63,7 +63,18 @@
         label="父资源"
         name="parentId"
       >
-        <a-input v-model:value="form.parentId"/>
+        <a-tree-select
+          v-model:value="form.parentId"
+          show-search
+          style="width: 100%"
+          :fieldNames="{children:'children', label:'name', value: 'id' }"
+          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+          placeholder="请选择"
+          allow-clear
+          :tree-data="metas.resourceTreeData"
+          tree-node-filter-prop="label"
+        >
+        </a-tree-select>
       </a-form-item>
 
       <a-form-item
@@ -207,11 +218,26 @@ export default {
           value: 1,
           label: '权限',
         }],
+        resourceTreeData:[],
       },
     }
   },
   methods: {
-
+    hookAfterMounted(){
+      this.loadResourcesTreeData()
+    },
+    loadResourcesTreeData(){
+      this.$axios({
+        url: `${this.moduleBaseUrl}/tree`,
+        method: 'get'
+      }).then(({data})=>{
+        this.metas.resourceTreeData=[{
+          id: 0,
+          name: '根节点',
+          children: data
+        }]
+      })
+    }
   }
 }
 </script>

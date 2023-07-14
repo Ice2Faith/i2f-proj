@@ -17,9 +17,17 @@ const ListManageMixin={
     return ListManageMixinData()
   },
   mounted() {
+    this.hookBeforeMounted()
     this.doSearch()
+    this.hookAfterMounted()
   },
   methods: {
+    hookBeforeMounted(){
+
+    },
+    hookAfterMounted(){
+
+    },
     filterOption(input, option) {
       return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     },

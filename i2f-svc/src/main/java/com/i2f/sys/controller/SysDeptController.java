@@ -2,6 +2,7 @@ package com.i2f.sys.controller;
 
 
 import com.i2f.sys.data.vo.SysDeptVo;
+import com.i2f.sys.data.vo.SysResourcesVo;
 import com.i2f.sys.service.ISysDeptService;
 import i2f.core.std.api.ApiPage;
 import i2f.core.std.api.ApiResp;
@@ -37,6 +38,12 @@ public class SysDeptController {
     @GetMapping(value = "/list")
     public ApiResp<?> page(SysDeptVo webVo) {
         List<SysDeptVo> ret = baseService.list(webVo);
+        return ApiResp.success(ret);
+    }
+
+    @GetMapping(value = "/children")
+    public ApiResp<?> children(SysDeptVo webVo) {
+        List<SysDeptVo> ret = baseService.children(webVo);
         return ApiResp.success(ret);
     }
 

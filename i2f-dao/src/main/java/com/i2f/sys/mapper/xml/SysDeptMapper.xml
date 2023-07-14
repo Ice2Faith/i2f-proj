@@ -105,6 +105,53 @@
                 and instr(a.update_user,#{post.updateUser}) &gt; 0
             </if>
         </where>
+        order by a.name asc
+    </sql>
+
+
+    <sql id="baseChildrenQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.deptKey!=null and post.deptKey!=''">
+                and instr(a.dept_key,#{post.deptKey}) &gt; 0
+            </if>
+            <if test="post.name!=null and post.name!=''">
+                and instr(a.name,#{post.name}) &gt; 0
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                and instr(a.remark,#{post.remark}) &gt; 0
+            </if>
+            <choose>
+                <when test="post.parentId!=null">
+                    and a.parent_id = #{post.parentId}
+                </when>
+                <otherwise>
+                    and a.parent_id = 0
+                </otherwise>
+            </choose>
+            <if test="post.level!=null">
+                and a.level = #{post.level}
+            </if>
+            <if test="post.status!=null">
+                and a.status = #{post.status}
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(a.create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and a.update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(a.update_user,#{post.updateUser}) &gt; 0
+            </if>
+            order by a.name asc
+        </where>
     </sql>
 
     <select id="page" resultMap="mapVoResultMap">
@@ -114,6 +161,10 @@
     <select id="list" resultMap="mapVoResultMap">
         <include refid="baseQuery"></include>
     </select>
+    
+    <select id="children" resultMap="mapVoResultMap">
+        <include refid="baseChildrenQuery"></include>
+    </select>
 
     <select id="findByPk" resultMap="mapVoResultMap">
         <include refid="baseQueryBody"></include>
@@ -121,6 +172,17 @@
     </select>
     <select id="findUserDepts" resultMap="mapVoResultMap">
         <include refid="baseQueryBody"></include>
+        where exists (
+            select 1 from sys_user_dept m
+            where m.user_id=#{userId}
+            and m.dept_id=a.id
+        )
+        and a.status=1
+    </select>
+    <select id="findUserDeptIds" resultType="java.lang.Long">
+        select
+              a.id
+        from sys_dept a
         where exists (
             select 1 from sys_user_dept m
             where m.user_id=#{userId}
@@ -167,8 +229,6 @@
             </if>
         </set>
         where id=#{post.id}
-        and del_flag=1
-        and sys_flag=0
     </update>
 
     <update id="disableByPk">
@@ -183,7 +243,6 @@
             </if>
         </set>
         where id=#{post.id}
-        and sys_flag=0
     </update>
 
     <insert id="insertSelective">

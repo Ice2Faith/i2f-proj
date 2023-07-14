@@ -35,4 +35,6 @@ public interface SysUserDeptMapper {
     <T extends SysUserDeptDo> int deleteSelective(@Param("post") T post);
 
     int insertBatch(@Param("list") Collection<? extends SysUserDeptDo> list);
+
+    int deleteUserDepts(@Param("userId")Long userId);
 }

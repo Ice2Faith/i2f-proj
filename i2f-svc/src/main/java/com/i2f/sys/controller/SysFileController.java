@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -126,9 +127,8 @@ public class SysFileController {
         return ApiResp.success(ret);
     }
 
-    @RequestMapping("/download/**")
-    public void download(HttpServletRequest request, HttpServletResponse response) throws Exception{
-        String signName=trimSignNameFromUri(request);
+    @RequestMapping("/download/{signName:.+}")
+    public void download(HttpServletRequest request, HttpServletResponse response, @PathVariable("signName")String signName) throws Exception{
 
         if(CheckUtil.isEmptyStr(signName)){
             ServletFileUtil.responseNotFileFound(signName,response);

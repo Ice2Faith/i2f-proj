@@ -148,12 +148,81 @@
         order by a.order_index
     </sql>
 
+    <sql id="baseChildrenQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.name!=null and post.name!=''">
+                and instr(a.name,#{post.name}) &gt; 0
+            </if>
+            <if test="post.menuKey!=null and post.menuKey!=''">
+                and instr(a.menu_key,#{post.menuKey}) &gt; 0
+            </if>
+            <if test="post.type!=null">
+                and a.type = #{post.type}
+            </if>
+            <if test="post.url!=null and post.url!=''">
+                and instr(a.url,#{post.url}) &gt; 0
+            </if>
+            <if test="post.permKey!=null and post.permKey!=''">
+                and instr(a.perm_key,#{post.permKey}) &gt; 0
+            </if>
+            <if test="post.remark!=null and post.remark!=''">
+                and instr(a.remark,#{post.remark}) &gt; 0
+            </if>
+            <choose>
+                <when test="post.parentId!=null">
+                    and a.parent_id = #{post.parentId}
+                </when>
+                <otherwise>
+                    and a.parent_id = 0
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="post.status!=null">
+                    and a.status = #{post.status}
+                </when>
+                <otherwise>
+                    and a.status != 99
+                </otherwise>
+            </choose>
+            <if test="post.orderIndex!=null">
+                and a.order_index = #{post.orderIndex}
+            </if>
+            <if test="post.icon!=null and post.icon!=''">
+                and instr(a.icon,#{post.icon}) &gt; 0
+            </if>
+            <if test="post.style!=null and post.style!=''">
+                and instr(a.style,#{post.style}) &gt; 0
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(a.create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and a.update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(a.update_user,#{post.updateUser}) &gt; 0
+            </if>
+        </where>
+        order by a.order_index
+    </sql>
+
     <select id="page" resultMap="mapVoResultMap">
         <include refid="baseQuery"></include>
     </select>
 
     <select id="list" resultMap="mapVoResultMap">
         <include refid="baseQuery"></include>
+    </select>
+
+    <select id="children" resultMap="mapVoResultMap">
+        <include refid="baseChildrenQuery"></include>
     </select>
 
     <select id="findByPk" resultMap="mapVoResultMap">

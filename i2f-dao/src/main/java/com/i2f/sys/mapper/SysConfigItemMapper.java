@@ -21,6 +21,8 @@ public interface SysConfigItemMapper {
 
     List<SysConfigItemVo> list(@Param("post") SysConfigItemVo post);
 
+    List<SysConfigItemVo> children(@Param("post") SysConfigItemVo post);
+
     SysConfigItemVo findByPk(@Param("id") Long id);
 
     <T extends SysConfigItemDo> int insertSelective(@Param("post") T post);
@@ -52,4 +54,5 @@ public interface SysConfigItemMapper {
                         @Param("excludesIds")Collection<Object> excludesIds);
 
     int deleteLogicalByPk(@Param("post")SysConfigItemVo post);
+
 }

@@ -188,6 +188,15 @@ public class SysRoleServiceImpl implements ISysRoleService {
     }
 
     @Override
+    public List<Long> findRoleResourcesIds(Long roleId) {
+        Checker.begin(true)
+                .isNullMsg(roleId,"roleId必填参数");
+
+        return sysRoleResourcesMapper.findRoleResourcesIds(roleId);
+    }
+
+
+    @Override
     public void updateRoleResources(Long roleId, Collection<Long> resIds) {
         Checker.begin(true)
                 .isNullMsg(roleId,"roleId必填参数")

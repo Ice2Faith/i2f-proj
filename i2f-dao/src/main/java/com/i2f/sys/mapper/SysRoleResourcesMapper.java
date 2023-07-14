@@ -47,4 +47,6 @@ public interface SysRoleResourcesMapper {
     int grantLikeResourcesByRoleId(@Param("toRoleId") Long toRoleId, @Param("fromRoleId") Long fromRoleId);
 
     int grantLikeResourcesByRoleKey(@Param("toRoleKey") String toRoleKey, @Param("fromRoleKey") String fromRoleKey);
+
+    List<Long> findRoleResourcesIds(@Param("roleId")Long roleId);
 }

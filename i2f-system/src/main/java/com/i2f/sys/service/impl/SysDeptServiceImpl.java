@@ -52,6 +52,13 @@ public class SysDeptServiceImpl implements ISysDeptService {
     }
 
     @Override
+    public List<SysDeptVo> children(SysDeptVo webVo) {
+        List<SysDeptVo> list = baseMapper.children(webVo);
+
+        return list;
+    }
+
+    @Override
     public List<SysDeptVo> tree(SysDeptVo webVo) {
         List<SysDeptVo> list = baseMapper.list(webVo);
         List<SysDeptVo> tree = TreeConvertUtil.list2Tree(list);
@@ -96,6 +103,9 @@ public class SysDeptServiceImpl implements ISysDeptService {
         }
         if(webVo.getLevel()==null){
             webVo.setLevel(1);
+        }
+        if(webVo.getParentId()==null){
+            webVo.setParentId(0L);
         }
         Checker.begin(true)
                 .isEmptyStrMsg(webVo.getDeptKey(),"deptKey参数必填")

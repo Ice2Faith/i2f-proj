@@ -45,4 +45,6 @@ public interface ISysConfigService {
     void updateConfigItems(Long configId, List<SysConfigItemVo> items);
 
     void deleteConfigItems(Long configId);
+
+    List<SysConfigItemVo> findItemsChildren(Long configId, SysConfigItemVo webVo);
 }

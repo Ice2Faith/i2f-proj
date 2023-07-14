@@ -39,6 +39,8 @@ public interface ISysRoleService {
 
     void deleteRoleResources(Long roleId);
 
+    List<Long> findRoleResourcesIds(Long roleId);
+
     void updateRoleResources(Long roleId, Collection<Long> resIds);
 
     void grantAllResources(Long roleId);

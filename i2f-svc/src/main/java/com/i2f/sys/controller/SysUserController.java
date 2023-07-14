@@ -100,6 +100,19 @@ public class SysUserController {
         return ApiResp.success(ret);
     }
 
+    @GetMapping(value = "/role/ids/{userId}")
+    public ApiResp<?> findUserRoleIds(@PathVariable(value = "userId") Long userId) {
+        List<Long> ret = baseService.findUserRoleIds(userId);
+        return ApiResp.success(ret);
+    }
+
+    @PutMapping(value = "/role/update/{userId}")
+    public ApiResp<?> updateUserRoleIds(@PathVariable(value = "userId") Long userId,
+                                      @RequestBody List<Long> ids) {
+        baseService.updateUserRoleIds(userId,ids);
+        return ApiResp.success("ok");
+    }
+
     @GetMapping(value = "/role/keys/{userId}")
     public ApiResp<?> findUserRoleKeys(@PathVariable(value = "userId") Long userId) {
         List<String> ret = baseService.findUserRoleKeys(userId);
@@ -140,6 +153,19 @@ public class SysUserController {
     public ApiResp<?> findUserDepts(@PathVariable(value = "userId") Long userId) {
         List<SysDeptVo> ret = baseService.findUserDepts(userId);
         return ApiResp.success(ret);
+    }
+
+    @GetMapping(value = "/dept/ids/{userId}")
+    public ApiResp<?> findUserDeptIds(@PathVariable(value = "userId") Long userId) {
+        List<Long> ret = baseService.findUserDeptIds(userId);
+        return ApiResp.success(ret);
+    }
+
+    @PutMapping(value = "/dept/update/{userId}")
+    public ApiResp<?> updateUserDeptIds(@PathVariable(value = "userId") Long userId,
+                                        @RequestBody List<Long> ids) {
+        baseService.updateUserDeptIds(userId,ids);
+        return ApiResp.success("ok");
     }
 
     @GetMapping(value = "/dept/keys/{userId}")

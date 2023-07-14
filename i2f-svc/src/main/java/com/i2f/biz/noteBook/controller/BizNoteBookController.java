@@ -21,7 +21,6 @@ import java.util.List;
 @RequestMapping("/api/biz/noteBook")
 public class BizNoteBookController {
 
-
     @Autowired
     private IBizNoteBookService baseService;
 
@@ -37,6 +36,12 @@ public class BizNoteBookController {
     @GetMapping(value = "/list")
     public ApiResp<?> page(BizNoteBookVo webVo) {
         List<BizNoteBookVo> ret = baseService.list(webVo);
+        return ApiResp.success(ret);
+    }
+
+    @GetMapping(value = "/children")
+    public ApiResp<?> children(BizNoteBookVo webVo) {
+        List<BizNoteBookVo> ret = baseService.children(webVo);
         return ApiResp.success(ret);
     }
 

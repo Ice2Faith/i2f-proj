@@ -187,10 +187,15 @@ export default {
   components: {
     Detail
   },
+  props:{
+    record:{
+      type: Object
+    }
+  },
   mixins: [ListManageMixin],
   data() {
     return {
-      moduleBaseUrl: '/api/sys/dept',
+      moduleBaseUrl: '/api/sys/config',
 
       form: {
         deptKey: '',
@@ -216,20 +221,52 @@ export default {
       },
       tableColumns: [
         {
-          title: '部门键',
-          dataIndex: 'deptKey',
+          title: '项ID',
+          dataIndex: 'entryId',
         },
         {
-          title: '名称',
-          dataIndex: 'name',
+          title: '项键',
+          dataIndex: 'entryKey',
+        },
+        {
+          title: '项名称',
+          dataIndex: 'entryName',
+        },
+        {
+          title: '项描述',
+          dataIndex: 'entryDesc',
+        },
+        {
+          title: '项描述',
+          dataIndex: 'entryDesc',
+        },
+        {
+          title: '项排序',
+          dataIndex: 'entryOrder',
         },
         {
           title: '状态',
           dataIndex: 'statusDesc',
         },
         {
-          title: '备注',
-          dataIndex: 'remark',
+          title: '生效时间',
+          dataIndex: 'validTime',
+        },
+        {
+          title: '失效时间',
+          dataIndex: 'invalidTime',
+        },
+        {
+          title: '是否可修改',
+          dataIndex: 'modFlagDesc',
+        },
+        {
+          title: '是否可删除',
+          dataIndex: 'delFlagDesc',
+        },
+        {
+          title: '是否系统',
+          dataIndex: 'sysFlagDesc',
         },
         {
           title: '更新日期',
@@ -265,7 +302,7 @@ export default {
       }
       this.queryLoading = true
       this.$axios({
-        url: `${this.moduleBaseUrl}/tree`,
+        url: `${this.moduleBaseUrl}/items/tree/id/${this.record.id}`,
         method: 'get',
         params: this.form
       }).then(({data}) => {

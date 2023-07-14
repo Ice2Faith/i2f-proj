@@ -3,14 +3,8 @@ package com.i2f.sys.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.i2f.framework.security.SecurityUtils;
-import com.i2f.sys.data.vo.SysDeptVo;
-import com.i2f.sys.data.vo.SysResourcesVo;
-import com.i2f.sys.data.vo.SysRoleVo;
-import com.i2f.sys.data.vo.SysUserVo;
-import com.i2f.sys.mapper.SysDeptMapper;
-import com.i2f.sys.mapper.SysResourcesMapper;
-import com.i2f.sys.mapper.SysRoleMapper;
-import com.i2f.sys.mapper.SysUserMapper;
+import com.i2f.sys.data.vo.*;
+import com.i2f.sys.mapper.*;
 import com.i2f.sys.service.ISysUserService;
 import i2f.core.check.CheckUtil;
 import i2f.core.check.Checker;
@@ -23,10 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Ice2Faith
@@ -52,6 +43,12 @@ public class SysUserServiceImpl implements ISysUserService {
 
     @Resource
     private SysDeptMapper sysDeptMapper;
+
+    @Resource
+    private SysUserRoleMapper sysUserRoleMapper;
+
+    @Resource
+    private SysUserDeptMapper sysUserDeptMapper;
 
     @Override
     public ApiPage<SysUserVo> page(SysUserVo webVo,
@@ -213,6 +210,11 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     @Override
+    public List<Long> findUserRoleIds(Long userId) {
+        return sysRoleMapper.findUserRoleIds(userId);
+    }
+
+    @Override
     public List<String> findUserRoleKeys(Long userId) {
         return sysRoleMapper.findUserRoleKeys(userId);
     }
@@ -252,8 +254,71 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     @Override
+    public List<Long> findUserDeptIds(Long userId) {
+        return sysDeptMapper.findUserDeptIds(userId);
+    }
+
+    @Override
     public List<String> findUserDeptKeys(Long userId) {
         return sysDeptMapper.findUserDeptKeys(userId);
+    }
+
+    @Override
+    public void updateUserRoleIds(Long userId, Collection<Long> roleIds) {
+        Checker.begin(true)
+                .isNullMsg(userId,"userId必填参数")
+                .isNullMsg(roleIds,"roleIds必填参数");
+
+        sysUserRoleMapper.deleteUserRoles(userId);
+
+        if(roleIds.isEmpty()){
+            return;
+        }
+
+        Date now=new Date();
+        String currentUserId=SecurityUtils.currentUserIdStr();
+
+        Set<Long> ids=new LinkedHashSet<>(roleIds);
+        List<SysUserRoleVo> list=new LinkedList<>();
+        for (Long id : ids) {
+            SysUserRoleVo item=new SysUserRoleVo();
+            item.setUserId(userId);
+            item.setRoleId(id);
+            item.setCreateTime(now);
+            item.setCreateUser(currentUserId);
+            list.add(item);
+        }
+
+        sysUserRoleMapper.insertBatch(list);
+    }
+
+    @Override
+    public void updateUserDeptIds(Long userId, Collection<Long> deptIds) {
+        Checker.begin(true)
+                .isNullMsg(userId,"userId必填参数")
+                .isNullMsg(deptIds,"deptIds必填参数");
+
+        sysUserDeptMapper.deleteUserDepts(userId);
+
+        if(deptIds.isEmpty()){
+            return;
+        }
+
+        Date now=new Date();
+        String currentUserId=SecurityUtils.currentUserIdStr();
+
+        Set<Long> ids=new LinkedHashSet<>(deptIds);
+        List<SysUserDeptVo> list=new LinkedList<>();
+        for (Long id : ids) {
+            SysUserDeptVo item=new SysUserDeptVo();
+            item.setUserId(userId);
+            item.setDeptId(id);
+            item.setCreateTime(now);
+            item.setCreateUser(currentUserId);
+            list.add(item);
+        }
+
+        sysUserDeptMapper.insertBatch(list);
     }
 
     @Override

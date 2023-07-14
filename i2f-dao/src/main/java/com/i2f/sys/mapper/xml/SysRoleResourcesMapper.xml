@@ -206,6 +206,13 @@
         where role_id=#{roleId}
     </delete>
 
+    <select id="findRoleResourcesIds" resultType="java.lang.Long">
+        select distinct a.res_id
+        from sys_role_resources a
+        inner join sys_role b on a.role_id=b.id
+        where a.role_id=${roleId}
+    </select>
+
     <update id="grantAllResourcesByRoleId">
         insert into sys_role_resources
         (role_id,res_id,create_user,create_time)

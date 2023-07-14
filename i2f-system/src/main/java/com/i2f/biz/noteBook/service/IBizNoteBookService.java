@@ -17,6 +17,8 @@ public interface IBizNoteBookService {
 
     List<BizNoteBookVo> list(BizNoteBookVo webVo);
 
+    List<BizNoteBookVo> children(BizNoteBookVo webVo);
+
     BizNoteBookVo find(Long id);
 
     void add(BizNoteBookVo webVo);
@@ -24,4 +26,6 @@ public interface IBizNoteBookService {
     void update(BizNoteBookVo webVo);
 
     void delete(Long id);
+
+
 }

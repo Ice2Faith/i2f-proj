@@ -6,6 +6,7 @@ import com.i2f.sys.data.vo.SysRoleVo;
 import com.i2f.sys.data.vo.SysUserVo;
 import i2f.core.std.api.ApiPage;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -57,4 +58,12 @@ public interface ISysUserService {
     SysUserVo findByUsername(String username);
 
     String findUserPassword(Long id);
+
+    List<Long> findUserRoleIds(Long userId);
+
+    List<Long> findUserDeptIds(Long userId);
+
+    void updateUserRoleIds(Long userId, Collection<Long> roleIds);
+
+    void updateUserDeptIds(Long userId,Collection<Long> deptIds);
 }

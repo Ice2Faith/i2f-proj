@@ -154,7 +154,6 @@ export default {
       })
     },
     handleChange(text, html) {
-      console.log('update:text',text)
       this.$emit('update:text', text)
       this.$emit('change', text, html)
     },

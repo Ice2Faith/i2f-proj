@@ -20,6 +20,8 @@ public interface SysResourcesMapper {
 
     List<SysResourcesVo> list(@Param("post") SysResourcesVo post);
 
+    List<SysResourcesVo> children(@Param("post") SysResourcesVo post);
+
     SysResourcesVo findByPk(@Param("id") Long id);
 
     <T extends SysResourcesDo> int insertSelective(@Param("post") T post);

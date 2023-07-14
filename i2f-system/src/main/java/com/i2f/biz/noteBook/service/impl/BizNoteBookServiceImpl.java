@@ -50,6 +50,15 @@ public class BizNoteBookServiceImpl implements IBizNoteBookService {
     }
 
     @Override
+    public List<BizNoteBookVo> children(BizNoteBookVo webVo) {
+        webVo.setUserId(SecurityUtils.currentUserId());
+
+        List<BizNoteBookVo> list = baseMapper.children(webVo);
+
+        return list;
+    }
+
+    @Override
     public BizNoteBookVo find(Long id) {
 
         BizNoteBookVo ret = baseMapper.findByPk(id);
@@ -80,7 +89,9 @@ public class BizNoteBookServiceImpl implements IBizNoteBookService {
     public void add(BizNoteBookVo webVo) {
         Checker.begin(true)
                 .isEmptyStrMsg(webVo.getTitle(), "名称不能为空");
-
+        if(webVo.getParentId()==null){
+            webVo.setParentId(0L);
+        }
         prepare(webVo);
         baseMapper.insertSelective(webVo);
     }

@@ -2,7 +2,6 @@ package com.i2f.sys.mapper;
 
 import com.i2f.sys.data.dom.SysDeptDo;
 import com.i2f.sys.data.vo.SysDeptVo;
-import com.i2f.sys.data.vo.SysRoleVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,6 +19,8 @@ public interface SysDeptMapper {
     List<SysDeptVo> page(@Param("post") SysDeptVo post);
 
     List<SysDeptVo> list(@Param("post") SysDeptVo post);
+
+    List<SysDeptVo> children(@Param("post") SysDeptVo post);
 
     SysDeptVo findByPk(@Param("id") Long id);
 
@@ -46,5 +47,7 @@ public interface SysDeptMapper {
 
     int deleteLogicalByPk(@Param("post") SysDeptVo post);
 
-    int disableByPk(@Param("post") SysDeptVo post);
+    int disableByPk(@Param("post") SysDeptVo post);;
+
+    List<Long> findUserDeptIds(Long userId);
 }

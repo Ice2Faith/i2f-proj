@@ -17,6 +17,8 @@ public interface ISysResourcesService {
 
     List<SysResourcesVo> list(SysResourcesVo webVo);
 
+    List<SysResourcesVo> children(SysResourcesVo webVo);
+
     List<SysResourcesVo> tree(SysResourcesVo webVo);
 
     SysResourcesVo find(Long id);
@@ -30,6 +32,5 @@ public interface ISysResourcesService {
     void enable(Long id);
 
     void disable(Long id);
-
 
 }

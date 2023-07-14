@@ -223,6 +223,99 @@
                 and instr(a.update_user,#{post.updateUser}) &gt; 0
             </if>
         </where>
+        order by a.entry_order asc
+    </sql>
+
+    <sql id="baseChildrenQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.configId!=null">
+                and a.config_id = #{post.configId}
+            </if>
+            <if test="post.entryId!=null">
+                and a.entry_id = #{post.entryId}
+            </if>
+            <if test="post.entryKey!=null and post.entryKey!=''">
+                and instr(a.entry_key,#{post.entryKey}) &gt; 0
+            </if>
+            <if test="post.entryName!=null and post.entryName!=''">
+                and instr(a.entry_name,#{post.entryName}) &gt; 0
+            </if>
+            <if test="post.entryDesc!=null and post.entryDesc!=''">
+                and instr(a.entry_desc,#{post.entryDesc}) &gt; 0
+            </if>
+            <if test="post.entryOrder!=null">
+                and a.entry_order = #{post.entryOrder}
+            </if>
+            <choose>
+                <when test="post.parentEntryId!=null">
+                    and a.parent_entry_id = #{post.parentEntryId}
+                </when>
+                <otherwise>
+                    and a.parent_entry_id = 0
+                </otherwise>
+            </choose>
+            <if test="post.paramDesc!=null and post.paramDesc!=''">
+                and instr(a.param_desc,#{post.paramDesc}) &gt; 0
+            </if>
+            <if test="post.param1!=null and post.param1!=''">
+                and instr(a.param1,#{post.param1}) &gt; 0
+            </if>
+            <if test="post.param2!=null and post.param2!=''">
+                and instr(a.param2,#{post.param2}) &gt; 0
+            </if>
+            <if test="post.param3!=null and post.param3!=''">
+                and instr(a.param3,#{post.param3}) &gt; 0
+            </if>
+            <if test="post.param4!=null and post.param4!=''">
+                and instr(a.param4,#{post.param4}) &gt; 0
+            </if>
+            <if test="post.param5!=null and post.param5!=''">
+                and instr(a.param5,#{post.param5}) &gt; 0
+            </if>
+            <choose>
+                <when test="post.status!=null">
+                    and a.status = #{post.status}
+                </when>
+                <otherwise>
+                    and a.status != 99
+                </otherwise>
+            </choose>
+            <if test="post.level!=null">
+                and a.level = #{post.level}
+            </if>
+            <if test="post.validTime!=null">
+                and a.valid_time = #{post.validTime}
+            </if>
+            <if test="post.invalidTime!=null">
+                and a.invalid_time = #{post.invalidTime}
+            </if>
+            <if test="post.modFlag!=null">
+                and a.mod_flag = #{post.modFlag}
+            </if>
+            <if test="post.delFlag!=null">
+                and a.del_flag = #{post.delFlag}
+            </if>
+            <if test="post.sysFlag!=null">
+                and a.sys_flag = #{post.sysFlag}
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(a.create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and a.update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(a.update_user,#{post.updateUser}) &gt; 0
+            </if>
+        </where>
+        order by a.entry_order asc
     </sql>
 
     <select id="page" resultMap="mapVoResultMap">
@@ -233,16 +326,20 @@
         <include refid="baseQuery"></include>
     </select>
 
+    <select id="children" resultMap="mapVoResultMap">
+        <include refid="baseChildrenQuery"></include>
+    </select>
+
     <select id="findByPk" resultMap="mapVoResultMap">
         <include refid="baseQueryBody"></include>
         where a.id = #{id}
     </select>
-    <select id="findConfigItemsByConfigId" resultType="com.i2f.sys.data.vo.SysConfigItemVo">
+    <select id="findConfigItemsByConfigId" resultMap="mapVoResultMap">
         <include refid="baseQueryBody"></include>
         where a.config_id=#{configId}
         <include refid="validCondition"></include>
     </select>
-    <select id="findConfigItemsByConfigKey" resultType="com.i2f.sys.data.vo.SysConfigItemVo">
+    <select id="findConfigItemsByConfigKey" resultMap="mapVoResultMap">
         <include refid="baseQueryBody"></include>
         left join sys_config b on a.config_id=b.id
         where b.config_key=#{configKey}

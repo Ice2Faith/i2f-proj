@@ -144,7 +144,7 @@
       :columns="tableColumns"
       :data-source="tableData"
       :loading="queryLoading"
-      :pagination="tablePage"
+      :pagination="false"
       :scroll="{ x: 1500 }"
       bordered
       :row-key="record => record[tableRowKey]"
@@ -174,6 +174,13 @@
                       <edit-outlined/>
                     </template>
                     编辑
+                  </a-menu-item>
+                  <a-menu-divider />
+                  <a-menu-item style="background-color: lightseagreen;color: white" @click="doAddChildren(record)">
+                    <template #icon>
+                      <plus-outlined/>
+                    </template>
+                    添加
                   </a-menu-item>
                   <a-menu-divider />
                   <a-menu-item style="background-color: orangered;color: white" @click="doDelete(record)">
@@ -316,13 +323,35 @@ export default {
   },
 
   methods: {
-
+    getData(reset) {
+      if (reset) {
+        this.tablePage.current = 1
+      }
+      this.queryLoading = true
+      this.$axios({
+        url: `${this.moduleBaseUrl}/tree`,
+        method: 'get',
+        params: this.form
+      }).then(({data}) => {
+        this.tableData = data
+      }).finally(() => {
+        this.queryLoading = false
+      })
+    },
     doImport() {
 
     },
     doExport() {
 
     },
+    doAddChildren(record){
+      this.dialogDetail.mode=FormDetailMode.ADD()
+      this.dialogDetail.title='新增'
+      this.dialogDetail.record={
+        parentId: record.id
+      }
+      this.dialogDetail.show = true
+    }
 
   }
 }

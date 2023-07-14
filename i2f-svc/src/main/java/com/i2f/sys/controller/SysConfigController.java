@@ -79,6 +79,12 @@ public class SysConfigController {
         return ApiResp.success(list);
     }
 
+    @GetMapping(value = "/items/children/{configId}")
+    public ApiResp<?> findItemsChildren(@PathVariable(value = "configId") Long configId,SysConfigItemVo webVo) {
+        List<SysConfigItemVo> list = baseService.findItemsChildren(configId,webVo);
+        return ApiResp.success(list);
+    }
+
     @GetMapping(value = "/items/tree/id/{configId}")
     public ApiResp<?> findItemTreeByConfigId(@PathVariable(value = "configId") Long configId) {
         List<SysConfigItemVo> list = baseService.treeConfigItems(configId);

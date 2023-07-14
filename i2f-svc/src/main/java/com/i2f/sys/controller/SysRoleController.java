@@ -104,6 +104,12 @@ public class SysRoleController {
         return ApiResp.success("ok");
     }
 
+    @GetMapping(value = "/resources/ids/{roleId}")
+    public ApiResp<?> findRoleResourcesIds(@PathVariable(value = "roleId") Long roleId) {
+        List<Long> resIds=baseService.findRoleResourcesIds(roleId);
+        return ApiResp.success(resIds);
+    }
+
     @PutMapping(value = "/resources/update/{roleId}")
     public ApiResp<?> updateRoleResources(@PathVariable(value = "roleId") Long roleId,
                                           @RequestBody List<Long> resIds) {
