@@ -68,13 +68,13 @@ public class SysConfigItemVo extends SysConfigItemDo implements ITreeNode<SysCon
 
     @Override
     public boolean isMyChild(SysConfigItemVo val) {
-        if (this.id == null) {
+        if (this.entryId == null) {
             return false;
         }
         if (val.parentEntryId == null) {
             return false;
         }
-        return (long) this.id == val.parentEntryId;
+        return (long) this.entryId == val.parentEntryId;
     }
 
     @Override
@@ -82,9 +82,9 @@ public class SysConfigItemVo extends SysConfigItemDo implements ITreeNode<SysCon
         if (this.parentEntryId == null) {
             return false;
         }
-        if (val.id == null) {
+        if (val.entryId == null) {
             return false;
         }
-        return (long) this.parentEntryId == val.id;
+        return (long) this.parentEntryId == val.entryId;
     }
 }

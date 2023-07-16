@@ -35,6 +35,9 @@ const ListDetailMixin={
     hookAfterMounted(){
 
     },
+    hookBeforeSubmit(){
+
+    },
     hasAddMode() {
       return this.mode == FormDetailMode.ADD()
     },
@@ -64,6 +67,7 @@ const ListDetailMixin={
     doSubmit() {
       this.$refs.form.validateFields().then(() => {
         let _this = this
+        _this.hookBeforeSubmit()
         _this.controls.loading = true
         let reqConfig = null
         if (this.mode == FormDetailMode.ADD()) {
@@ -81,6 +85,7 @@ const ListDetailMixin={
           }
         }
         if (reqConfig) {
+
           this.$axios(reqConfig).then(resp => {
           })
             .finally(() => {

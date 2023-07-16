@@ -1,5 +1,16 @@
 <template>
   <div>
+    <a-card>
+      <a-row>
+        <a-col :span="12">
+          <a-statistic title="配置键" :value="record.configKey"
+                       style="margin-right: 50px" />
+        </a-col>
+        <a-col :span="12">
+          <a-statistic title="配置名称" :value="record.name" />
+        </a-col>
+      </a-row>
+    </a-card>
     <a-form
       ref="form"
       :label-col="{ span: 4 }"
@@ -169,6 +180,7 @@
       width="1200px"
     >
       <Detail :mode="dialogDetail.mode"
+              :config="record"
               :record="dialogDetail.record"
               @cancel="handleDetailCancel"
               @submit="handleDetailOk"></Detail>
@@ -195,7 +207,7 @@ export default {
   mixins: [ListManageMixin],
   data() {
     return {
-      moduleBaseUrl: '/api/sys/config',
+      moduleBaseUrl: '/api/sys/config/item',
 
       form: {
         deptKey: '',
@@ -302,7 +314,7 @@ export default {
       }
       this.queryLoading = true
       this.$axios({
-        url: `${this.moduleBaseUrl}/items/tree/id/${this.record.id}`,
+        url: `${this.moduleBaseUrl}/tree/id/${this.record.id}`,
         method: 'get',
         params: this.form
       }).then(({data}) => {

@@ -28,6 +28,9 @@ const ListManageMixin={
     hookAfterMounted(){
 
     },
+    hookBeforeGetData(){
+
+    },
     filterOption(input, option) {
       return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
     },
@@ -47,6 +50,7 @@ const ListManageMixin={
         this.tablePage.current = 1
       }
       this.queryLoading = true
+      this.hookBeforeGetData()
       this.$axios({
         url: `${this.moduleBaseUrl}/page/${this.tablePage.pageSize}/${(this.tablePage.current - 1)}`,
         method: 'get',
@@ -94,13 +98,25 @@ const ListManageMixin={
       this.dialogDetail.show = true
     },
     doDelete(record) {
-      this.$axios({
-        url: `${this.moduleBaseUrl}/delete/${record.id}`,
-        method: 'delete',
-        data: {}
-      }).then(()=>{
-        this.doSearch()
-      })
+      let _this=this
+      this.$modal.confirm({
+        title: '删除确认框',
+        content: '您真的要要删除此项吗?',
+        onOk() {
+          _this.$axios({
+            url: `${_this.moduleBaseUrl}/delete/${record.id}`,
+            method: 'delete',
+            data: {}
+          }).then(()=>{
+            _this.doSearch()
+          })
+        },
+        onCancel() {
+          _this.$message.noticeInfo('操作已取消')
+        },
+      });
+
+
     }
   }
 }

@@ -1,6 +1,5 @@
 package com.i2f.sys.service;
 
-import com.i2f.sys.data.vo.SysConfigItemVo;
 import com.i2f.sys.data.vo.SysConfigVo;
 import i2f.core.std.api.ApiPage;
 
@@ -25,26 +24,4 @@ public interface ISysConfigService {
     void update(SysConfigVo webVo);
 
     void delete(Long id);
-
-    List<SysConfigItemVo> findConfigItems(Long configId);
-
-    List<SysConfigItemVo> findConfigItems(String configKey);
-
-    List<SysConfigItemVo> treeConfigItems(Long configId);
-
-    List<SysConfigItemVo> treeConfigItems(String configKey);
-
-    SysConfigItemVo findConfigItem(Long configItemId);
-
-    void addConfigItem(Long configId, SysConfigItemVo webVo);
-
-    void updateConfigItem(SysConfigItemVo webVo);
-
-    void deleteConfigItem(Long configItemId);
-
-    void updateConfigItems(Long configId, List<SysConfigItemVo> items);
-
-    void deleteConfigItems(Long configId);
-
-    List<SysConfigItemVo> findItemsChildren(Long configId, SysConfigItemVo webVo);
 }

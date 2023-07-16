@@ -239,9 +239,15 @@ import ListDetailMixin from "@/mixins/ListDetailMixin";
 export default {
   components: {},
   mixins:[ListDetailMixin],
+  props:{
+    config:{
+      type: Object,
+      default: {}
+    }
+  },
   data() {
     return {
-      moduleBaseUrl: '/api/sys/config',
+      moduleBaseUrl: '/api/sys/config/item',
       form: {
         configId: '',
         entryId: '',
@@ -296,11 +302,12 @@ export default {
   },
   methods: {
     hookAfterMounted(){
-      this.loadDeptTreeData()
+      this.form.configId=this.config.id
+      this.loadConfigTreeData()
     },
-    loadDeptTreeData(){
+    loadConfigTreeData(){
       this.$axios({
-        url: `${this.moduleBaseUrl}/items/tree/id/${this.record.id}`,
+        url: `${this.moduleBaseUrl}/tree/id/${this.config.id}`,
         method: 'get',
         params: this.form
       }).then(({data}) => {

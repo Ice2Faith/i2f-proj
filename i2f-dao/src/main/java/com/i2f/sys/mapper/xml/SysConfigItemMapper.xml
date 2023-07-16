@@ -824,7 +824,7 @@
                 update_user = #{post.updateUser},
             </if>
         </set>
-        where config_id=#{post.id}
+        where config_id=#{post.configId}
         and del_flag=1
         and sys_flag=0
     </delete>

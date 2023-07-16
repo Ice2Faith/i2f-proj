@@ -2,7 +2,6 @@ package com.i2f.sys.mapper;
 
 import com.i2f.sys.data.dom.SysConfigItemDo;
 import com.i2f.sys.data.vo.SysConfigItemVo;
-import com.i2f.sys.data.vo.SysConfigVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,7 +38,7 @@ public interface SysConfigItemMapper {
 
     int insertBatch(@Param("list") Collection<? extends SysConfigItemDo> list);
 
-    int deleteItemsLogical(@Param("post") SysConfigVo post);
+    int deleteItemsLogical(@Param("post") SysConfigItemVo post);
 
     List<SysConfigItemVo> findConfigItemsByConfigId(@Param("configId")Long configId);
 

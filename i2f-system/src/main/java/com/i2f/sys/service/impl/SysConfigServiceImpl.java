@@ -7,13 +7,14 @@ import com.i2f.sys.data.vo.SysConfigItemVo;
 import com.i2f.sys.data.vo.SysConfigVo;
 import com.i2f.sys.mapper.SysConfigItemMapper;
 import com.i2f.sys.mapper.SysConfigMapper;
+import com.i2f.sys.service.ISysConfigItemService;
 import com.i2f.sys.service.ISysConfigService;
 import i2f.core.check.CheckUtil;
 import i2f.core.check.Checker;
-import i2f.core.convert.TreeConvertUtil;
 import i2f.core.std.api.ApiPage;
 import i2f.springboot.redisson.annotation.RedisLock;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -37,6 +38,9 @@ public class SysConfigServiceImpl implements ISysConfigService {
 
     @Resource
     private SysConfigItemMapper sysConfigItemMapper;
+
+    @Autowired
+    private ISysConfigItemService sysConfigItemService;
 
     @Override
     public ApiPage<SysConfigVo> page(SysConfigVo webVo,
@@ -176,136 +180,7 @@ public class SysConfigServiceImpl implements ISysConfigService {
 
         baseMapper.deleteByPk(id);
 
-        SysConfigVo updInfo=new SysConfigVo();
-        updInfo.setId(id);
-        prepare(updInfo);
-        sysConfigItemMapper.deleteItemsLogical(updInfo);
+        sysConfigItemService.deleteItems(id);
     }
 
-    @Override
-    public List<SysConfigItemVo> findConfigItems(Long configId) {
-        return sysConfigItemMapper.findConfigItemsByConfigId(configId);
-    }
-
-    @Override
-    public List<SysConfigItemVo> findConfigItems(String configKey) {
-        return sysConfigItemMapper.findConfigItemsByConfigKey(configKey);
-    }
-
-    @Override
-    public List<SysConfigItemVo> treeConfigItems(Long configId) {
-        List<SysConfigItemVo> list = sysConfigItemMapper.findConfigItemsByConfigId(configId);
-        List<SysConfigItemVo> tree = TreeConvertUtil.list2Tree(list);
-        return tree;
-    }
-
-    @Override
-    public List<SysConfigItemVo> treeConfigItems(String configKey) {
-        List<SysConfigItemVo> list = sysConfigItemMapper.findConfigItemsByConfigKey(configKey);
-        List<SysConfigItemVo> tree = TreeConvertUtil.list2Tree(list);
-        return tree;
-    }
-
-    @Override
-    public SysConfigItemVo findConfigItem(Long configItemId) {
-        return sysConfigItemMapper.findByPk(configItemId);
-    }
-
-    @Override
-    public void addConfigItem(Long configId, SysConfigItemVo webVo) {
-        if (webVo.getStatus() == null) {
-            webVo.setStatus(1);
-        }
-        if(webVo.getEntryOrder()==null){
-            webVo.setEntryOrder(0);
-        }
-        if(webVo.getModFlag()==null){
-            webVo.setModFlag(1);
-        }
-        if(webVo.getDelFlag()==null){
-            webVo.setDelFlag(1);
-        }
-        if(webVo.getSysFlag()==null){
-            webVo.setSysFlag(0);
-        }
-        if(webVo.getParentEntryId()==null){
-            webVo.setParentEntryId(0L);
-        }
-        webVo.setConfigId(configId);
-        prepareItem(webVo);
-
-        Checker.begin(true)
-                .isNullMsg(webVo.getConfigId(),"configId必填参数")
-                .isNullMsg(webVo.getEntryId(),"entryId必填参数")
-                .isEmptyStrMsg(webVo.getEntryName(),"entryName必填参数")
-                .notInMsg("不正确的状态标志位",webVo.getStatus(),0,1)
-                .notInMsg("不正确的修改标志位",webVo.getModFlag(),0,1)
-                .notInMsg("不正确的删除标志位",webVo.getDelFlag(),0,1)
-                .notInMsg("不正确的系统标志位",webVo.getSysFlag(),0,1);
-        uniqueCheckItem(webVo);
-
-        sysConfigItemMapper.insertSelective(webVo);
-    }
-
-    @Override
-    public void updateConfigItem(SysConfigItemVo webVo) {
-        Checker.begin(true)
-                .isNullMsg(webVo.getId(),"ID必填参数");
-        SysConfigItemVo exInfo = findConfigItem(webVo.getId());
-        Checker.begin(true)
-                .isNullMsg(exInfo, "找不到配置项")
-                .isExTrueMsg("配置项不允许修改", exInfo.getModFlag() == 0)
-                .isExTrueMsg("配置项已删除",exInfo.getStatus()==99);
-        exInfo.setConfigId(null);
-        prepareItem(webVo);
-        uniqueCheckItem(webVo);
-
-        sysConfigItemMapper.updateSelectiveByPk(webVo);
-    }
-
-    @Override
-    public void deleteConfigItem(Long configItemId) {
-        Checker.begin(true)
-                .isNullMsg(configItemId,"ID必填参数");
-        SysConfigItemVo exInfo = findConfigItem(configItemId);
-        Checker.begin(true)
-                .isNullMsg(exInfo, "找不到配置项")
-                .isExTrueMsg("配置项不允许删除", exInfo.getDelFlag() == 0)
-                .isExTrueMsg("系统配置项不允许删除",exInfo.getSysFlag()==1)
-                .isExTrueMsg("配置项已删除",exInfo.getStatus()==99);
-
-        SysConfigItemVo updInfo=new SysConfigItemVo();
-        updInfo.setId(configItemId);
-        prepareItem(updInfo);
-        sysConfigItemMapper.deleteLogicalByPk(updInfo);
-    }
-
-    @Override
-    public void updateConfigItems(Long configId, List<SysConfigItemVo> items) {
-        deleteConfigItems(configId);
-        for (SysConfigItemVo item : items) {
-            if(item.getId()!=null){
-                updateConfigItem(item);
-            }else{
-                addConfigItem(configId,item);
-            }
-        }
-    }
-
-    @Override
-    public void deleteConfigItems(Long configId) {
-        SysConfigVo updInfo=new SysConfigVo();
-        updInfo.setId(configId);
-        prepare(updInfo);
-        sysConfigItemMapper.deleteItemsLogical(updInfo);
-    }
-
-    @Override
-    public List<SysConfigItemVo> findItemsChildren(Long configId, SysConfigItemVo webVo) {
-        webVo.setConfigId(configId);
-
-        List<SysConfigItemVo> list=sysConfigItemMapper.children(webVo);
-
-        return list;
-    }
 }
