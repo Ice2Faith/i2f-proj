@@ -73,6 +73,9 @@ import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css';
 VueMarkdownEditor.use(createMermaidPlugin());
 //////////////////////////////////////////////////////////
 
+import * as echarts from 'echarts'
+import EchartsCustomTheme from '@/plugins/echarts/theme/custom'
+
 // 使用路由创建App
 const VueApp = createApp(App)
   .use(Router)
@@ -93,6 +96,8 @@ VueApp.config.globalProperties.$auth = Auth
 VueApp.config.globalProperties.$config = Config
 VueApp.config.globalProperties.$message = Message
 VueApp.config.globalProperties.$modal=Modal
+VueApp.config.globalProperties.$echarts=echarts
+EchartsCustomTheme(echarts)
 
 // 在setup语法中，可以使用如下方式获取对象
 // import { getCurrentInstance } from 'vue'

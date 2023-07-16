@@ -48,6 +48,11 @@ const Routes = [
         component: () => import('@/views/sys/user/SysUser.vue')
       },
       {
+        path: '/sys/perf',
+        name: 'sysPerf',
+        component: () => import('@/views/sys/perf/SysPerf.vue')
+      },
+      {
         path: '/home',
         component: Hello
       },
