@@ -182,6 +182,7 @@
     </a-modal>
 
     <a-drawer
+      v-if="dialogs.manage.show"
       v-model:visible="dialogs.manage.show"
       :title="dialogs.manage.title"
       width="100%"

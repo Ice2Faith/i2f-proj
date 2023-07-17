@@ -46,6 +46,12 @@ public class SysDeptResourcesController {
         return ApiResp.success(ret);
     }
 
+    @GetMapping(value = "/tree")
+    public ApiResp<?> tree(SysDeptResourcesVo webVo) {
+        List<SysDeptResourcesVo> ret = baseService.tree(webVo);
+        return ApiResp.success(ret);
+    }
+
     @PostMapping(value = "/add")
     public ApiResp<?> add(@RequestBody SysDeptResourcesVo webVo) {
         baseService.add(webVo);

@@ -4,9 +4,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.i2f.framework.security.SecurityUtils;
 import com.i2f.sys.data.vo.SysDeptResourcesVo;
+import com.i2f.sys.data.vo.SysResourcesVo;
 import com.i2f.sys.mapper.SysDeptResourcesMapper;
 import com.i2f.sys.service.ISysDeptResourcesService;
 import i2f.core.check.Checker;
+import i2f.core.convert.TreeConvertUtil;
 import i2f.core.std.api.ApiPage;
 import i2f.springboot.redisson.annotation.RedisLock;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +58,13 @@ public class SysDeptResourcesServiceImpl implements ISysDeptResourcesService {
 
         SysDeptResourcesVo ret = baseMapper.findByPk(id);
         return ret;
+    }
+
+    @Override
+    public List<SysDeptResourcesVo> tree(SysDeptResourcesVo webVo) {
+        List<SysDeptResourcesVo> list = baseMapper.list(webVo);
+        List<SysDeptResourcesVo> tree = TreeConvertUtil.list2Tree(list);
+        return tree;
     }
 
 

@@ -210,7 +210,7 @@ export default {
         permKey: '',
         remark: '',
         icon: '',
-        status: 0,
+        status: '',
       },
       rules: {
 
@@ -236,8 +236,8 @@ export default {
             dataIndex: 'name',
           },
           {
-            title: '菜单键',
-            dataIndex: 'menuKey',
+            title: '权限键',
+            dataIndex: 'permKey',
           },
           {
             title: '备注',
@@ -284,7 +284,7 @@ export default {
   },
 
   methods: {
-    hookAfterMounted(){
+    hookBeforeMounted(){
       this.form.deptId=this.dept.id
     },
     getData(reset) {

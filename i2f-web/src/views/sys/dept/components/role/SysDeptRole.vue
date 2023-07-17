@@ -290,8 +290,10 @@ export default {
   },
 
   methods: {
+    hookBeforeMounted() {
+      this.form.deptId = this.dept.id
+    },
     hookAfterMounted(){
-      this.form.deptId=this.dept.id
       this.loadResourcesTreeData()
     },
     loadResourcesTreeData(){

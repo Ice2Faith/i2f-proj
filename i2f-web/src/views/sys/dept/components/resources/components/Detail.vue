@@ -193,8 +193,10 @@ export default {
     }
   },
   methods: {
-    hookAfterMounted(){
+    hookBeforeMounted(){
       this.form.deptId=this.dept.id
+    },
+    hookAfterMounted(){
       this.loadResourcesTreeData()
     },
     loadResourcesTreeData(){
