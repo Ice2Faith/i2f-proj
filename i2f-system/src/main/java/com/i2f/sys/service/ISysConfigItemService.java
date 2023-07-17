@@ -13,7 +13,7 @@ import java.util.List;
 public interface ISysConfigItemService {
 
     ApiPage<SysConfigItemVo> page(SysConfigItemVo webVo,
-                              ApiPage<SysConfigItemVo> page);
+                                  ApiPage<SysConfigItemVo> page);
 
     List<SysConfigItemVo> list(SysConfigItemVo webVo);
 

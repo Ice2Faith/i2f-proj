@@ -45,53 +45,53 @@ public class SecurityUserDetailService implements UserDetailsService {
         userVo.setPassword(pass);
         if (StringUtils.isEmpty(userVo.getPassword())
                 || "-".equals(userVo.getPassword())) {
-            sysUserService.changePassword(userVo.getId(),"123456");
+            sysUserService.changePassword(userVo.getId(), "123456");
             userVo = sysUserService.find(userVo.getId());
         }
 
-        List<SysRoleVo> roles=sysUserService.findUserRoles(userVo.getId());
-        List<SysResourcesVo> resources=sysUserService.findUserResources(userVo.getId());
-        List<SysDeptVo> depts=sysUserService.findUserDepts(userVo.getId());
+        List<SysRoleVo> roles = sysUserService.findUserRoles(userVo.getId());
+        List<SysResourcesVo> resources = sysUserService.findUserResources(userVo.getId());
+        List<SysDeptVo> depts = sysUserService.findUserDepts(userVo.getId());
 
-        Set<String> urlsSet=new TreeSet<>();
-        Set<String> permsSet=new TreeSet<>();
-        Set<String> menusSet=new TreeSet<>();
-        Set<String> rolesSet=new TreeSet<>();
-        Set<String> deptsSet=new TreeSet<>();
+        Set<String> urlsSet = new TreeSet<>();
+        Set<String> permsSet = new TreeSet<>();
+        Set<String> menusSet = new TreeSet<>();
+        Set<String> rolesSet = new TreeSet<>();
+        Set<String> deptsSet = new TreeSet<>();
 
-        Set<String> resSet=new TreeSet<>();
+        Set<String> resSet = new TreeSet<>();
 
         for (SysRoleVo role : roles) {
             String roleKey = role.getRoleKey();
-            if(!CheckUtil.isEmptyStr(roleKey)){
+            if (!CheckUtil.isEmptyStr(roleKey)) {
                 rolesSet.add(roleKey);
-                resSet.add("ROLE_"+roleKey);
+                resSet.add("ROLE_" + roleKey);
             }
         }
 
         for (SysDeptVo dept : depts) {
             String deptKey = dept.getDeptKey();
-            if(!CheckUtil.isEmptyStr(deptKey)){
+            if (!CheckUtil.isEmptyStr(deptKey)) {
                 deptsSet.add(deptKey);
-                resSet.add("DEPT_"+deptKey);
+                resSet.add("DEPT_" + deptKey);
             }
         }
 
         for (SysResourcesVo resource : resources) {
             String permKey = resource.getPermKey();
-            if(!CheckUtil.isEmptyStr(permKey)){
+            if (!CheckUtil.isEmptyStr(permKey)) {
                 permsSet.add(permKey);
                 resSet.add(permKey);
             }
             String menuKey = resource.getMenuKey();
-            if(!CheckUtil.isEmptyStr(menuKey)){
+            if (!CheckUtil.isEmptyStr(menuKey)) {
                 menusSet.add(menuKey);
-                resSet.add("MENU_"+menuKey);
+                resSet.add("MENU_" + menuKey);
             }
             String url = resource.getUrl();
-            if(!CheckUtil.isEmptyStr(url)){
+            if (!CheckUtil.isEmptyStr(url)) {
                 urlsSet.add(url);
-                resSet.add("URL_"+url);
+                resSet.add("URL_" + url);
             }
         }
 
@@ -101,7 +101,7 @@ public class SecurityUserDetailService implements UserDetailsService {
         userVo.setRoles(rolesSet);
         userVo.setDepts(deptsSet);
 
-        List<GrantedAuthority> authorities=new ArrayList<>(300);
+        List<GrantedAuthority> authorities = new ArrayList<>(300);
         for (String item : resSet) {
             authorities.add(new SecurityGrantedAuthority(item));
         }
@@ -113,7 +113,7 @@ public class SecurityUserDetailService implements UserDetailsService {
         );
 
         userVo.setPassword(null);
-        ret.setEnabled(userVo.getStatus()==1);
+        ret.setEnabled(userVo.getStatus() == 1);
         ret.setTag(userVo);
 
         return ret;

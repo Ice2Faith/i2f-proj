@@ -3,11 +3,10 @@ package com.i2f.sys.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.i2f.framework.security.SecurityUtils;
-import com.i2f.sys.data.vo.SysDeptVo;
-import com.i2f.sys.mapper.SysDeptMapper;
-import com.i2f.sys.service.ISysDeptService;
+import com.i2f.sys.data.vo.SysDeptRoleVo;
+import com.i2f.sys.mapper.SysDeptRoleMapper;
+import com.i2f.sys.service.ISysDeptRoleService;
 import i2f.core.check.Checker;
-import i2f.core.convert.TreeConvertUtil;
 import i2f.core.std.api.ApiPage;
 import i2f.springboot.redisson.annotation.RedisLock;
 import lombok.extern.slf4j.Slf4j;
@@ -21,59 +20,45 @@ import java.util.List;
 
 /**
  * @author Ice2Faith
- * @date 2023-07-04 17:30:12
- * @desc sys_dept 部门表
+ * @date 2023-07-17 08:38:00
+ * @desc sys_dept_role 部门角色表
  */
 @Slf4j
 @Service
-public class SysDeptServiceImpl implements ISysDeptService {
+public class SysDeptRoleServiceImpl implements ISysDeptRoleService {
+
     public static final String UNIQUE_KEY = "unique_key";
 
     @Resource
-    private SysDeptMapper baseMapper;
+    private SysDeptRoleMapper baseMapper;
 
     @Override
-    public ApiPage<SysDeptVo> page(SysDeptVo webVo,
-                                   ApiPage<SysDeptVo> page) {
+    public ApiPage<SysDeptRoleVo> page(SysDeptRoleVo webVo,
+                                       ApiPage<SysDeptRoleVo> page) {
 
         PageHelper.startPage(page.getIndex() + 1, page.getSize());
-        List<SysDeptVo> list = baseMapper.page(webVo);
-        PageInfo<SysDeptVo> pageInfo = new PageInfo<>(list);
+        List<SysDeptRoleVo> list = baseMapper.page(webVo);
+        PageInfo<SysDeptRoleVo> pageInfo = new PageInfo<>(list);
         page.data(pageInfo.getTotal(), pageInfo.getList());
         return page;
     }
 
     @Override
-    public List<SysDeptVo> list(SysDeptVo webVo) {
+    public List<SysDeptRoleVo> list(SysDeptRoleVo webVo) {
 
-        List<SysDeptVo> list = baseMapper.list(webVo);
-
-        return list;
-    }
-
-    @Override
-    public List<SysDeptVo> children(SysDeptVo webVo) {
-        List<SysDeptVo> list = baseMapper.children(webVo);
+        List<SysDeptRoleVo> list = baseMapper.list(webVo);
 
         return list;
     }
 
     @Override
-    public List<SysDeptVo> tree(SysDeptVo webVo) {
-        List<SysDeptVo> list = baseMapper.list(webVo);
-        List<SysDeptVo> tree = TreeConvertUtil.list2Tree(list);
-        return tree;
-    }
+    public SysDeptRoleVo find(Long id) {
 
-    @Override
-    public SysDeptVo find(Long id) {
-
-        SysDeptVo ret = baseMapper.findByPk(id);
+        SysDeptRoleVo ret = baseMapper.findByPk(id);
         return ret;
     }
 
-
-    public void prepare(SysDeptVo webVo) {
+    public void prepare(SysDeptRoleVo webVo) {
         Date now = new Date();
         String currentUserId = SecurityUtils.currentUserIdStr();
         if (webVo.getId() == null) {
@@ -85,40 +70,35 @@ public class SysDeptServiceImpl implements ISysDeptService {
         }
     }
 
-    public void uniqueCheck(SysDeptVo webVo) {
+    public void uniqueCheck(SysDeptRoleVo webVo) {
         Collection<Object> excludesIds = null;
         if (webVo.getId() != null) {
             excludesIds = Arrays.asList(webVo.getId());
         }
-        int cnt = baseMapper.countOfKey(webVo.getDeptKey(), excludesIds);
+        int cnt = baseMapper.countOfKey(webVo.getDeptId(),webVo.getRoleKey(), excludesIds);
         Checker.begin(true)
-                .isExTrueMsg("deptKey已存在", cnt > 0);
+                .isExTrueMsg("roleKey已存在", cnt > 0);
     }
 
     @RedisLock(UNIQUE_KEY)
     @Override
-    public void add(SysDeptVo webVo) {
+    public void add(SysDeptRoleVo webVo) {
         if (webVo.getStatus() == null) {
             webVo.setStatus(1);
         }
-        if (webVo.getLevel() == null) {
-            webVo.setLevel(1);
-        }
-        if (webVo.getParentId() == null) {
-            webVo.setParentId(0L);
-        }
-        Checker.begin(true)
-                .isEmptyStrMsg(webVo.getDeptKey(), "deptKey参数必填")
-                .isEmptyStrMsg(webVo.getName(), "name参数必填")
-                .notInMsg("不正确的状态标志位", webVo.getStatus(), 0, 1);
         prepare(webVo);
+        Checker.begin(true)
+                .isNullMsg(webVo.getDeptId(),"deptId必填参数")
+                .isEmptyStrMsg(webVo.getRoleKey(), "roleKey必填参数")
+                .isEmptyStrMsg(webVo.getRoleName(), "roleName必填参数")
+                .notInMsg("不正确的状态标志位", webVo.getStatus(), 0, 1);
         uniqueCheck(webVo);
         baseMapper.insertSelective(webVo);
     }
 
     @RedisLock(UNIQUE_KEY)
     @Override
-    public void update(SysDeptVo webVo) {
+    public void update(SysDeptRoleVo webVo) {
         Checker.begin(true)
                 .isNullMsg(webVo.getId(), "ID必填参数");
         webVo.setStatus(null);
@@ -127,23 +107,24 @@ public class SysDeptServiceImpl implements ISysDeptService {
         baseMapper.updateSelectiveByPk(webVo);
     }
 
-
     @Override
     public void delete(Long id) {
         Checker.begin(true)
                 .isNullMsg(id, "ID不能为空");
-        SysDeptVo updInfo = new SysDeptVo();
+        SysDeptRoleVo updInfo = new SysDeptRoleVo();
         updInfo.setId(id);
+        updInfo.setStatus(99);
         prepare(updInfo);
-        baseMapper.deleteLogicalByPk(updInfo);
+        baseMapper.updateSelectiveByPk(updInfo);
     }
+
 
     @Override
     public void enable(Long id) {
         Checker.begin(true)
                 .isNullMsg(id, "ID不能为空");
 
-        SysDeptVo updInfo = new SysDeptVo();
+        SysDeptRoleVo updInfo = new SysDeptRoleVo();
         updInfo.setId(id);
         updInfo.setStatus(1);
         prepare(updInfo);
@@ -155,11 +136,10 @@ public class SysDeptServiceImpl implements ISysDeptService {
         Checker.begin(true)
                 .isNullMsg(id, "ID不能为空");
 
-        SysDeptVo updInfo = new SysDeptVo();
+        SysDeptRoleVo updInfo = new SysDeptRoleVo();
         updInfo.setId(id);
+        updInfo.setStatus(0);
         prepare(updInfo);
-        baseMapper.disableByPk(updInfo);
+        baseMapper.updateSelectiveByPk(updInfo);
     }
-
-
 }

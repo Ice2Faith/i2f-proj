@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.i2f.sys.mapper.SysNoticeReadMapper">
+    <!--
+    * @author Ice2Faith
+    * @date 2023-07-17 08:44:03
+    * @desc sys_notice_read 通知已读表
+    -->
+
+    <resultMap id="mapDoResultMap" type="com.i2f.sys.data.dom.SysNoticeReadDo">
+        <id property="id" column="id"/>
+        <result property="noticeId" column="notice_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <resultMap id="mapVoResultMap" type="com.i2f.sys.data.vo.SysNoticeReadVo"
+               extends="mapDoResultMap">
+    </resultMap>
+
+    <sql id="columnsAsCamel">
+          a.id
+         ,a.notice_id as noticeId
+         ,a.user_id as userId
+         ,a.create_time as createTime
+    </sql>
+
+    <sql id="columnDescAsCamel">
+    </sql>
+
+    <sql id="baseQueryBody">
+        select
+               a.id
+              ,a.notice_id
+              ,a.user_id
+              ,a.create_time
+        from sys_notice_read a
+    </sql>
+
+    <sql id="baseQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.noticeId!=null">
+                and a.notice_id = #{post.noticeId}
+            </if>
+            <if test="post.userId!=null">
+                and a.user_id = #{post.userId}
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="list" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="findByPk" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSelective">
+        insert into sys_notice_read
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                id,
+            </if>
+            <if test="post.noticeId!=null">
+                notice_id,
+            </if>
+            <if test="post.userId!=null">
+                user_id,
+            </if>
+            <if test="post.createTime!=null">
+                create_time,
+            </if>
+        </trim>
+        )
+        values
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                #{post.id},
+            </if>
+            <if test="post.noticeId!=null">
+                #{post.noticeId},
+            </if>
+            <if test="post.userId!=null">
+                #{post.userId},
+            </if>
+            <if test="post.createTime!=null">
+                #{post.createTime},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateSelectiveByPk">
+        update sys_notice_read
+        <set>
+            <if test="post.id!=null">
+                id = #{post.id},
+            </if>
+            <if test="post.noticeId!=null">
+                notice_id = #{post.noticeId},
+            </if>
+            <if test="post.userId!=null">
+                user_id = #{post.userId},
+            </if>
+            <if test="post.createTime!=null">
+                create_time = #{post.createTime},
+            </if>
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteByPk">
+        delete from sys_notice_read
+        where id = #{id}
+    </delete>
+
+    <insert id="insert">
+        insert into sys_notice_read
+        (
+                    id
+             ,notice_id
+             ,user_id
+             ,create_time
+                            )
+        values
+        (
+                    #{post.id}
+             ,#{post.noticeId}
+             ,#{post.userId}
+             ,#{post.createTime}
+                            )
+    </insert>
+
+    <update id="updateByPk">
+        update sys_notice_read
+        <set>
+            id = #{post.id},
+            notice_id = #{post.noticeId},
+            user_id = #{post.userId},
+            create_time = #{post.createTime},
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteSelective">
+        delete from sys_notice_read
+        where
+        <trim suffixOverrides="and|or" prefixOverrides="and|or">
+            <if test="post.id!=null">
+                and id = #{post.id}
+            </if>
+            <if test="post.noticeId!=null">
+                and notice_id = #{post.noticeId}
+            </if>
+            <if test="post.userId!=null">
+                and user_id = #{post.userId}
+            </if>
+            <if test="post.createTime!=null">
+                and create_time = #{post.createTime}
+            </if>
+        </trim>
+    </delete>
+
+    <insert id="insertBatch">
+        insert into sys_notice_read
+        (
+        id
+        ,notice_id
+        ,user_id
+        ,create_time
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}
+            ,#{item.noticeId}
+            ,#{item.userId}
+            ,#{item.createTime}
+            )
+        </foreach>
+
+    </insert>
+</mapper>

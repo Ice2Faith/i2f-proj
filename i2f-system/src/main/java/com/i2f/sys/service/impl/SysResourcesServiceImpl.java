@@ -29,7 +29,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class SysResourcesServiceImpl implements ISysResourcesService {
-    public static final String UNIQUE_KEY="unique_key";
+    public static final String UNIQUE_KEY = "unique_key";
 
     @Resource
     private SysResourcesMapper baseMapper;
@@ -80,32 +80,32 @@ public class SysResourcesServiceImpl implements ISysResourcesService {
     public void prepare(SysResourcesVo webVo) {
         Date now = new Date();
         String currentUserId = SecurityUtils.currentUserIdStr();
-        if(webVo.getId()==null){
+        if (webVo.getId() == null) {
             webVo.setCreateTime(now);
             webVo.setCreateUser(currentUserId);
-        }else{
+        } else {
             webVo.setUpdateTime(now);
             webVo.setUpdateUser(currentUserId);
         }
     }
 
-    public void uniqueCheck(SysResourcesVo webVo){
-        Collection<Object> excludesIds=null;
-        if(webVo.getId()!=null){
-            excludesIds= Arrays.asList(webVo.getId());
+    public void uniqueCheck(SysResourcesVo webVo) {
+        Collection<Object> excludesIds = null;
+        if (webVo.getId() != null) {
+            excludesIds = Arrays.asList(webVo.getId());
         }
-        if(!CheckUtil.isEmptyStr(webVo.getMenuKey())){
-            int cnt=baseMapper.countOfMenuKey(webVo.getMenuKey(),excludesIds);
+        if (!CheckUtil.isEmptyStr(webVo.getMenuKey())) {
+            int cnt = baseMapper.countOfMenuKey(webVo.getMenuKey(), excludesIds);
 
             Checker.begin(true)
-                    .isExTrueMsg("menuKey已存在",cnt>0);
+                    .isExTrueMsg("menuKey已存在", cnt > 0);
         }
 
-        if(!CheckUtil.isEmptyStr(webVo.getPermKey())){
-            int cnt=baseMapper.countOfPermKey(webVo.getPermKey(),excludesIds);
+        if (!CheckUtil.isEmptyStr(webVo.getPermKey())) {
+            int cnt = baseMapper.countOfPermKey(webVo.getPermKey(), excludesIds);
 
             Checker.begin(true)
-                    .isExTrueMsg("permKey已存在",cnt>0);
+                    .isExTrueMsg("permKey已存在", cnt > 0);
         }
     }
 
@@ -113,21 +113,21 @@ public class SysResourcesServiceImpl implements ISysResourcesService {
     @Override
     public void add(SysResourcesVo webVo) {
         prepare(webVo);
-        if(webVo.getStatus()==null){
+        if (webVo.getStatus() == null) {
             webVo.setStatus(1);
         }
-        if(webVo.getType()==null){
+        if (webVo.getType() == null) {
             webVo.setType(0);
         }
-        if(webVo.getOrderIndex()==null){
+        if (webVo.getOrderIndex() == null) {
             webVo.setOrderIndex(0);
         }
-        if(webVo.getParentId()==null){
+        if (webVo.getParentId() == null) {
             webVo.setParentId(0L);
         }
         Checker.begin(true)
-                .notInMsg("不正确的类型标志位",webVo.getType(),0,1)
-                .notInMsg("不正确的状态标志位",webVo.getStatus(),0,1);
+                .notInMsg("不正确的类型标志位", webVo.getType(), 0, 1)
+                .notInMsg("不正确的状态标志位", webVo.getStatus(), 0, 1);
         uniqueCheck(webVo);
         baseMapper.insertSelective(webVo);
     }
@@ -136,12 +136,12 @@ public class SysResourcesServiceImpl implements ISysResourcesService {
     @Override
     public void update(SysResourcesVo webVo) {
         Checker.begin(true)
-                .isNullMsg(webVo.getId(),"ID必填参数");
+                .isNullMsg(webVo.getId(), "ID必填参数");
         prepare(webVo);
         webVo.setStatus(null);
-        if(webVo.getType()!=null){
+        if (webVo.getType() != null) {
             Checker.begin(true)
-                    .notInMsg("不正确的类型标志位",webVo.getType(),0,1);
+                    .notInMsg("不正确的类型标志位", webVo.getType(), 0, 1);
         }
         uniqueCheck(webVo);
         baseMapper.updateSelectiveByPk(webVo);
@@ -150,8 +150,8 @@ public class SysResourcesServiceImpl implements ISysResourcesService {
     @Override
     public void delete(Long id) {
         Checker.begin(true)
-                .isNullMsg(id,"ID必填参数");
-        SysResourcesVo updInfo=new SysResourcesVo();
+                .isNullMsg(id, "ID必填参数");
+        SysResourcesVo updInfo = new SysResourcesVo();
         updInfo.setId(id);
         updInfo.setStatus(99);
         prepare(updInfo);
@@ -163,8 +163,8 @@ public class SysResourcesServiceImpl implements ISysResourcesService {
     @Override
     public void enable(Long id) {
         Checker.begin(true)
-                .isNullMsg(id,"ID必填参数");
-        SysResourcesVo updInfo=new SysResourcesVo();
+                .isNullMsg(id, "ID必填参数");
+        SysResourcesVo updInfo = new SysResourcesVo();
         updInfo.setId(id);
         updInfo.setStatus(1);
         prepare(updInfo);
@@ -174,14 +174,13 @@ public class SysResourcesServiceImpl implements ISysResourcesService {
     @Override
     public void disable(Long id) {
         Checker.begin(true)
-                .isNullMsg(id,"ID必填参数");
-        SysResourcesVo updInfo=new SysResourcesVo();
+                .isNullMsg(id, "ID必填参数");
+        SysResourcesVo updInfo = new SysResourcesVo();
         updInfo.setId(id);
         updInfo.setStatus(0);
         prepare(updInfo);
         baseMapper.updateSelectiveByPk(updInfo);
     }
-
 
 
 }

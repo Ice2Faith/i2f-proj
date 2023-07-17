@@ -11,13 +11,6 @@
       @keyup.enter="doSearch"
     >
       <a-form-item
-        label="部门键"
-        name="deptKey"
-      >
-        <a-input v-model:value="form.deptKey" allow-clear/>
-      </a-form-item>
-
-      <a-form-item
         label="名称"
         name="name"
       >
@@ -40,10 +33,24 @@
       </a-form-item>
 
       <a-form-item
+        label="权限键"
+        name="permKey"
+      >
+        <a-input v-model:value="form.permKey" allow-clear/>
+      </a-form-item>
+
+      <a-form-item
         label="备注"
         name="remark"
       >
         <a-input v-model:value="form.remark" allow-clear/>
+      </a-form-item>
+
+      <a-form-item
+        label="ICON"
+        name="icon"
+      >
+        <a-input v-model:value="form.icon" allow-clear/>
       </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 0, span: 24 }">
@@ -108,7 +115,7 @@
       :columns="tableColumns"
       :data-source="tableData"
       :loading="queryLoading"
-      :pagination="tablePage"
+      :pagination="false"
       :scroll="{ x: 1500 }"
       bordered
       :row-key="record => record[tableRowKey]"
@@ -147,13 +154,6 @@
                     添加
                   </a-menu-item>
                   <a-menu-divider />
-                  <a-menu-item style="background-color: deepskyblue;color: white" @click="doManage(record)">
-                    <template #icon>
-                      <safety-certificate-outlined />
-                    </template>
-                    管理
-                  </a-menu-item>
-                  <a-menu-divider/>
                   <a-menu-item style="background-color: orangered;color: white" @click="doDelete(record)">
                     <template #icon>
                       <delete-outlined/>
@@ -177,56 +177,48 @@
     >
       <Detail :mode="dialogDetail.mode"
               :record="dialogDetail.record"
+              :dept="dept"
               @cancel="handleDetailCancel"
               @submit="handleDetailOk"></Detail>
     </a-modal>
-
-    <a-drawer
-      v-model:visible="dialogs.manage.show"
-      :title="dialogs.manage.title"
-      width="100%"
-      placement="right"
-    >
-      <template #extra>
-        <a-button style="margin-right: 8px" @click="onManageCancel">取消</a-button>
-      </template>
-      <SysDeptManage :dept="dialogs.manage.record"></SysDeptManage>
-    </a-drawer>
   </div>
 </template>
 <script>
 
-import Detail from "./components/Detail";
-
-import ListManageMixin from "@/mixins/ListManageMixin";
 import FormDetailMode from "@/framework/consts/FormDetailMode";
-import SysDeptManage from "@/views/sys/dept/components/SysDeptManage";
+import Detail from "./components/Detail";
+import ListManageMixin from "@/mixins/ListManageMixin";
 
 export default {
   components: {
-    SysDeptManage,
     Detail
   },
-  mixins: [ListManageMixin],
+  mixins:[ListManageMixin],
+  props:{
+    dept:{
+      type:Object,
+      default:{}
+    }
+  },
   data() {
     return {
-      moduleBaseUrl: '/api/sys/dept',
+      moduleBaseUrl: '/api/sys/dept/resources',
 
       form: {
-        deptKey: '',
+        deptId: '',
         name: '',
-        status: '',
-        remark: ''
+        permKey: '',
+        remark: '',
+        icon: '',
+        status: 0,
       },
-      rules: {},
+      rules: {
+
+      },
       dialogs: {
-        manage:{
-          title: '部门管理',
-          show: false,
-          record:{},
-        }
+
       },
-      metas: {
+      metas:{
         statusList:[{
           value: 0,
           label: '禁用',
@@ -239,50 +231,62 @@ export default {
         }],
       },
       tableColumns: [
-        {
-          title: '部门键',
-          dataIndex: 'deptKey',
-        },
-        {
-          title: '名称',
-          dataIndex: 'name',
-        },
-        {
-          title: '状态',
-          dataIndex: 'statusDesc',
-        },
-        {
-          title: '备注',
-          dataIndex: 'remark',
-        },
-        {
-          title: '更新日期',
-          dataIndex: 'updateTime',
-        },
-        {
-          title: '更新人',
-          dataIndex: 'updateUser',
-        },
-        {
-          title: '创建日期',
-          dataIndex: 'createTime',
-        },
-        {
-          title: '创建人',
-          dataIndex: 'createUser',
-        },
-        {
-          title: '操作',
-          key: 'action',
-          fixed: 'right',
-          width: '200px',
-          align: 'center'
-        },
-      ]
+          {
+            title: '名称',
+            dataIndex: 'name',
+          },
+          {
+            title: '菜单键',
+            dataIndex: 'menuKey',
+          },
+          {
+            title: '备注',
+            dataIndex: 'remark',
+          },
+          {
+            title: '状态',
+            dataIndex: 'statusDesc',
+          },
+          {
+            title: '排序字段',
+            dataIndex: 'orderIndex',
+          },
+          {
+            title: 'ICON',
+            dataIndex: 'icon',
+          },
+          {
+            title: '更新日期',
+            dataIndex: 'updateTime',
+          },
+          {
+            title: '更新人',
+            dataIndex: 'updateUser',
+          },
+          {
+            title: '创建日期',
+            dataIndex: 'createTime',
+          },
+          {
+            title: '创建人',
+            dataIndex: 'createUser',
+          },
+          {
+            title: '操作',
+            key: 'action',
+            fixed: 'right',
+            width: '200px',
+            align: 'center'
+          },
+        ]
+
     }
   },
 
   methods: {
+    hookAfterMounted(){
+      this.form.deptId=this.dept.id
+    },
     getData(reset) {
       if (reset) {
         this.tablePage.current = 1
@@ -311,14 +315,8 @@ export default {
         parentId: record.id
       }
       this.dialogDetail.show = true
-    },
-    doManage(record){
-      this.dialogs.manage.record=record;
-      this.dialogs.manage.show=true
-    },
-    onManageCancel(){
-      this.dialogs.manage.show=false
     }
+
   }
 }
 </script>

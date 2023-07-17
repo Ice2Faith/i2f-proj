@@ -28,7 +28,7 @@ import java.util.*;
 @Slf4j
 @Service
 public class SysRoleServiceImpl implements ISysRoleService {
-    public static final String UNIQUE_KEY="unique_key";
+    public static final String UNIQUE_KEY = "unique_key";
 
     @Resource
     private SysRoleMapper baseMapper;
@@ -66,51 +66,51 @@ public class SysRoleServiceImpl implements ISysRoleService {
         return ret;
     }
 
-    public void prepare(SysRoleVo webVo){
-        Date now=new Date();
+    public void prepare(SysRoleVo webVo) {
+        Date now = new Date();
         String currentUserId = SecurityUtils.currentUserIdStr();
-        if(webVo.getId()==null){
+        if (webVo.getId() == null) {
             webVo.setCreateTime(now);
             webVo.setCreateUser(currentUserId);
-        }else{
+        } else {
             webVo.setUpdateTime(now);
             webVo.setUpdateUser(currentUserId);
         }
     }
 
-    public void uniqueCheck(SysRoleVo webVo){
-        Collection<Object> excludesIds=null;
-        if(webVo.getId()!=null){
-            excludesIds= Arrays.asList(webVo.getId());
+    public void uniqueCheck(SysRoleVo webVo) {
+        Collection<Object> excludesIds = null;
+        if (webVo.getId() != null) {
+            excludesIds = Arrays.asList(webVo.getId());
         }
-        int cnt=baseMapper.countOfKey(webVo.getRoleKey(),excludesIds);
+        int cnt = baseMapper.countOfKey(webVo.getRoleKey(), excludesIds);
         Checker.begin(true)
-                .isExTrueMsg("roleKey已存在",cnt>0);
+                .isExTrueMsg("roleKey已存在", cnt > 0);
     }
 
     @RedisLock(UNIQUE_KEY)
     @Override
     public void add(SysRoleVo webVo) {
-        if(webVo.getStatus()==null){
+        if (webVo.getStatus() == null) {
             webVo.setStatus(1);
         }
-        if(webVo.getDelFlag()==null){
+        if (webVo.getDelFlag() == null) {
             webVo.setDelFlag(1);
         }
-        if(webVo.getSysFlag()==null){
+        if (webVo.getSysFlag() == null) {
             webVo.setSysFlag(0);
         }
-        if(webVo.getSysFlag()==1){
+        if (webVo.getSysFlag() == 1) {
             webVo.setStatus(1);
             webVo.setDelFlag(0);
         }
         prepare(webVo);
         Checker.begin(true)
-                .isEmptyStrMsg(webVo.getRoleKey(),"roleKey必填参数")
-                .isEmptyStrMsg(webVo.getRoleName(),"roleName必填参数")
-                .notInMsg("不正确的状态标志位",webVo.getStatus(),0,1)
-                .notInMsg("不正确的删除标志位",webVo.getDelFlag(),0,1)
-                .notInMsg("不正确的系统标志位",webVo.getSysFlag(),0,1);
+                .isEmptyStrMsg(webVo.getRoleKey(), "roleKey必填参数")
+                .isEmptyStrMsg(webVo.getRoleName(), "roleName必填参数")
+                .notInMsg("不正确的状态标志位", webVo.getStatus(), 0, 1)
+                .notInMsg("不正确的删除标志位", webVo.getDelFlag(), 0, 1)
+                .notInMsg("不正确的系统标志位", webVo.getSysFlag(), 0, 1);
         uniqueCheck(webVo);
         baseMapper.insertSelective(webVo);
     }
@@ -119,7 +119,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public void update(SysRoleVo webVo) {
         Checker.begin(true)
-                .isNullMsg(webVo.getId(),"ID必填参数");
+                .isNullMsg(webVo.getId(), "ID必填参数");
         webVo.setStatus(null);
         prepare(webVo);
         uniqueCheck(webVo);
@@ -130,8 +130,8 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public void delete(Long id) {
         Checker.begin(true)
-                .isNullMsg(id,"ID不能为空");
-        SysRoleVo updInfo=new SysRoleVo();
+                .isNullMsg(id, "ID不能为空");
+        SysRoleVo updInfo = new SysRoleVo();
         updInfo.setId(id);
         prepare(updInfo);
         baseMapper.deleteLogicalByPk(updInfo);
@@ -140,9 +140,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public void enable(Long id) {
         Checker.begin(true)
-                .isNullMsg(id,"ID不能为空");
+                .isNullMsg(id, "ID不能为空");
 
-        SysRoleVo updInfo=new SysRoleVo();
+        SysRoleVo updInfo = new SysRoleVo();
         updInfo.setId(id);
         updInfo.setStatus(1);
         prepare(updInfo);
@@ -152,9 +152,9 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public void disable(Long id) {
         Checker.begin(true)
-                .isNullMsg(id,"ID不能为空");
+                .isNullMsg(id, "ID不能为空");
 
-        SysRoleVo updInfo=new SysRoleVo();
+        SysRoleVo updInfo = new SysRoleVo();
         updInfo.setId(id);
         prepare(updInfo);
         baseMapper.disableByPk(updInfo);
@@ -182,7 +182,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public void deleteRoleResources(Long roleId) {
         Checker.begin(true)
-                .isNullMsg(roleId,"roleId必填参数");
+                .isNullMsg(roleId, "roleId必填参数");
 
         sysRoleResourcesMapper.deleteRoleResources(roleId);
     }
@@ -190,7 +190,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public List<Long> findRoleResourcesIds(Long roleId) {
         Checker.begin(true)
-                .isNullMsg(roleId,"roleId必填参数");
+                .isNullMsg(roleId, "roleId必填参数");
 
         return sysRoleResourcesMapper.findRoleResourcesIds(roleId);
     }
@@ -199,22 +199,22 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public void updateRoleResources(Long roleId, Collection<Long> resIds) {
         Checker.begin(true)
-                .isNullMsg(roleId,"roleId必填参数")
-                .isNullMsg(resIds,"resIds必填参数");
+                .isNullMsg(roleId, "roleId必填参数")
+                .isNullMsg(resIds, "resIds必填参数");
 
         sysRoleResourcesMapper.deleteRoleResources(roleId);
 
-        if(resIds.isEmpty()){
+        if (resIds.isEmpty()) {
             return;
         }
 
-        Date now=new Date();
-        String currentUserId=SecurityUtils.currentUserIdStr();
+        Date now = new Date();
+        String currentUserId = SecurityUtils.currentUserIdStr();
 
-        Set<Long> ids=new LinkedHashSet<>(resIds);
-        List<SysRoleResourcesVo> list=new LinkedList<>();
+        Set<Long> ids = new LinkedHashSet<>(resIds);
+        List<SysRoleResourcesVo> list = new LinkedList<>();
         for (Long id : ids) {
-            SysRoleResourcesVo item=new SysRoleResourcesVo();
+            SysRoleResourcesVo item = new SysRoleResourcesVo();
             item.setRoleId(roleId);
             item.setResId(id);
             item.setCreateTime(now);

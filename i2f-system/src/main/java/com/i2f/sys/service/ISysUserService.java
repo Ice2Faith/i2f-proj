@@ -29,9 +29,9 @@ public interface ISysUserService {
 
     void delete(Long id);
 
-    void changePassword(Long id,String password);
+    void changePassword(Long id, String password);
 
-    void changePassword(String username,String password);
+    void changePassword(String username, String password);
 
     void enable(Long id);
 
@@ -65,5 +65,5 @@ public interface ISysUserService {
 
     void updateUserRoleIds(Long userId, Collection<Long> roleIds);
 
-    void updateUserDeptIds(Long userId,Collection<Long> deptIds);
+    void updateUserDeptIds(Long userId, Collection<Long> deptIds);
 }

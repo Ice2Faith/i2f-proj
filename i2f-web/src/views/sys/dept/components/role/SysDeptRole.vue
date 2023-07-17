@@ -11,17 +11,17 @@
       @keyup.enter="doSearch"
     >
       <a-form-item
-        label="部门键"
-        name="deptKey"
+        label="角色键"
+        name="roleKey"
       >
-        <a-input v-model:value="form.deptKey" allow-clear/>
+        <a-input v-model:value="form.roleKey" allow-clear/>
       </a-form-item>
 
       <a-form-item
-        label="名称"
-        name="name"
+        label="角色名称"
+        name="roleName"
       >
-        <a-input v-model:value="form.name" allow-clear/>
+        <a-input v-model:value="form.roleName" allow-clear/>
       </a-form-item>
 
       <a-form-item
@@ -39,12 +39,6 @@
         </a-select>
       </a-form-item>
 
-      <a-form-item
-        label="备注"
-        name="remark"
-      >
-        <a-input v-model:value="form.remark" allow-clear/>
-      </a-form-item>
 
       <a-form-item :wrapper-col="{ offset: 0, span: 24 }">
         <a-row :gutter="20" justify="center" type="flex">
@@ -140,20 +134,13 @@
                     编辑
                   </a-menu-item>
                   <a-menu-divider />
-                  <a-menu-item style="background-color: lightseagreen;color: white" @click="doAddChildren(record)">
-                    <template #icon>
-                      <plus-outlined/>
-                    </template>
-                    添加
-                  </a-menu-item>
-                  <a-menu-divider />
-                  <a-menu-item style="background-color: deepskyblue;color: white" @click="doManage(record)">
+                  <a-menu-item style="background-color: lightseagreen;color: white" @click="doAuthResources(record)">
                     <template #icon>
                       <safety-certificate-outlined />
                     </template>
-                    管理
+                    授权
                   </a-menu-item>
-                  <a-menu-divider/>
+                  <a-menu-divider />
                   <a-menu-item style="background-color: orangered;color: white" @click="doDelete(record)">
                     <template #icon>
                       <delete-outlined/>
@@ -177,56 +164,71 @@
     >
       <Detail :mode="dialogDetail.mode"
               :record="dialogDetail.record"
+              :dept="dept"
               @cancel="handleDetailCancel"
               @submit="handleDetailOk"></Detail>
     </a-modal>
 
     <a-drawer
-      v-model:visible="dialogs.manage.show"
-      :title="dialogs.manage.title"
-      width="100%"
+      v-model:visible="dialogs.auth.show"
+      :title="dialogs.auth.title"
+      width="30%"
       placement="right"
     >
       <template #extra>
-        <a-button style="margin-right: 8px" @click="onManageCancel">取消</a-button>
+        <a-button style="margin-right: 8px" @click="onAuthCancel">取消</a-button>
+        <a-button type="primary" @click="onAuthSubmit">提交</a-button>
       </template>
-      <SysDeptManage :dept="dialogs.manage.record"></SysDeptManage>
+      <a-tree
+        v-model:checkedKeys="dialogs.auth.checkedKeys"
+        :fieldNames="{children:'children', title:'name', key:'id' }"
+        checkable
+        :tree-data="metas.resourceTreeData"
+      >
+      </a-tree>
     </a-drawer>
   </div>
 </template>
 <script>
 
-import Detail from "./components/Detail";
-
-import ListManageMixin from "@/mixins/ListManageMixin";
 import FormDetailMode from "@/framework/consts/FormDetailMode";
-import SysDeptManage from "@/views/sys/dept/components/SysDeptManage";
+import Detail from "./components/Detail";
+import ListManageMixin from "@/mixins/ListManageMixin";
 
 export default {
   components: {
-    SysDeptManage,
     Detail
   },
-  mixins: [ListManageMixin],
+  mixins:[ListManageMixin],
+  props:{
+    dept:{
+      type: Object,
+      default: {}
+    }
+  },
   data() {
     return {
-      moduleBaseUrl: '/api/sys/dept',
+      moduleBaseUrl: '/api/sys/dept/role',
 
       form: {
-        deptKey: '',
-        name: '',
-        status: '',
-        remark: ''
+        deptId: '',
+        roleKey: '',
+        roleName: '',
+        status: null,
       },
-      rules: {},
+
+      rules: {
+
+      },
       dialogs: {
-        manage:{
-          title: '部门管理',
+        auth:{
+          title: '角色授权',
           show: false,
           record:{},
+          checkedKeys: [],
         }
       },
-      metas: {
+      metas:{
         statusList:[{
           value: 0,
           label: '禁用',
@@ -237,65 +239,67 @@ export default {
           value: 99,
           label: '删除',
         }],
+        boolList:[{
+          value: 0,
+          label: '否',
+        }, {
+          value: 1,
+          label: '是',
+        }],
+        resourceTreeData:[]
       },
       tableColumns: [
-        {
-          title: '部门键',
-          dataIndex: 'deptKey',
-        },
-        {
-          title: '名称',
-          dataIndex: 'name',
-        },
-        {
-          title: '状态',
-          dataIndex: 'statusDesc',
-        },
-        {
-          title: '备注',
-          dataIndex: 'remark',
-        },
-        {
-          title: '更新日期',
-          dataIndex: 'updateTime',
-        },
-        {
-          title: '更新人',
-          dataIndex: 'updateUser',
-        },
-        {
-          title: '创建日期',
-          dataIndex: 'createTime',
-        },
-        {
-          title: '创建人',
-          dataIndex: 'createUser',
-        },
-        {
-          title: '操作',
-          key: 'action',
-          fixed: 'right',
-          width: '200px',
-          align: 'center'
-        },
-      ]
+          {
+            title: '角色键',
+            dataIndex: 'roleKey',
+          },
+          {
+            title: '角色名称',
+            dataIndex: 'roleName',
+          },
+          {
+            title: '状态',
+            dataIndex: 'statusDesc',
+          },
+          {
+            title: '更新日期',
+            dataIndex: 'updateTime',
+          },
+          {
+            title: '更新人',
+            dataIndex: 'updateUser',
+          },
+          {
+            title: '创建日期',
+            dataIndex: 'createTime',
+          },
+          {
+            title: '创建人',
+            dataIndex: 'createUser',
+          },
+          {
+            title: '操作',
+            key: 'action',
+            fixed: 'right',
+            width: '200px',
+            align: 'center'
+          },
+        ]
+
     }
   },
 
   methods: {
-    getData(reset) {
-      if (reset) {
-        this.tablePage.current = 1
-      }
-      this.queryLoading = true
+    hookAfterMounted(){
+      this.form.deptId=this.dept.id
+      this.loadResourcesTreeData()
+    },
+    loadResourcesTreeData(){
       this.$axios({
-        url: `${this.moduleBaseUrl}/tree`,
-        method: 'get',
-        params: this.form
-      }).then(({data}) => {
-        this.tableData = data
-      }).finally(() => {
-        this.queryLoading = false
+        url: `/api/sys/resources/tree`,
+        method: 'get'
+      }).then(({data})=>{
+        this.metas.resourceTreeData=data
       })
     },
     doImport() {
@@ -304,21 +308,31 @@ export default {
     doExport() {
 
     },
-    doAddChildren(record){
-      this.dialogDetail.mode=FormDetailMode.ADD()
-      this.dialogDetail.title='新增'
-      this.dialogDetail.record={
-        parentId: record.id
-      }
-      this.dialogDetail.show = true
+    onAuthCancel(){
+      this.dialogs.auth.show=false
+
     },
-    doManage(record){
-      this.dialogs.manage.record=record;
-      this.dialogs.manage.show=true
+    onAuthSubmit(){
+
+      this.$axios({
+        url: `${this.moduleBaseUrl}/resources/update/${this.dialogs.auth.record.id}`,
+        method: 'put',
+        data: this.dialogs.auth.checkedKeys
+      }).then((data)=>{
+        this.dialogs.auth.show=false
+      })
+
     },
-    onManageCancel(){
-      this.dialogs.manage.show=false
-    }
+    doAuthResources(record){
+      this.dialogs.auth.record=record
+      this.$axios({
+        url:`${this.moduleBaseUrl}/resources/ids/${this.dialogs.auth.record.id}`,
+        method:'get'
+      }).then(({data})=>{
+        this.dialogs.auth.checkedKeys=data
+        this.dialogs.auth.show=true
+      })
+    },
   }
 }
 </script>

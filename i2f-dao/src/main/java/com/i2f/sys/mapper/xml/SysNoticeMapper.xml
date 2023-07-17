@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.i2f.sys.mapper.SysNoticeMapper">
+    <!--
+    * @author Ice2Faith
+    * @date 2023-07-17 08:43:00
+    * @desc sys_notice 通知表
+    -->
+
+    <resultMap id="mapDoResultMap" type="com.i2f.sys.data.dom.SysNoticeDo">
+        <id property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="recvUserId" column="recv_user_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="sender" column="sender"/>
+        <result property="sendUserId" column="send_user_id"/>
+        <result property="noticeTime" column="notice_time"/>
+        <result property="url" column="url"/>
+        <result property="businessType" column="business_type"/>
+        <result property="businessKey" column="business_key"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateUser" column="update_user"/>
+    </resultMap>
+
+    <resultMap id="mapVoResultMap" type="com.i2f.sys.data.vo.SysNoticeVo"
+               extends="mapDoResultMap">
+        <result property="typeDesc" column="type_desc"/>
+        <result property="businessTypeDesc" column="business_type_desc"/>
+    </resultMap>
+
+    <sql id="columnsAsCamel">
+          a.id
+         ,a.type
+         ,a.recv_user_id as recvUserId
+         ,a.title
+         ,a.content
+         ,a.sender
+         ,a.send_user_id as sendUserId
+         ,a.notice_time as noticeTime
+         ,a.url
+         ,a.business_type as businessType
+         ,a.business_key as businessKey
+         ,a.create_time as createTime
+         ,a.create_user as createUser
+         ,a.update_time as updateTime
+         ,a.update_user as updateUser
+    </sql>
+
+    <sql id="columnDescAsCamel">
+          a.type_desc as typeDesc
+         ,a.business_type_desc as businessTypeDesc
+    </sql>
+
+    <sql id="baseQueryBody">
+        select
+               a.id
+              ,a.type
+              ,a.recv_user_id
+              ,a.title
+              ,a.content
+              ,a.sender
+              ,a.send_user_id
+              ,a.notice_time
+              ,a.url
+              ,a.business_type
+              ,a.business_key
+              ,a.create_time
+              ,a.create_user
+              ,a.update_time
+              ,a.update_user
+        from sys_notice a
+    </sql>
+
+    <sql id="baseQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.type!=null">
+                and a.type = #{post.type}
+            </if>
+            <if test="post.recvUserId!=null">
+                and a.recv_user_id = #{post.recvUserId}
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                and instr(a.title,#{post.title}) &gt; 0
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                and instr(a.content,#{post.content}) &gt; 0
+            </if>
+            <if test="post.sender!=null and post.sender!=''">
+                and instr(a.sender,#{post.sender}) &gt; 0
+            </if>
+            <if test="post.sendUserId!=null">
+                and a.send_user_id = #{post.sendUserId}
+            </if>
+            <if test="post.noticeTime!=null">
+                and a.notice_time = #{post.noticeTime}
+            </if>
+            <if test="post.url!=null and post.url!=''">
+                and instr(a.url,#{post.url}) &gt; 0
+            </if>
+            <if test="post.businessType!=null">
+                and a.business_type = #{post.businessType}
+            </if>
+            <if test="post.businessKey!=null and post.businessKey!=''">
+                and instr(a.business_key,#{post.businessKey}) &gt; 0
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(a.create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and a.update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(a.update_user,#{post.updateUser}) &gt; 0
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="list" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="findByPk" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSelective">
+        insert into sys_notice
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                id,
+            </if>
+            <if test="post.type!=null">
+                type,
+            </if>
+            <if test="post.recvUserId!=null">
+                recv_user_id,
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                title,
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                content,
+            </if>
+            <if test="post.sender!=null and post.sender!=''">
+                sender,
+            </if>
+            <if test="post.sendUserId!=null">
+                send_user_id,
+            </if>
+            <if test="post.noticeTime!=null">
+                notice_time,
+            </if>
+            <if test="post.url!=null and post.url!=''">
+                url,
+            </if>
+            <if test="post.businessType!=null">
+                business_type,
+            </if>
+            <if test="post.businessKey!=null and post.businessKey!=''">
+                business_key,
+            </if>
+            <if test="post.createTime!=null">
+                create_time,
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user,
+            </if>
+            <if test="post.updateTime!=null">
+                update_time,
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user,
+            </if>
+        </trim>
+        )
+        values
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                #{post.id},
+            </if>
+            <if test="post.type!=null">
+                #{post.type},
+            </if>
+            <if test="post.recvUserId!=null">
+                #{post.recvUserId},
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                #{post.title},
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                #{post.content},
+            </if>
+            <if test="post.sender!=null and post.sender!=''">
+                #{post.sender},
+            </if>
+            <if test="post.sendUserId!=null">
+                #{post.sendUserId},
+            </if>
+            <if test="post.noticeTime!=null">
+                #{post.noticeTime},
+            </if>
+            <if test="post.url!=null and post.url!=''">
+                #{post.url},
+            </if>
+            <if test="post.businessType!=null">
+                #{post.businessType},
+            </if>
+            <if test="post.businessKey!=null and post.businessKey!=''">
+                #{post.businessKey},
+            </if>
+            <if test="post.createTime!=null">
+                #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                #{post.createUser},
+            </if>
+            <if test="post.updateTime!=null">
+                #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                #{post.updateUser},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateSelectiveByPk">
+        update sys_notice
+        <set>
+            <if test="post.id!=null">
+                id = #{post.id},
+            </if>
+            <if test="post.type!=null">
+                type = #{post.type},
+            </if>
+            <if test="post.recvUserId!=null">
+                recv_user_id = #{post.recvUserId},
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                title = #{post.title},
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                content = #{post.content},
+            </if>
+            <if test="post.sender!=null and post.sender!=''">
+                sender = #{post.sender},
+            </if>
+            <if test="post.sendUserId!=null">
+                send_user_id = #{post.sendUserId},
+            </if>
+            <if test="post.noticeTime!=null">
+                notice_time = #{post.noticeTime},
+            </if>
+            <if test="post.url!=null and post.url!=''">
+                url = #{post.url},
+            </if>
+            <if test="post.businessType!=null">
+                business_type = #{post.businessType},
+            </if>
+            <if test="post.businessKey!=null and post.businessKey!=''">
+                business_key = #{post.businessKey},
+            </if>
+            <if test="post.createTime!=null">
+                create_time = #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user = #{post.createUser},
+            </if>
+            <if test="post.updateTime!=null">
+                update_time = #{post.updateTime},
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                update_user = #{post.updateUser},
+            </if>
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteByPk">
+        delete from sys_notice
+        where id = #{id}
+    </delete>
+
+    <insert id="insert">
+        insert into sys_notice
+        (
+                    id
+             ,type
+             ,recv_user_id
+             ,title
+             ,content
+             ,sender
+             ,send_user_id
+             ,notice_time
+             ,url
+             ,business_type
+             ,business_key
+             ,create_time
+             ,create_user
+             ,update_time
+             ,update_user
+                            )
+        values
+        (
+                    #{post.id}
+             ,#{post.type}
+             ,#{post.recvUserId}
+             ,#{post.title}
+             ,#{post.content}
+             ,#{post.sender}
+             ,#{post.sendUserId}
+             ,#{post.noticeTime}
+             ,#{post.url}
+             ,#{post.businessType}
+             ,#{post.businessKey}
+             ,#{post.createTime}
+             ,#{post.createUser}
+             ,#{post.updateTime}
+             ,#{post.updateUser}
+                            )
+    </insert>
+
+    <update id="updateByPk">
+        update sys_notice
+        <set>
+            id = #{post.id},
+            type = #{post.type},
+            recv_user_id = #{post.recvUserId},
+            title = #{post.title},
+            content = #{post.content},
+            sender = #{post.sender},
+            send_user_id = #{post.sendUserId},
+            notice_time = #{post.noticeTime},
+            url = #{post.url},
+            business_type = #{post.businessType},
+            business_key = #{post.businessKey},
+            create_time = #{post.createTime},
+            create_user = #{post.createUser},
+            update_time = #{post.updateTime},
+            update_user = #{post.updateUser},
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteSelective">
+        delete from sys_notice
+        where
+        <trim suffixOverrides="and|or" prefixOverrides="and|or">
+            <if test="post.id!=null">
+                and id = #{post.id}
+            </if>
+            <if test="post.type!=null">
+                and type = #{post.type}
+            </if>
+            <if test="post.recvUserId!=null">
+                and recv_user_id = #{post.recvUserId}
+            </if>
+            <if test="post.title!=null and post.title!=''">
+                and instr(title,#{post.title}) &gt; 0
+            </if>
+            <if test="post.content!=null and post.content!=''">
+                and instr(content,#{post.content}) &gt; 0
+            </if>
+            <if test="post.sender!=null and post.sender!=''">
+                and instr(sender,#{post.sender}) &gt; 0
+            </if>
+            <if test="post.sendUserId!=null">
+                and send_user_id = #{post.sendUserId}
+            </if>
+            <if test="post.noticeTime!=null">
+                and notice_time = #{post.noticeTime}
+            </if>
+            <if test="post.url!=null and post.url!=''">
+                and instr(url,#{post.url}) &gt; 0
+            </if>
+            <if test="post.businessType!=null">
+                and business_type = #{post.businessType}
+            </if>
+            <if test="post.businessKey!=null and post.businessKey!=''">
+                and instr(business_key,#{post.businessKey}) &gt; 0
+            </if>
+            <if test="post.createTime!=null">
+                and create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(create_user,#{post.createUser}) &gt; 0
+            </if>
+            <if test="post.updateTime!=null">
+                and update_time = #{post.updateTime}
+            </if>
+            <if test="post.updateUser!=null and post.updateUser!=''">
+                and instr(update_user,#{post.updateUser}) &gt; 0
+            </if>
+        </trim>
+    </delete>
+
+    <insert id="insertBatch">
+        insert into sys_notice
+        (
+        id
+        ,type
+        ,recv_user_id
+        ,title
+        ,content
+        ,sender
+        ,send_user_id
+        ,notice_time
+        ,url
+        ,business_type
+        ,business_key
+        ,create_time
+        ,create_user
+        ,update_time
+        ,update_user
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}
+            ,#{item.type}
+            ,#{item.recvUserId}
+            ,#{item.title}
+            ,#{item.content}
+            ,#{item.sender}
+            ,#{item.sendUserId}
+            ,#{item.noticeTime}
+            ,#{item.url}
+            ,#{item.businessType}
+            ,#{item.businessKey}
+            ,#{item.createTime}
+            ,#{item.createUser}
+            ,#{item.updateTime}
+            ,#{item.updateUser}
+            )
+        </foreach>
+
+    </insert>
+</mapper>

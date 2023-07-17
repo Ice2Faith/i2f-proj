@@ -28,14 +28,14 @@ import java.util.List;
 @Slf4j
 @Service
 public class SysConfigItemServiceImpl implements ISysConfigItemService {
-    public static final String UNIQUE_KEY="unique_key";
+    public static final String UNIQUE_KEY = "unique_key";
 
     @Resource
     private SysConfigItemMapper baseMapper;
 
     @Override
     public ApiPage<SysConfigItemVo> page(SysConfigItemVo webVo,
-                                     ApiPage<SysConfigItemVo> page) {
+                                         ApiPage<SysConfigItemVo> page) {
 
         PageHelper.startPage(page.getIndex() + 1, page.getSize());
         List<SysConfigItemVo> list = baseMapper.page(webVo);
@@ -60,32 +60,32 @@ public class SysConfigItemServiceImpl implements ISysConfigItemService {
     }
 
 
-    public void prepare(SysConfigItemVo webVo){
-        Date now=new Date();
+    public void prepare(SysConfigItemVo webVo) {
+        Date now = new Date();
         String currentUserId = SecurityUtils.currentUserIdStr();
-        if(webVo.getId()==null){
+        if (webVo.getId() == null) {
             webVo.setCreateTime(now);
             webVo.setCreateUser(currentUserId);
-        }else{
+        } else {
             webVo.setUpdateTime(now);
             webVo.setUpdateUser(currentUserId);
         }
     }
 
-    public void uniqueCheck(SysConfigItemVo webVo){
-        Collection<Object> excludesIds=null;
-        if(webVo.getId()!=null){
-            excludesIds= Arrays.asList(webVo.getId());
+    public void uniqueCheck(SysConfigItemVo webVo) {
+        Collection<Object> excludesIds = null;
+        if (webVo.getId() != null) {
+            excludesIds = Arrays.asList(webVo.getId());
         }
-        if(webVo.getEntryId()!=null){
-            int cnt=baseMapper.countOfEntryId(webVo.getEntryId(),webVo.getConfigId(),excludesIds);
+        if (webVo.getEntryId() != null) {
+            int cnt = baseMapper.countOfEntryId(webVo.getEntryId(), webVo.getConfigId(), excludesIds);
             Checker.begin(true)
-                    .isExTrueMsg("entryId已存在",cnt>0);
+                    .isExTrueMsg("entryId已存在", cnt > 0);
         }
-        if(!CheckUtil.isEmptyStr(webVo.getEntryKey())){
-            int cnt=baseMapper.countOfEntryKey(webVo.getEntryKey(),webVo.getConfigId(),excludesIds);
+        if (!CheckUtil.isEmptyStr(webVo.getEntryKey())) {
+            int cnt = baseMapper.countOfEntryKey(webVo.getEntryKey(), webVo.getConfigId(), excludesIds);
             Checker.begin(true)
-                    .isExTrueMsg("entryKey已存在",cnt>0);
+                    .isExTrueMsg("entryKey已存在", cnt > 0);
         }
     }
 
@@ -96,31 +96,31 @@ public class SysConfigItemServiceImpl implements ISysConfigItemService {
         if (webVo.getStatus() == null) {
             webVo.setStatus(1);
         }
-        if(webVo.getEntryOrder()==null){
+        if (webVo.getEntryOrder() == null) {
             webVo.setEntryOrder(0);
         }
-        if(webVo.getModFlag()==null){
+        if (webVo.getModFlag() == null) {
             webVo.setModFlag(1);
         }
-        if(webVo.getDelFlag()==null){
+        if (webVo.getDelFlag() == null) {
             webVo.setDelFlag(1);
         }
-        if(webVo.getSysFlag()==null){
+        if (webVo.getSysFlag() == null) {
             webVo.setSysFlag(0);
         }
-        if(webVo.getParentEntryId()==null){
+        if (webVo.getParentEntryId() == null) {
             webVo.setParentEntryId(0L);
         }
         prepare(webVo);
 
         Checker.begin(true)
-                .isNullMsg(webVo.getConfigId(),"configId必填参数")
-                .isNullMsg(webVo.getEntryId(),"entryId必填参数")
-                .isEmptyStrMsg(webVo.getEntryName(),"entryName必填参数")
-                .notInMsg("不正确的状态标志位",webVo.getStatus(),0,1)
-                .notInMsg("不正确的修改标志位",webVo.getModFlag(),0,1)
-                .notInMsg("不正确的删除标志位",webVo.getDelFlag(),0,1)
-                .notInMsg("不正确的系统标志位",webVo.getSysFlag(),0,1);
+                .isNullMsg(webVo.getConfigId(), "configId必填参数")
+                .isNullMsg(webVo.getEntryId(), "entryId必填参数")
+                .isEmptyStrMsg(webVo.getEntryName(), "entryName必填参数")
+                .notInMsg("不正确的状态标志位", webVo.getStatus(), 0, 1)
+                .notInMsg("不正确的修改标志位", webVo.getModFlag(), 0, 1)
+                .notInMsg("不正确的删除标志位", webVo.getDelFlag(), 0, 1)
+                .notInMsg("不正确的系统标志位", webVo.getSysFlag(), 0, 1);
         uniqueCheck(webVo);
 
         baseMapper.insertSelective(webVo);
@@ -130,12 +130,12 @@ public class SysConfigItemServiceImpl implements ISysConfigItemService {
     @Override
     public void update(SysConfigItemVo webVo) {
         Checker.begin(true)
-                .isNullMsg(webVo.getId(),"ID必填参数");
+                .isNullMsg(webVo.getId(), "ID必填参数");
         SysConfigItemVo exInfo = find(webVo.getId());
         Checker.begin(true)
                 .isNullMsg(exInfo, "找不到配置项")
                 .isExTrueMsg("配置项不允许修改", exInfo.getModFlag() == 0)
-                .isExTrueMsg("配置项已删除",exInfo.getStatus()==99);
+                .isExTrueMsg("配置项已删除", exInfo.getStatus() == 99);
         exInfo.setConfigId(null);
         prepare(webVo);
         uniqueCheck(webVo);
@@ -146,15 +146,15 @@ public class SysConfigItemServiceImpl implements ISysConfigItemService {
     @Override
     public void delete(Long id) {
         Checker.begin(true)
-                .isNullMsg(id,"ID必填参数");
+                .isNullMsg(id, "ID必填参数");
         SysConfigItemVo exInfo = find(id);
         Checker.begin(true)
                 .isNullMsg(exInfo, "找不到配置项")
                 .isExTrueMsg("配置项不允许删除", exInfo.getDelFlag() == 0)
-                .isExTrueMsg("系统配置项不允许删除",exInfo.getSysFlag()==1)
-                .isExTrueMsg("配置项已删除",exInfo.getStatus()==99);
+                .isExTrueMsg("系统配置项不允许删除", exInfo.getSysFlag() == 1)
+                .isExTrueMsg("配置项已删除", exInfo.getStatus() == 99);
 
-        SysConfigItemVo updInfo=new SysConfigItemVo();
+        SysConfigItemVo updInfo = new SysConfigItemVo();
         updInfo.setId(id);
         prepare(updInfo);
         baseMapper.deleteLogicalByPk(updInfo);
@@ -190,9 +190,9 @@ public class SysConfigItemServiceImpl implements ISysConfigItemService {
         deleteItems(configId);
         for (SysConfigItemVo item : items) {
             item.setConfigId(configId);
-            if(item.getId()!=null){
+            if (item.getId() != null) {
                 update(item);
-            }else{
+            } else {
                 add(item);
             }
         }
@@ -200,7 +200,7 @@ public class SysConfigItemServiceImpl implements ISysConfigItemService {
 
     @Override
     public void deleteItems(Long configId) {
-        SysConfigItemVo updInfo=new SysConfigItemVo();
+        SysConfigItemVo updInfo = new SysConfigItemVo();
         updInfo.setConfigId(configId);
         prepare(updInfo);
         baseMapper.deleteItemsLogical(updInfo);
@@ -210,7 +210,7 @@ public class SysConfigItemServiceImpl implements ISysConfigItemService {
     public List<SysConfigItemVo> children(Long configId, SysConfigItemVo webVo) {
         webVo.setConfigId(configId);
 
-        List<SysConfigItemVo> list=baseMapper.children(webVo);
+        List<SysConfigItemVo> list = baseMapper.children(webVo);
 
         return list;
     }
