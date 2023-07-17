@@ -298,8 +298,11 @@ export default {
     },
     loadResourcesTreeData(){
       this.$axios({
-        url: `/api/sys/resources/tree`,
-        method: 'get'
+        url: `/api/sys/dept/resources/tree`,
+        method: 'get',
+        params:{
+          deptId: this.dept.id
+        }
       }).then(({data})=>{
         this.metas.resourceTreeData=data
       })
