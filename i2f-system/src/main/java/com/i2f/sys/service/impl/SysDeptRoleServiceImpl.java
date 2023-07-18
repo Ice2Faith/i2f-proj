@@ -3,20 +3,21 @@ package com.i2f.sys.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.i2f.framework.security.SecurityUtils;
+import com.i2f.sys.data.vo.SysDeptRoleResourcesVo;
 import com.i2f.sys.data.vo.SysDeptRoleVo;
+import com.i2f.sys.data.vo.SysRoleResourcesVo;
 import com.i2f.sys.mapper.SysDeptRoleMapper;
+import com.i2f.sys.mapper.SysDeptRoleResourcesMapper;
 import com.i2f.sys.service.ISysDeptRoleService;
 import i2f.core.check.Checker;
 import i2f.core.std.api.ApiPage;
 import i2f.springboot.redisson.annotation.RedisLock;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Ice2Faith
@@ -31,6 +32,9 @@ public class SysDeptRoleServiceImpl implements ISysDeptRoleService {
 
     @Resource
     private SysDeptRoleMapper baseMapper;
+
+    @Resource
+    private SysDeptRoleResourcesMapper sysDeptRoleResourcesMapper;
 
     @Override
     public ApiPage<SysDeptRoleVo> page(SysDeptRoleVo webVo,
@@ -141,5 +145,44 @@ public class SysDeptRoleServiceImpl implements ISysDeptRoleService {
         updInfo.setStatus(0);
         prepare(updInfo);
         baseMapper.updateSelectiveByPk(updInfo);
+    }
+
+
+    @Override
+    public List<Long> findRoleResourcesIds(Long roleId) {
+        Checker.begin(true)
+                .isNullMsg(roleId, "roleId必填参数");
+
+        return sysDeptRoleResourcesMapper.findRoleResourcesIds(roleId);
+    }
+
+
+    @Override
+    public void updateRoleResources(Long roleId, Collection<Long> resIds) {
+        Checker.begin(true)
+                .isNullMsg(roleId, "roleId必填参数")
+                .isNullMsg(resIds, "resIds必填参数");
+
+        sysDeptRoleResourcesMapper.deleteRoleResources(roleId);
+
+        if (resIds.isEmpty()) {
+            return;
+        }
+
+        Date now = new Date();
+        String currentUserId = SecurityUtils.currentUserIdStr();
+
+        Set<Long> ids = new LinkedHashSet<>(resIds);
+        List<SysDeptRoleResourcesVo> list = new LinkedList<>();
+        for (Long id : ids) {
+            SysDeptRoleResourcesVo item = new SysDeptRoleResourcesVo();
+            item.setDeptRoleId(roleId);
+            item.setDeptResId(id);
+            item.setCreateTime(now);
+            item.setCreateUser(currentUserId);
+            list.add(item);
+        }
+
+        sysDeptRoleResourcesMapper.insertBatch(list);
     }
 }

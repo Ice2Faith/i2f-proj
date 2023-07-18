@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.i2f.sys.mapper.SysDeptRoleResourcesMapper">
+    <!--
+    * @author Ice2Faith
+    * @date 2023-07-18 16:42:11
+    * @desc sys_dept_role_resources 部门角色-部门资源表
+    -->
+
+    <resultMap id="mapDoResultMap" type="com.i2f.sys.data.dom.SysDeptRoleResourcesDo">
+        <id property="id" column="id"/>
+        <result property="deptRoleId" column="dept_role_id"/>
+        <result property="deptResId" column="dept_res_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUser" column="create_user"/>
+    </resultMap>
+
+    <resultMap id="mapVoResultMap" type="com.i2f.sys.data.vo.SysDeptRoleResourcesVo"
+               extends="mapDoResultMap">
+    </resultMap>
+
+    <sql id="columnsAsCamel">
+          a.id
+         ,a.dept_role_id as deptRoleId
+         ,a.dept_res_id as deptResId
+         ,a.create_time as createTime
+         ,a.create_user as createUser
+    </sql>
+
+    <sql id="columnDescAsCamel">
+    </sql>
+
+    <sql id="baseQueryBody">
+        select
+               a.id
+              ,a.dept_role_id
+              ,a.dept_res_id
+              ,a.create_time
+              ,a.create_user
+        from sys_dept_role_resources a
+    </sql>
+
+    <sql id="baseQuery">
+        <include refid="baseQueryBody"></include>
+        <where>
+            <if test="post.id!=null">
+                and a.id = #{post.id}
+            </if>
+            <if test="post.deptRoleId!=null">
+                and a.dept_role_id = #{post.deptRoleId}
+            </if>
+            <if test="post.deptResId!=null">
+                and a.dept_res_id = #{post.deptResId}
+            </if>
+            <if test="post.createTime!=null">
+                and a.create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(a.create_user,#{post.createUser}) &gt; 0
+            </if>
+        </where>
+    </sql>
+
+    <select id="page" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="list" resultMap="mapVoResultMap">
+        <include refid="baseQuery"></include>
+    </select>
+
+    <select id="findByPk" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSelective">
+        insert into sys_dept_role_resources
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                id,
+            </if>
+            <if test="post.deptRoleId!=null">
+                dept_role_id,
+            </if>
+            <if test="post.deptResId!=null">
+                dept_res_id,
+            </if>
+            <if test="post.createTime!=null">
+                create_time,
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user,
+            </if>
+        </trim>
+        )
+        values
+        (
+        <trim suffixOverrides="," prefixOverrides=",">
+            <if test="post.id!=null">
+                #{post.id},
+            </if>
+            <if test="post.deptRoleId!=null">
+                #{post.deptRoleId},
+            </if>
+            <if test="post.deptResId!=null">
+                #{post.deptResId},
+            </if>
+            <if test="post.createTime!=null">
+                #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                #{post.createUser},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateSelectiveByPk">
+        update sys_dept_role_resources
+        <set>
+            <if test="post.id!=null">
+                id = #{post.id},
+            </if>
+            <if test="post.deptRoleId!=null">
+                dept_role_id = #{post.deptRoleId},
+            </if>
+            <if test="post.deptResId!=null">
+                dept_res_id = #{post.deptResId},
+            </if>
+            <if test="post.createTime!=null">
+                create_time = #{post.createTime},
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                create_user = #{post.createUser},
+            </if>
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteByPk">
+        delete from sys_dept_role_resources
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteRoleResources">
+        delete from sys_dept_role_resources
+        where dept_role_id=#{roleId}
+    </delete>
+
+    <select id="findRoleResourcesIds" resultType="java.lang.Long">
+        select distinct a.dept_res_id
+        from sys_dept_role_resources a
+        inner join sys_dept_role b on a.dept_role_id=b.id
+        where a.dept_role_id=${roleId}
+    </select>
+
+    <insert id="insert">
+        insert into sys_dept_role_resources
+        (
+                    id
+             ,dept_role_id
+             ,dept_res_id
+             ,create_time
+             ,create_user
+                            )
+        values
+        (
+                    #{post.id}
+             ,#{post.deptRoleId}
+             ,#{post.deptResId}
+             ,#{post.createTime}
+             ,#{post.createUser}
+                            )
+    </insert>
+
+    <update id="updateByPk">
+        update sys_dept_role_resources
+        <set>
+            id = #{post.id},
+            dept_role_id = #{post.deptRoleId},
+            dept_res_id = #{post.deptResId},
+            create_time = #{post.createTime},
+            create_user = #{post.createUser},
+        </set>
+        where id = #{post.id}
+    </update>
+
+    <delete id="deleteSelective">
+        delete from sys_dept_role_resources
+        where
+        <trim suffixOverrides="and|or" prefixOverrides="and|or">
+            <if test="post.id!=null">
+                and id = #{post.id}
+            </if>
+            <if test="post.deptRoleId!=null">
+                and dept_role_id = #{post.deptRoleId}
+            </if>
+            <if test="post.deptResId!=null">
+                and dept_res_id = #{post.deptResId}
+            </if>
+            <if test="post.createTime!=null">
+                and create_time = #{post.createTime}
+            </if>
+            <if test="post.createUser!=null and post.createUser!=''">
+                and instr(create_user,#{post.createUser}) &gt; 0
+            </if>
+        </trim>
+    </delete>
+
+    <insert id="insertBatch">
+        insert into sys_dept_role_resources
+        (
+        id
+        ,dept_role_id
+        ,dept_res_id
+        ,create_time
+        ,create_user
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id}
+            ,#{item.deptRoleId}
+            ,#{item.deptResId}
+            ,#{item.createTime}
+            ,#{item.createUser}
+            )
+        </foreach>
+
+    </insert>
+</mapper>

@@ -3,6 +3,7 @@ package com.i2f.sys.service;
 import com.i2f.sys.data.vo.SysDeptRoleVo;
 import i2f.core.std.api.ApiPage;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,4 +29,8 @@ public interface ISysDeptRoleService {
     void enable(Long id);
 
     void disable(Long id);
+
+    List<Long> findRoleResourcesIds(Long roleId);
+
+    void updateRoleResources(Long roleId, Collection<Long> resIds);
 }
