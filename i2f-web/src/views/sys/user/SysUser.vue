@@ -243,6 +243,21 @@
             checkable
             :tree-data="metas.deptTreeData"
           >
+            <template #title="{id,name}">
+              <div style="border-bottom: solid 1px #aaa">
+                <span>
+                  {{name}}
+                </span>
+                <span style="margin-left: 20px">
+                  <a-button type="link" @click="doAuthDeptRoles(id)">
+                    <template #icon>
+                      <carry-out-outlined />
+                    </template>
+                    担任角色
+                  </a-button>
+                </span>
+              </div>
+            </template>
           </a-tree>
         </a-form-item>
       </a-form>
@@ -433,7 +448,9 @@ export default {
         this.dialogs.auth.deptKeys=arr[1].data
         this.dialogs.auth.show=true
       })
-
+    },
+    doAuthDeptRoles(deptId){
+      this.$message.noticeInfo('授予部门角色')
     }
   }
 }
