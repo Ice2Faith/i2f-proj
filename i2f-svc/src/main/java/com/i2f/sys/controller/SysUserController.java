@@ -175,4 +175,18 @@ public class SysUserController {
     }
 
 
+    @GetMapping(value = "/dept/role/ids/{userId}/{deptId}")
+    public ApiResp<?> findUserDeptRoleIds(@PathVariable(value = "userId") Long userId,
+                                          @PathVariable(value = "deptId") Long deptId) {
+        List<Long> ret = baseService.findUserDeptRoleIds(userId,deptId);
+        return ApiResp.success(ret);
+    }
+
+    @PutMapping(value = "/dept/role/update/{userId}/{deptId}")
+    public ApiResp<?> updateUserDeptRoleIds(@PathVariable(value = "userId") Long userId,
+                                            @PathVariable(value = "deptId") Long deptId,
+                                            @RequestBody List<Long> ids) {
+        baseService.updateUserDeptRoleIds(userId,deptId,ids);
+        return ApiResp.success("ok");
+    }
 }

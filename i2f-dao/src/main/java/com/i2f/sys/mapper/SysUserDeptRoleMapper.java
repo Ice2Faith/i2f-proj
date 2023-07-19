@@ -35,4 +35,10 @@ public interface SysUserDeptRoleMapper {
     <T extends SysUserDeptRoleDo> int deleteSelective(@Param("post") T post);
 
     int insertBatch(@Param("list") Collection<? extends SysUserDeptRoleDo> list);
+
+    List<Long> findUserDeptRoleIds(@Param("userId")Long userId,
+                                   @Param("deptId")Long deptId);
+
+    int deleteUserDeptRoles(@Param("userId")Long userId,
+                            @Param("deptId")Long deptId);
 }

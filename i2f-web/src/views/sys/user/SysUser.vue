@@ -248,7 +248,7 @@
                 <span>
                   {{name}}
                 </span>
-                <span style="margin-left: 20px">
+                <span style="margin-left: 20px" v-if="dialogs.auth.deptKeys.indexOf(id) >= 0">
                   <a-button type="link" @click="doAuthDeptRoles(id)">
                     <template #icon>
                       <carry-out-outlined />
@@ -262,6 +262,33 @@
         </a-form-item>
       </a-form>
 
+      <a-modal
+        v-if="dialogs.deptRole.show"
+        v-model:visible="dialogs.deptRole.show"
+        :title="dialogs.deptRole.title"
+        :footer="null"
+        width="800px"
+      >
+        <a-form>
+          <a-form-item label="担任角色">
+            <a-select
+              v-model:value="dialogs.deptRole.roleKeys"
+              show-search
+              mode="multiple"
+              allow-clear
+              placeholder="请选择"
+              :options="dialogs.deptRole.roleList"
+              :filter-option="filterOption"
+            >
+            </a-select>
+          </a-form-item>
+          <a-form-item>
+            <a-row justify="center" type="flex">
+              <a-button size="large" type="primary" @click="submitAuthDeptRole">提交</a-button>
+            </a-row>
+          </a-form-item>
+        </a-form>
+      </a-modal>
     </a-drawer>
   </div>
 </template>
@@ -297,6 +324,13 @@ export default {
           record:{},
           roleKeys: [],
           deptKeys:[],
+        },
+        deptRole:{
+          title: '部门角色授权',
+          show: false,
+          deptId: null,
+          roleKeys:[],
+          roleList:[]
         }
       },
       metas: {
@@ -450,7 +484,40 @@ export default {
       })
     },
     doAuthDeptRoles(deptId){
-      this.$message.noticeInfo('授予部门角色')
+      this.dialogs.deptRole.deptId=deptId
+      Promise.all([
+          this.$axios({
+            url: `/api/sys/dept/role/list`,
+            method: 'get',
+            params:{
+              deptId: deptId
+            }
+          }),
+          this.$axios({
+            url: `${this.moduleBaseUrl}/dept/role/ids/${this.dialogs.auth.record.id}/${this.dialogs.deptRole.deptId}`,
+            method: 'get',
+          }),
+        ]
+      ).then((arr)=>{
+        let roleList=arr[0].data;
+        roleList.map(item=>{
+          item.value=item.id
+          item.label=item.roleName
+        })
+        this.dialogs.deptRole.roleList=roleList
+        this.dialogs.deptRole.roleKeys=arr[1].data
+        this.dialogs.deptRole.show=true
+      })
+
+    },
+    submitAuthDeptRole(){
+      this.$axios({
+        url: `${this.moduleBaseUrl}/dept/role/update/${this.dialogs.auth.record.id}/${this.dialogs.deptRole.deptId}`,
+        method: 'put',
+        data: this.dialogs.deptRole.roleKeys
+      }).then(({data})=>{
+        this.dialogs.deptRole.show=false
+      })
     }
   }
 }

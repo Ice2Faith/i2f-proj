@@ -66,4 +66,8 @@ public interface ISysUserService {
     void updateUserRoleIds(Long userId, Collection<Long> roleIds);
 
     void updateUserDeptIds(Long userId, Collection<Long> deptIds);
+
+    List<Long> findUserDeptRoleIds(Long userId, Long deptId);
+
+    void updateUserDeptRoleIds(Long userId, Long deptId, List<Long> ids);
 }

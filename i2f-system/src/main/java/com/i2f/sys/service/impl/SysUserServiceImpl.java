@@ -50,6 +50,9 @@ public class SysUserServiceImpl implements ISysUserService {
     @Resource
     private SysUserDeptMapper sysUserDeptMapper;
 
+    @Resource
+    private SysUserDeptRoleMapper sysUserDeptRoleMapper;
+
     @Override
     public ApiPage<SysUserVo> page(SysUserVo webVo,
                                    ApiPage<SysUserVo> page) {
@@ -319,6 +322,41 @@ public class SysUserServiceImpl implements ISysUserService {
         }
 
         sysUserDeptMapper.insertBatch(list);
+    }
+
+    @Override
+    public List<Long> findUserDeptRoleIds(Long userId, Long deptId) {
+        return sysUserDeptRoleMapper.findUserDeptRoleIds(userId,deptId);
+    }
+
+    @Override
+    public void updateUserDeptRoleIds(Long userId, Long deptId, List<Long> deptRoleIds) {
+        Checker.begin(true)
+                .isNullMsg(userId, "userId必填参数")
+                .isNullMsg(deptId, "deptId必填参数")
+                .isNullMsg(deptRoleIds, "deptRoleIds必填参数");
+
+        sysUserDeptRoleMapper.deleteUserDeptRoles(userId,deptId);
+
+        if (deptRoleIds.isEmpty()) {
+            return;
+        }
+
+        Date now = new Date();
+        String currentUserId = SecurityUtils.currentUserIdStr();
+
+        Set<Long> ids = new LinkedHashSet<>(deptRoleIds);
+        List<SysUserDeptRoleVo> list = new LinkedList<>();
+        for (Long id : ids) {
+            SysUserDeptRoleVo item = new SysUserDeptRoleVo();
+            item.setUserId(userId);
+            item.setDeptRoleId(id);
+            item.setCreateTime(now);
+            item.setCreateUser(currentUserId);
+            list.add(item);
+        }
+
+        sysUserDeptRoleMapper.insertBatch(list);
     }
 
     @Override
