@@ -33,7 +33,7 @@ export default {
       this.$axios({
         url: 'secure/key',
         method: 'post'
-      }).then((data) => {
+      }).then(({data}) => {
         SecureTransfer.saveAsymPubKey(data)
       })
     },
@@ -41,7 +41,7 @@ export default {
       this.$axios({
         url: 'secure/clientKey',
         method: 'post'
-      }).then((data) => {
+      }).then(({data}) => {
         SecureTransfer.saveAsymPriKey(data)
       })
     }

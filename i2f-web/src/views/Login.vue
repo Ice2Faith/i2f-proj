@@ -83,13 +83,13 @@ export default {
           url: '/login',
           method: 'post',
           data: this.form
-        }).then(data => {
-          let token = data.data
+        }).then(({data}) => {
+          let token = data
           Auth.setToken(token)
           this.$axios({
             url: 'sys/user/info',
             method: 'post'
-          }).then(data => {
+          }).then(({data}) => {
             Auth.setUser(data)
             let user = Auth.getUser()
             Auth.setRoutes(user.tag.urls)

@@ -1,8 +1,10 @@
 package com.i2f.app;
 
+import i2f.springboot.api.EnableApiRespConfig;
 import i2f.springboot.application.WarBootApplication;
 import i2f.springboot.cors.EnableCorsConfig;
 import i2f.springboot.datasource.EnableDynamicDatasourceConfig;
+import i2f.springboot.exception.EnableExceptionHandlerConfig;
 import i2f.springboot.mybatis.EnableMybatisConfig;
 import i2f.springboot.perf.EnablePerfConfig;
 import i2f.springboot.redis.EnableRedisConfig;
@@ -21,6 +23,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableDynamicDatasourceConfig
 @EnableSecurityConfig
 @EnablePerfConfig
+@EnableExceptionHandlerConfig
+@EnableApiRespConfig
 @EnableAspectJAutoProxy
 @Slf4j
 @SpringBootApplication(scanBasePackages = "com.i2f")
