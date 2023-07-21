@@ -2,7 +2,7 @@ package com.i2f.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import com.i2f.sys.data.vo.SysDeptVo;
 import com.i2f.sys.mapper.SysDeptMapper;
 import com.i2f.sys.service.ISysDeptService;
@@ -75,7 +75,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
 
     public void prepare(SysDeptVo webVo) {
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
         if (webVo.getId() == null) {
             webVo.setCreateTime(now);
             webVo.setCreateUser(currentUserId);

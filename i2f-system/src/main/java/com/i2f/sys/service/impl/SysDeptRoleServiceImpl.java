@@ -2,10 +2,9 @@ package com.i2f.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import com.i2f.sys.data.vo.SysDeptRoleResourcesVo;
 import com.i2f.sys.data.vo.SysDeptRoleVo;
-import com.i2f.sys.data.vo.SysRoleResourcesVo;
 import com.i2f.sys.mapper.SysDeptRoleMapper;
 import com.i2f.sys.mapper.SysDeptRoleResourcesMapper;
 import com.i2f.sys.service.ISysDeptRoleService;
@@ -13,7 +12,6 @@ import i2f.core.check.Checker;
 import i2f.core.std.api.ApiPage;
 import i2f.springboot.redisson.annotation.RedisLock;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -64,7 +62,7 @@ public class SysDeptRoleServiceImpl implements ISysDeptRoleService {
 
     public void prepare(SysDeptRoleVo webVo) {
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
         if (webVo.getId() == null) {
             webVo.setCreateTime(now);
             webVo.setCreateUser(currentUserId);
@@ -170,7 +168,7 @@ public class SysDeptRoleServiceImpl implements ISysDeptRoleService {
         }
 
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
 
         Set<Long> ids = new LinkedHashSet<>(resIds);
         List<SysDeptRoleResourcesVo> list = new LinkedList<>();

@@ -2,7 +2,7 @@ package com.i2f.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import com.i2f.sys.data.vo.SysConfigItemVo;
 import com.i2f.sys.mapper.SysConfigItemMapper;
 import com.i2f.sys.service.ISysConfigItemService;
@@ -62,7 +62,7 @@ public class SysConfigItemServiceImpl implements ISysConfigItemService {
 
     public void prepare(SysConfigItemVo webVo) {
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
         if (webVo.getId() == null) {
             webVo.setCreateTime(now);
             webVo.setCreateUser(currentUserId);

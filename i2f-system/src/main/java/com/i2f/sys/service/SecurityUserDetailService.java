@@ -1,9 +1,6 @@
 package com.i2f.sys.service;
 
-import com.i2f.sys.data.vo.SysDeptVo;
-import com.i2f.sys.data.vo.SysResourcesVo;
-import com.i2f.sys.data.vo.SysRoleVo;
-import com.i2f.sys.data.vo.SysUserVo;
+import com.i2f.sys.data.vo.*;
 import i2f.core.check.CheckUtil;
 import i2f.springboot.security.model.SecurityGrantedAuthority;
 import i2f.springboot.security.model.SecurityUser;
@@ -16,10 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author Ice2Faith
@@ -58,6 +52,8 @@ public class SecurityUserDetailService implements UserDetailsService {
         Set<String> menusSet = new TreeSet<>();
         Set<String> rolesSet = new TreeSet<>();
         Set<String> deptsSet = new TreeSet<>();
+        Map<String,Set<String>> deptRolesMap=new TreeMap<>();
+        Map<String,Set<String>> deptPermsMap=new TreeMap<>();
 
         Set<String> resSet = new TreeSet<>();
 
@@ -74,6 +70,20 @@ public class SecurityUserDetailService implements UserDetailsService {
             if (!CheckUtil.isEmptyStr(deptKey)) {
                 deptsSet.add(deptKey);
                 resSet.add("DEPT_" + deptKey);
+            }
+
+            List<SysDeptRoleVo> deptRoles=sysUserService.findUserDeptRoles(userVo.getId(),dept.getId());
+            deptRolesMap.put(deptKey,new TreeSet<>());
+            for (SysDeptRoleVo deptRole : deptRoles) {
+                deptRolesMap.get(deptKey).add(deptRole.getRoleKey());
+                resSet.add("DROLE_"+deptKey+"/"+deptRole.getRoleKey());
+            }
+
+            List<SysDeptResourcesVo> deptPerms=sysUserService.findUserDeptPerms(userVo.getId(),dept.getId());
+            deptPermsMap.put(deptKey,new TreeSet<>());
+            for (SysDeptResourcesVo deptPerm : deptPerms) {
+                deptPermsMap.get(deptKey).add(deptPerm.getPermKey());
+                resSet.add(deptKey+"/"+deptPerm.getPermKey());
             }
         }
 
@@ -100,6 +110,8 @@ public class SecurityUserDetailService implements UserDetailsService {
         userVo.setMenus(menusSet);
         userVo.setRoles(rolesSet);
         userVo.setDepts(deptsSet);
+        userVo.setDeptRoles(deptRolesMap);
+        userVo.setDeptPerms(deptPermsMap);
 
         List<GrantedAuthority> authorities = new ArrayList<>(300);
         for (String item : resSet) {

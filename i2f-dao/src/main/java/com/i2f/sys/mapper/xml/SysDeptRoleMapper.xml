@@ -325,4 +325,17 @@
             </foreach>
         </if>
     </select>
+    <select id="findUserDeptRoles" resultMap="mapVoResultMap">
+        <include refid="baseQueryBody"></include>
+        where a.id in (
+
+            select
+            distinct dr.id
+            from sys_user_dept_role a
+            left join sys_dept_role dr on dr.id=a.dept_role_id
+            where dr.dept_id = #{deptId}
+            and a.user_id = #{userId}
+
+        )
+    </select>
 </mapper>

@@ -2,7 +2,7 @@ package com.i2f.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import com.i2f.sys.data.vo.SysNoticeVo;
 import com.i2f.sys.mapper.SysNoticeMapper;
 import com.i2f.sys.service.ISysNoticeService;
@@ -57,7 +57,7 @@ public class SysNoticeServiceImpl implements ISysNoticeService {
 
     public void prepare(SysNoticeVo webVo) {
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
         if (webVo.getId() == null) {
             webVo.setCreateTime(now);
             webVo.setCreateUser(currentUserId);

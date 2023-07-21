@@ -1,6 +1,6 @@
 package com.i2f.sys.controller;
 
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import com.i2f.sys.data.vo.SysResourcesVo;
 import com.i2f.sys.service.ISysUserService;
 import i2f.core.std.api.ApiResp;
@@ -34,7 +34,7 @@ public class SecurityUserController {
 
     @PostMapping(value = "menus")
     public ApiResp<?> treeUserResourcesMenu() {
-        Long userId = SecurityUtils.currentUserId();
+        Long userId = AuthUtils.currentUserId();
         List<SysResourcesVo> ret = baseService.treeUserResourcesMenu(userId);
         return ApiResp.success(ret);
     }

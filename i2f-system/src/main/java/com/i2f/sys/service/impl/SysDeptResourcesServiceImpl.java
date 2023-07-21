@@ -2,9 +2,8 @@ package com.i2f.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import com.i2f.sys.data.vo.SysDeptResourcesVo;
-import com.i2f.sys.data.vo.SysResourcesVo;
 import com.i2f.sys.mapper.SysDeptResourcesMapper;
 import com.i2f.sys.service.ISysDeptResourcesService;
 import i2f.core.check.Checker;
@@ -70,7 +69,7 @@ public class SysDeptResourcesServiceImpl implements ISysDeptResourcesService {
 
     public void prepare(SysDeptResourcesVo webVo) {
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
         if (webVo.getId() == null) {
             webVo.setCreateTime(now);
             webVo.setCreateUser(currentUserId);

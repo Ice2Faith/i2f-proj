@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.i2f.biz.noteBook.data.vo.BizNoteBookVo;
 import com.i2f.biz.noteBook.mapper.BizNoteBookMapper;
 import com.i2f.biz.noteBook.service.IBizNoteBookService;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import i2f.core.check.Checker;
 import i2f.core.std.api.ApiPage;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class BizNoteBookServiceImpl implements IBizNoteBookService {
     @Override
     public ApiPage<BizNoteBookVo> page(BizNoteBookVo webVo,
                                        ApiPage<BizNoteBookVo> page) {
-        webVo.setUserId(SecurityUtils.currentUserId());
+        webVo.setUserId(AuthUtils.currentUserId());
 
         PageHelper.startPage(page.getIndex() + 1, page.getSize());
         List<BizNoteBookVo> list = baseMapper.page(webVo);
@@ -42,7 +42,7 @@ public class BizNoteBookServiceImpl implements IBizNoteBookService {
 
     @Override
     public List<BizNoteBookVo> list(BizNoteBookVo webVo) {
-        webVo.setUserId(SecurityUtils.currentUserId());
+        webVo.setUserId(AuthUtils.currentUserId());
 
         List<BizNoteBookVo> list = baseMapper.list(webVo);
 
@@ -51,7 +51,7 @@ public class BizNoteBookServiceImpl implements IBizNoteBookService {
 
     @Override
     public List<BizNoteBookVo> children(BizNoteBookVo webVo) {
-        webVo.setUserId(SecurityUtils.currentUserId());
+        webVo.setUserId(AuthUtils.currentUserId());
 
         List<BizNoteBookVo> list = baseMapper.children(webVo);
 
@@ -67,7 +67,7 @@ public class BizNoteBookServiceImpl implements IBizNoteBookService {
 
     public void prepare(BizNoteBookVo webVo) {
         Date now = new Date();
-        Long userId = SecurityUtils.currentUserId();
+        Long userId = AuthUtils.currentUserId();
         if (webVo.getId() == null) {
             webVo.setUserId(userId);
             webVo.setCreateTime(now);
@@ -79,7 +79,7 @@ public class BizNoteBookServiceImpl implements IBizNoteBookService {
 
     public void assertUserAccess(Long id) {
         BizNoteBookVo exInfo = find(id);
-        Long currentUserId = SecurityUtils.currentUserId();
+        Long currentUserId = AuthUtils.currentUserId();
         Checker.begin(true)
                 .isExTrueMsg("您无法访问该资源", (long) exInfo.getUserId() != currentUserId);
     }

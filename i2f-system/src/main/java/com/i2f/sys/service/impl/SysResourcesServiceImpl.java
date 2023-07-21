@@ -2,7 +2,7 @@ package com.i2f.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import com.i2f.sys.data.vo.SysResourcesVo;
 import com.i2f.sys.mapper.SysResourcesMapper;
 import com.i2f.sys.mapper.SysRoleResourcesMapper;
@@ -79,7 +79,7 @@ public class SysResourcesServiceImpl implements ISysResourcesService {
 
     public void prepare(SysResourcesVo webVo) {
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
         if (webVo.getId() == null) {
             webVo.setCreateTime(now);
             webVo.setCreateUser(currentUserId);

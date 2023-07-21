@@ -2,7 +2,7 @@ package com.i2f.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import com.i2f.sys.data.vo.SysResourcesVo;
 import com.i2f.sys.data.vo.SysRoleResourcesVo;
 import com.i2f.sys.data.vo.SysRoleVo;
@@ -68,7 +68,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
 
     public void prepare(SysRoleVo webVo) {
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
         if (webVo.getId() == null) {
             webVo.setCreateTime(now);
             webVo.setCreateUser(currentUserId);
@@ -209,7 +209,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
         }
 
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
 
         Set<Long> ids = new LinkedHashSet<>(resIds);
         List<SysRoleResourcesVo> list = new LinkedList<>();

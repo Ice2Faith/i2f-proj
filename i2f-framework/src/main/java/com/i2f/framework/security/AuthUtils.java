@@ -13,7 +13,7 @@ import java.util.Collection;
  * @date 2023/7/6 9:55
  * @desc
  */
-public class SecurityUtils {
+public class AuthUtils {
     public static SecurityUser currentSecurityUser(){
         Authentication auth = SecurityUtil.getAuthentication();
         if(auth==null){

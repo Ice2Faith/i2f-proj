@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -45,4 +46,6 @@ public class SysUserVo extends SysUserDo {
     protected Set<String> menus;
     protected Set<String> roles;
     protected Set<String> depts;
+    protected Map<String,Set<String>> deptRoles;
+    protected Map<String,Set<String>> deptPerms;
 }

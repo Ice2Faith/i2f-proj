@@ -2,7 +2,7 @@ package com.i2f.sys.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import com.i2f.sys.data.vo.*;
 import com.i2f.sys.mapper.*;
 import com.i2f.sys.service.ISysUserService;
@@ -53,6 +53,12 @@ public class SysUserServiceImpl implements ISysUserService {
     @Resource
     private SysUserDeptRoleMapper sysUserDeptRoleMapper;
 
+    @Resource
+    private SysDeptRoleMapper sysDeptRoleMapper;
+
+    @Resource
+    private SysDeptResourcesMapper sysDeptResourcesMapper;
+
     @Override
     public ApiPage<SysUserVo> page(SysUserVo webVo,
                                    ApiPage<SysUserVo> page) {
@@ -81,7 +87,7 @@ public class SysUserServiceImpl implements ISysUserService {
 
     private void prepare(SysUserVo webVo) {
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
         if (webVo.getId() == null) {
             webVo.setCreateUser(currentUserId);
             webVo.setCreateTime(now);
@@ -279,7 +285,7 @@ public class SysUserServiceImpl implements ISysUserService {
         }
 
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
 
         Set<Long> ids = new LinkedHashSet<>(roleIds);
         List<SysUserRoleVo> list = new LinkedList<>();
@@ -308,7 +314,7 @@ public class SysUserServiceImpl implements ISysUserService {
         }
 
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
 
         Set<Long> ids = new LinkedHashSet<>(deptIds);
         List<SysUserDeptVo> list = new LinkedList<>();
@@ -343,7 +349,7 @@ public class SysUserServiceImpl implements ISysUserService {
         }
 
         Date now = new Date();
-        String currentUserId = SecurityUtils.currentUserIdStr();
+        String currentUserId = AuthUtils.currentUserIdStr();
 
         Set<Long> ids = new LinkedHashSet<>(deptRoleIds);
         List<SysUserDeptRoleVo> list = new LinkedList<>();
@@ -357,6 +363,16 @@ public class SysUserServiceImpl implements ISysUserService {
         }
 
         sysUserDeptRoleMapper.insertBatch(list);
+    }
+
+    @Override
+    public List<SysDeptRoleVo> findUserDeptRoles(Long userId, Long deptId) {
+        return sysDeptRoleMapper.findUserDeptRoles(userId,deptId);
+    }
+
+    @Override
+    public List<SysDeptResourcesVo> findUserDeptPerms(Long userId, Long deptId) {
+        return sysDeptResourcesMapper.findUserDeptPerms(userId,deptId);
     }
 
     @Override

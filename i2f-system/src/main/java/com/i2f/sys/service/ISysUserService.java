@@ -1,9 +1,6 @@
 package com.i2f.sys.service;
 
-import com.i2f.sys.data.vo.SysDeptVo;
-import com.i2f.sys.data.vo.SysResourcesVo;
-import com.i2f.sys.data.vo.SysRoleVo;
-import com.i2f.sys.data.vo.SysUserVo;
+import com.i2f.sys.data.vo.*;
 import i2f.core.std.api.ApiPage;
 
 import java.util.Collection;
@@ -70,4 +67,8 @@ public interface ISysUserService {
     List<Long> findUserDeptRoleIds(Long userId, Long deptId);
 
     void updateUserDeptRoleIds(Long userId, Long deptId, List<Long> ids);
+
+    List<SysDeptRoleVo> findUserDeptRoles(Long userId, Long deptId);
+
+    List<SysDeptResourcesVo> findUserDeptPerms(Long userId, Long deptId);
 }

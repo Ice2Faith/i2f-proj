@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.i2f.biz.passwordBook.data.vo.BizPasswordBookVo;
 import com.i2f.biz.passwordBook.mapper.BizPasswordBookMapper;
 import com.i2f.biz.passwordBook.service.IBizPasswordBookService;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import com.i2f.sys.data.vo.SysUserVo;
 import i2f.core.check.CheckUtil;
 import i2f.core.check.Checker;
@@ -40,7 +40,7 @@ public class BizPasswordBookServiceImpl implements IBizPasswordBookService {
     @Override
     public ApiPage<BizPasswordBookVo> page(BizPasswordBookVo webVo,
                                            ApiPage<BizPasswordBookVo> page) {
-        webVo.setUserId(SecurityUtils.currentUserId());
+        webVo.setUserId(AuthUtils.currentUserId());
 
         PageHelper.startPage(page.getIndex() + 1, page.getSize());
         List<BizPasswordBookVo> list = baseMapper.page(webVo);
@@ -54,7 +54,7 @@ public class BizPasswordBookServiceImpl implements IBizPasswordBookService {
 
     @Override
     public List<BizPasswordBookVo> list(BizPasswordBookVo webVo) {
-        webVo.setUserId(SecurityUtils.currentUserId());
+        webVo.setUserId(AuthUtils.currentUserId());
 
         List<BizPasswordBookVo> list = baseMapper.list(webVo);
         for (BizPasswordBookVo item : list) {
@@ -73,7 +73,7 @@ public class BizPasswordBookServiceImpl implements IBizPasswordBookService {
 
     public void prepare(BizPasswordBookVo webVo) {
         Date now = new Date();
-        Long userId = SecurityUtils.currentUserId();
+        Long userId = AuthUtils.currentUserId();
         if (webVo.getId() == null) {
             webVo.setUserId(userId);
             webVo.setCreateTime(now);
@@ -85,14 +85,14 @@ public class BizPasswordBookServiceImpl implements IBizPasswordBookService {
 
     public void assertUserAccess(Long id) {
         BizPasswordBookVo exInfo = find(id);
-        Long currentUserId = SecurityUtils.currentUserId();
+        Long currentUserId = AuthUtils.currentUserId();
         Checker.begin(true)
                 .isExTrueMsg("您无法访问该资源", (long) exInfo.getUserId() != currentUserId);
     }
 
     public Pair<String, String> getAesKey(String salt) {
         try {
-            SysUserVo user = SecurityUtils.currentUser();
+            SysUserVo user = AuthUtils.currentUser();
             String username = user.getUsername();
             if(CheckUtil.isEmptyStr(salt)){
                 salt = CodeUtil.makeCheckCode(16, false);

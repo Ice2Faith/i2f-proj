@@ -60,10 +60,12 @@ const SecureTransferFilter = {
   // 也就是说，如果请求头中，这两个请求头不存在，或者值不为SECURE_HEADER_ENABLE，都将不会处理
   // 也就是手动处理，部分参数的情形
   requestFilter(config) {
+    config.secure={
+      url: config.url
+    }
     if (SecureTransfer.existsAsymPriKey()) {
       config.headers[SecureConfig.clientAsymSignName] = SecureTransfer.getAsymPriSign()
     }
-
     if (config.data) {
       if (SecureUtils.typeOf(config.data) == 'formdata') {
         config.headers['Content-Type'] = 'multipart/form-data'
@@ -81,7 +83,7 @@ const SecureTransferFilter = {
       return config
     }
     if (SecureConfig.enableDebugLog) {
-      console.log('request:beforeSecureConfig:', config.url, ObjectUtils.deepClone(config))
+      console.log('request:beforeSecureConfig:', (config.secure.url || config.url), ObjectUtils.deepClone(config))
     }
     if (config.headers[SecureConsts.SECURE_URL_HEADER()] === SecureConsts.FLAG_ENABLE()) {
       delete config.headers[SecureConsts.SECURE_URL_HEADER()]
@@ -135,12 +137,12 @@ const SecureTransferFilter = {
     requestHeader.sign = SecureUtils.makeSecureSign(signText, requestHeader)
     requestHeader.digital = SecureTransfer.getRequestDigitalHeader(requestHeader.sign)
     if (SecureConfig.enableDebugLog) {
-      console.log('request:secureHeader:', config.url, ObjectUtils.deepClone(requestHeader))
+      console.log('request:secureHeader:', (config.secure.url || config.url), ObjectUtils.deepClone(requestHeader))
     }
     config.headers[SecureConfig.headerName] = SecureUtils.encodeSecureHeader(requestHeader, SecureConfig.headerSeparator)
 
     if (SecureConfig.enableDebugLog) {
-      console.log('request:afterSecureConfig:', config.url, ObjectUtils.deepClone(config))
+      console.log('request:afterSecureConfig:', (config.secure.url || config.url), ObjectUtils.deepClone(config))
     }
     return config;
   },
@@ -149,19 +151,19 @@ const SecureTransferFilter = {
   // 当响应头中存在SECURE_DATA_HEADER时，将会自动解密响应体
   responseFilter(res) {
     if (SecureConfig.enableDebugLog) {
-      console.log('response:beforeSecureRes:', res.config.url, ObjectUtils.deepClone(res))
+      console.log('response:beforeSecureRes:', (res.config.secure.url || res.config.url), ObjectUtils.deepClone(res))
     }
     let skeyHeader = res.headers[SecureConfig.dynamicKeyHeaderName];
     if (!StringUtils.isEmpty(skeyHeader)) {
       if (SecureConfig.enableDebugLog) {
-        console.log('response:updateAsymPubKey:', res.config.url, skeyHeader)
+        console.log('response:updateAsymPubKey:', (res.config.secure.url || res.config.url), skeyHeader)
       }
       SecureTransfer.saveAsymPubKey(skeyHeader);
     }
     let wkeyHeader = res.headers[SecureConfig.clientKeyHeaderName];
     if (!StringUtils.isEmpty(wkeyHeader)) {
       if (SecureConfig.enableDebugLog) {
-        console.log('response:updateAsymPriKey:', res.config.url, wkeyHeader)
+        console.log('response:updateAsymPriKey:', (res.config.secure.url || res.config.url), wkeyHeader)
       }
       SecureTransfer.saveAsymPriKey(wkeyHeader);
     }
@@ -173,7 +175,7 @@ const SecureTransferFilter = {
     let responseHeader = SecureUtils.parseSecureHeader(SecureConfig.headerName, SecureConfig.headerSeparator, res)
     responseHeader.clientAsymSign = SecureTransfer.getAsymPriSign()
     if (SecureConfig.enableDebugLog) {
-      console.log('response:secureHeader:', res.config.url, ObjectUtils.deepClone(responseHeader))
+      console.log('response:secureHeader:', (res.config.secure.url || res.config.url), ObjectUtils.deepClone(responseHeader))
     }
     let ok = SecureUtils.verifySecureHeader(res.data, responseHeader);
     if (!ok) {
@@ -195,7 +197,7 @@ const SecureTransferFilter = {
 
     res.data = SecureTransfer.decrypt(res.data, symmKey);
     if (SecureConfig.enableDebugLog) {
-      console.log('response:afterSecureRes:', res.config.url, ObjectUtils.deepClone(res))
+      console.log('response:afterSecureRes:', (res.config.secure.url || res.config.url), ObjectUtils.deepClone(res))
     }
     return res;
   },

@@ -39,4 +39,7 @@ public interface SysDeptResourcesMapper {
     int countOfKey(@Param("deptId")Long deptId,
                    @Param("key")String key,
                    @Param("excludesIds")Collection<Object> excludesIds);
+
+    List<SysDeptResourcesVo> findUserDeptPerms(@Param("userId")Long userId,
+                                               @Param("deptId")Long deptId);
 }

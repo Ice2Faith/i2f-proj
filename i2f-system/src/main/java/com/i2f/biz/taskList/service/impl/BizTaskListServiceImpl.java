@@ -7,7 +7,7 @@ import com.i2f.biz.taskList.data.vo.BizTaskListVo;
 import com.i2f.biz.taskList.mapper.BizTaskListHistoryMapper;
 import com.i2f.biz.taskList.mapper.BizTaskListMapper;
 import com.i2f.biz.taskList.service.IBizTaskListService;
-import com.i2f.framework.security.SecurityUtils;
+import com.i2f.framework.security.AuthUtils;
 import i2f.core.check.Checker;
 import i2f.core.std.api.ApiPage;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class BizTaskListServiceImpl implements IBizTaskListService {
     @Override
     public ApiPage<BizTaskListVo> page(BizTaskListVo webVo,
                                        ApiPage<BizTaskListVo> page) {
-        webVo.setUserId(SecurityUtils.currentUserId());
+        webVo.setUserId(AuthUtils.currentUserId());
 
         PageHelper.startPage(page.getIndex() + 1, page.getSize());
         List<BizTaskListVo> list = baseMapper.page(webVo);
@@ -47,7 +47,7 @@ public class BizTaskListServiceImpl implements IBizTaskListService {
 
     @Override
     public List<BizTaskListVo> list(BizTaskListVo webVo) {
-        webVo.setUserId(SecurityUtils.currentUserId());
+        webVo.setUserId(AuthUtils.currentUserId());
 
         List<BizTaskListVo> list = baseMapper.list(webVo);
 
@@ -63,7 +63,7 @@ public class BizTaskListServiceImpl implements IBizTaskListService {
 
     public void prepare(BizTaskListVo webVo) {
         Date now = new Date();
-        Long userId = SecurityUtils.currentUserId();
+        Long userId = AuthUtils.currentUserId();
         if (webVo.getId() == null) {
             webVo.setUserId(userId);
             webVo.setCreateTime(now);
@@ -75,7 +75,7 @@ public class BizTaskListServiceImpl implements IBizTaskListService {
 
     public void assertUserAccess(Long id) {
         BizTaskListVo exInfo = find(id);
-        Long currentUserId = SecurityUtils.currentUserId();
+        Long currentUserId = AuthUtils.currentUserId();
         Checker.begin(true)
                 .isExTrueMsg("您无法访问该资源", (long) exInfo.getUserId() != currentUserId);
     }

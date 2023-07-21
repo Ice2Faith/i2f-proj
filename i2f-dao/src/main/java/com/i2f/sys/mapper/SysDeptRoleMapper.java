@@ -39,4 +39,7 @@ public interface SysDeptRoleMapper {
     int countOfKey(@Param("deptId")Long deptId,
                    @Param("key")String key,
                    @Param("excludesIds")Collection<Object> excludesIds);
+
+    List<SysDeptRoleVo> findUserDeptRoles(@Param("userId")Long userId,
+                                          @Param("deptId")Long deptId);
 }

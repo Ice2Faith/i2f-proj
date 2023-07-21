@@ -1,9 +1,10 @@
 import Auth from "@/framework/auth";
+
 /**
  * 是否具有某个菜单
  * v-has-menu="admin"
  */
-const HasMenuDirective= {
+const HasMenuDirective = {
   name: 'hasMenu',
   // vue3 写法
   mounted(el, binding, vnode) {
@@ -14,15 +15,18 @@ const HasMenuDirective= {
     this.action(el, binding, vnode)
   },
   action(el, binding, vnode) {
-    if(binding.value && binding.value!=''){
+    if (binding.value && binding.value != '') {
       let user = Auth.getUser()
-      let arr = user.tag.menus
-      let ok=false
-      if(arr && arr.length > 0){
-        ok=arr.indexOf(binding.value) >=0
+      if (!user) {
+        return false
       }
-      if(!ok){
-        el.style.display='none'
+      let arr = user.tag.menus
+      let ok = false
+      if (arr && arr.length > 0) {
+        ok = arr.indexOf(binding.value) >= 0
+      }
+      if (!ok) {
+        el.style.display = 'none'
       }
     }
 
