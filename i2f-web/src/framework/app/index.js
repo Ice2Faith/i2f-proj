@@ -76,12 +76,19 @@ VueMarkdownEditor.use(createMermaidPlugin());
 import * as echarts from 'echarts'
 import EchartsCustomTheme from '@/plugins/echarts/theme/custom'
 
+//////////////////////////////////////////////////////////
+import Directives from "@/framework/directives";
+import DirectiveInstaller from "@/framework/directives/install";
+
 // 使用路由创建App
 const VueApp = createApp(App)
   .use(Router)
   .use(Store)
   .use(Antd)
   .use(VueMarkdownEditor)
+
+// 注册指令
+DirectiveInstaller.installAll(VueApp,Directives)
 
 // 全局注册ant-icon
 Object.keys(AntIcons).forEach(key => {
