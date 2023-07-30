@@ -384,4 +384,60 @@ public class SysUserServiceImpl implements ISysUserService {
     public String findUserPassword(Long id) {
         return baseMapper.findUserPassword(id);
     }
+
+    @Override
+    public void registry(SysUserVo webVo) {
+        Checker.begin(true)
+                .isEmptyStrMsg(webVo.getUsername(), "用户名不能为空")
+                .isEmptyStrMsg(webVo.getPassword(), "密码不能为空")
+                .isEmptyStrMsg(webVo.getRepeatPass(), "确认密码不能为空")
+                .isExFalseMsg("密码和确认密码不一致", webVo.getPassword().equals(webVo.getRepeatPass()))
+                .isEmptyStrMsg(webVo.getRealname(), "昵称不能为空");
+        SysUserVo insVo = new SysUserVo();
+        insVo.setUsername(webVo.getUsername());
+        insVo.setPassword(webVo.getPassword());
+        insVo.setRealname(webVo.getRealname());
+        insVo.setPhone(webVo.getPhone());
+        insVo.setEmail(webVo.getEmail());
+        insVo.setStatus(1);
+        insVo.setDelFlag(1);
+        insVo.setSysFlag(0);
+        add(insVo);
+
+        SysUserVo userVo = findByUsername(webVo.getUsername());
+
+        SysRoleVo role = sysRoleMapper.findByRoleKey("user");
+        if (role != null) {
+            updateUserRoleIds(userVo.getId(), Arrays.asList(role.getId()));
+        }
+    }
+
+    @Override
+    public void passReset(SysUserVo webVo) {
+        Checker.begin(true)
+                .isEmptyStrMsg(webVo.getUsername(), "用户名不能为空")
+                .isEmptyStrMsg(webVo.getPassword(), "密码不能为空")
+                .isEmptyStrMsg(webVo.getRepeatPass(), "确认密码不能为空")
+                .isExFalseMsg("密码和确认密码不一致", webVo.getPassword().equals(webVo.getRepeatPass()))
+                .isExTrueMsg("电话号码或电子邮箱不能都为空", (CheckUtil.isEmptyStr(webVo.getPhone()) && CheckUtil.isEmptyStr(webVo.getEmail())));
+
+        SysUserVo userVo = findByUsername(webVo.getUsername());
+
+        boolean pass = false;
+        if (!CheckUtil.isEmptyStr(webVo.getPhone())) {
+            if (webVo.getPhone().equals(userVo.getPhone())) {
+                pass = true;
+            }
+        }
+        if (!CheckUtil.isEmptyStr(webVo.getEmail())) {
+            if (webVo.getEmail().equals(userVo.getEmail())) {
+                pass = true;
+            }
+        }
+
+        Checker.begin(true)
+                .isExFalseMsg("身份验证失败", pass);
+
+        changePassword(userVo.getId(), webVo.getPassword());
+    }
 }

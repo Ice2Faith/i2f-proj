@@ -3,6 +3,8 @@ import Error404 from "@/framework/error/Error404"
 import Login from "@/views/Login"
 import Hello from "@/views/Hello"
 import Home from "@/components/HomeLayout";
+import Registry from "@/views/Registry";
+import PassReset from "@/views/PassReset";
 
 
 const Routes = [
@@ -13,6 +15,22 @@ const Routes = [
   {
     path: Config.LOGIN_ROUTE,
     component: Login,
+    meta: {
+      // 明确指定，不需要访问权限
+      permission: false
+    }
+  },
+  {
+    path: '/registry',
+    component: Registry,
+    meta: {
+      // 明确指定，不需要访问权限
+      permission: false
+    }
+  },
+  {
+    path: '/pass-reset',
+    component: PassReset,
     meta: {
       // 明确指定，不需要访问权限
       permission: false

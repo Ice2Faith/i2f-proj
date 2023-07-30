@@ -22,6 +22,8 @@ public interface SysRoleMapper {
 
     SysRoleVo findByPk(@Param("id") Long id);
 
+    SysRoleVo findByRoleKey(@Param("roleKey") String roleKey);
+
     <T extends SysRoleDo> int insertSelective(@Param("post") T post);
 
     <T extends SysRoleDo> int updateSelectiveByPk(@Param("post") T post);

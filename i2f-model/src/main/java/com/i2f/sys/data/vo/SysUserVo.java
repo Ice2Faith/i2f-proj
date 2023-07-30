@@ -40,12 +40,17 @@ public class SysUserVo extends SysUserDo {
      */
     protected String statusDesc;
 
+    /**
+     * 确认密码
+     */
+    protected String repeatPass;
+
 
     protected Set<String> urls;
     protected Set<String> perms;
     protected Set<String> menus;
     protected Set<String> roles;
     protected Set<String> depts;
-    protected Map<String,Set<String>> deptRoles;
-    protected Map<String,Set<String>> deptPerms;
+    protected Map<String, Set<String>> deptRoles;
+    protected Map<String, Set<String>> deptPerms;
 }

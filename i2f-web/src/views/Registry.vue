@@ -8,8 +8,8 @@
           念
         </div>
         <a-form
-          :label-col="{ span: 4 }"
           ref="form"
+          :label-col="{ span: 4 }"
           :model="form"
           :wrapper-col="{ span: 20 }"
           autocomplete
@@ -21,7 +21,7 @@
             label="用户名"
             name="username"
           >
-            <a-input v-model:value="form.username"/>
+            <a-input v-model:value="form.username" placeholder="唯一的登录账号名"/>
           </a-form-item>
 
           <a-form-item
@@ -29,29 +29,53 @@
             label="密码"
             name="password"
           >
-            <a-input-password v-model:value="form.password"/>
+            <a-input-password v-model:value="form.password" placeholder="登录密码"/>
           </a-form-item>
 
+          <a-form-item
+            :rules="rules.repeatPass"
+            label="确认密码"
+            name="repeatPass"
+          >
+            <a-input-password v-model:value="form.repeatPass" placeholder="确认登录密码"/>
+          </a-form-item>
+
+          <a-form-item
+            :rules="rules.realname"
+            label="昵称"
+            name="realname"
+          >
+            <a-input v-model:value="form.realname" placeholder="自己喜欢的昵称"/>
+          </a-form-item>
+
+          <a-form-item
+            :rules="rules.phone"
+            label="电话号码"
+            name="phone"
+          >
+            <a-input v-model:value="form.phone" placeholder="忘记密码时的验证方式之一"/>
+          </a-form-item>
+
+          <a-form-item
+            :rules="rules.email"
+            label="电子邮箱"
+            name="email"
+          >
+            <a-input v-model:value="form.email" placeholder="忘记密码时的验证方式之一"/>
+          </a-form-item>
 
           <a-form-item :wrapper-col="{ offset: 0, span: 24 }">
             <a-row justify="center" type="flex">
               <a-spin :spinning="controls.loading">
-                <a-button size="large" type="primary" @click="doLogin">登录</a-button>
+                <a-button size="large" style="background: orangered;border: solid 1px orangered" type="primary"
+                          @click="doRegistry">注册
+                </a-button>
               </a-spin>
             </a-row>
           </a-form-item>
 
-          <a-row>
-            <a-col :span="12">
-              <a-row justify="start" type="flex">
-                <a-button style="color: lightseagreen" type="link" @click="goResetPass">忘记密码？</a-button>
-              </a-row>
-            </a-col>
-            <a-col :span="12">
-              <a-row justify="end" type="flex">
-                <a-button style="color: orangered" type="link" @click="goRegistry">去注册</a-button>
-              </a-row>
-            </a-col>
+          <a-row justify="end" type="flex">
+            <a-button type="link" @click="goLogin">去登录</a-button>
           </a-row>
         </a-form>
       </div>
@@ -63,16 +87,21 @@
 </template>
 
 <script>
-import Auth from "@/framework/auth";
+
+import Config from "@/framework/config";
 
 export default {
-  name: 'Login',
+  name: 'Registry',
   props: {},
   data() {
     return {
       form: {
         username: '',
-        password: ''
+        password: '',
+        repeatPass: '',
+        realname: '',
+        phone: '',
+        email: ''
       },
       controls: {
         loading: false,
@@ -80,53 +109,35 @@ export default {
       rules: {
         username: [{required: true, message: '请输入用户名!'}],
         password: [{required: true, message: '请输入密码!'}],
+        repeatPass: [{required: true, message: '请输入确认密码!'}],
+        realname: [{required: true, message: '请输入昵称!'}],
       }
     }
   },
   mounted() {
-    this.logout()
-    Auth.removeToken()
-    Auth.setRoutes([])
+
   },
   methods: {
-    doLogin() {
-      this.$refs.form.validateFields().then(()=>{
+    doRegistry() {
+      this.$refs.form.validateFields().then(() => {
+        if (this.form.password != this.form.repeatPass) {
+          this.$message.noticeError('确认密码和密码不一致，请重试')
+          return
+        }
         this.controls.loading = true
         this.$axios({
-          url: '/login',
+          url: '/sys/entrance/registry',
           method: 'post',
           data: this.form
         }).then(({data}) => {
-          let token = data
-          Auth.setToken(token)
-          this.$axios({
-            url: 'sys/user/info',
-            method: 'post'
-          }).then(({data}) => {
-            Auth.setUser(data)
-            let user = Auth.getUser()
-            Auth.setRoutes(user.tag.urls)
-            Auth.resolveRedirect('/home')
-          })
+          this.$router.push({path: Config.LOGIN_ROUTE})
         }).finally(() => {
           this.controls.loading = false
         })
       })
     },
-    logout() {
-      this.$axios({
-        url: '/logout',
-        method: 'get'
-      }).then(data => {
-        this.$router.replace({path: '/'})
-        this.$message.noticeInfo(data.msg)
-      })
-    },
-    goRegistry() {
-      this.$router.push({path: '/registry'})
-    },
-    goResetPass() {
-      this.$router.push({path: '/pass-reset'})
+    goLogin() {
+      this.$router.push({path: Config.LOGIN_ROUTE})
     }
   }
 }
@@ -144,9 +155,9 @@ export default {
 }
 
 .login-box {
-  min-width: 420px;
+  min-width: 500px;
   width: 25%;
-  height: 280px;
+  height: 520px;
   position: fixed;
   right: 15%;
   top: 50%;
@@ -178,7 +189,7 @@ export default {
 .login-title {
   text-align: center;
   font-size: 18px;
-  color: dodgerblue;
+  color: orangered;
   font-weight: bold;
 }
 </style>

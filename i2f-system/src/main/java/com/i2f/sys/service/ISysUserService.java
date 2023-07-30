@@ -71,4 +71,8 @@ public interface ISysUserService {
     List<SysDeptRoleVo> findUserDeptRoles(Long userId, Long deptId);
 
     List<SysDeptResourcesVo> findUserDeptPerms(Long userId, Long deptId);
+
+    void registry(SysUserVo webVo);
+
+    void passReset(SysUserVo webVo);
 }

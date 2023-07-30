@@ -24,7 +24,7 @@ const SecureConfig = {
    // 加密配置的白名单url
    whileList: ['/secure/key', '/secure/clientKey'],
    // 加密URL的URL白名单
-   encWhiteList: ['/login', '/logout']
+   encWhiteList: ['/login', '/logout', '/sys/entrance/registry', '/sys/entrance/passReset']
 }
 
 export default SecureConfig
