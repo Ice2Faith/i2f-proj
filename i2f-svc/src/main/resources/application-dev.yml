@@ -53,7 +53,7 @@ i2f:
         # session 管理模式，默认无状态
         session-creation-policy: STATELESS
         # 忽略访问名单，默认无
-        ignore-list: /secure/**
+        ignore-list: /secure/**,/sys/entrance/**
         # 匿名访问名单，默认无
         anonymous-list: /actuator/**
         # 完全开放访问名单，默认无
