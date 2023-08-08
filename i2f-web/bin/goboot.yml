@@ -45,7 +45,7 @@ goboot:
       pemPath: ./https/server.pem
       keyPath: ./https/server.key
     gzip:
-      enable: false
+      enable: true
       # BestCompression/BestSpeed/DefaultCompression/NoCompression
       level: DefaultCompression
       excludeExtensions:

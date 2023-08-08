@@ -108,6 +108,9 @@ module.exports = defineConfig({
 
     if (process.env.NODE_ENV != 'dev') {
       // 不是开发环境时，启用gzip压缩
+      // 需要使用nginx添加gzip_static on; 配置进行支持
+      // 这个配置需要编译时启动插件：--with-http_gzip_static_module
+      // 因此，自行决定是否启用gzip打包
       // config.plugin('compressionPlugin')
       //   .use(new CompressionPlugin({
       //     filename: '[path].gz[query]',
@@ -118,7 +121,10 @@ module.exports = defineConfig({
       //     deleteOriginalAssets: true // 是否删除未压缩的源文件，谨慎设置，如果希望提供非gzip的资源，可不设置或者设置为false（比如删除打包后的gz后还可以加载到原始资源文件）
       //   }))
       //   .end()
+
     }
 
+    // 启用文件名hash，避免重新部署之后的缓存问题
+    config.output.filename('js/[name].[hash].js').end()
   }
 })

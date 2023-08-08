@@ -53,59 +53,59 @@ const SecureUtils = {
         }
         return ret
     },
-    encodeSecureHeader(header,separator) {
-        let str = ''
-        str += header.sign
-        str += separator
-        str += header.nonce
-        str += separator
-        str += header.randomKey
-        str += separator
-        str += header.serverAsymSign
-        str += separator
-        str += header.digital
-        return Base64Obfuscator.encode(B64.encrypt(str), true)
+    encodeSecureHeader(header, separator) {
+      let str = ''
+      str += header.sign
+      str += separator
+      str += header.nonce
+      str += separator
+      str += header.randomKey
+      str += separator
+      str += header.serverAsymSign
+      str += separator
+      str += header.digital
+      return Base64Obfuscator.encode(B64.encrypt(str), true)
     },
-    makeSecureSign(body,header){
-        if(StringUtils.isEmpty(body)){
-            body=''
-        }
-        let text=''
-        text+=header.nonce
-        text += header.randomKey
-        text += header.serverAsymSign
-        text += header.clientAsymSign
-        text += body
-        let sign = SignatureUtil.sign(text)
-        return sign
-    },
-    verifySecureHeader(body,header){
-        let sign=this.makeSecureSign(body,header)
-        return sign==header.sign
-    },
-    decodeEncTrueUrl(encodeUrl){
-        let text=B64.decrypt(text)
-        text=Base64Obfuscator.decode(encodeUrl)
-        let arr=text.split(';')
-        if(arr.length!=2){
-            throw SecureException.newObj(SecureErrorCode.BAD_SECURE_REQUEST(),"不正确的URL请求")
-        }
-        let sign=arr[0]
-        let url = arr[1]
-        let usign = SignatureUtil.sign(url)
-        if(usign!=sign){
-            throw SecureException.newObj(SecureErrorCode.BAD_SIGN(),"签名验证失败")
-        }
-        let trueUrl=B64.decrypt(Base64Obfuscator.decode(url))
-        return trueUrl
-    },
-    encodeEncTrueUrl(trueUrl){
-        let url = Base64Obfuscator.encode(B64.encrypt(trueUrl), false)
-        let sign = SignatureUtil.sign(url)
-        let text = Base64Obfuscator.encode(sign + ';' + url, false)
-        text=B64.encrypt(text)
-        return encodeURIComponent(text)
+  makeSecureSign(body, header) {
+    if (StringUtils.isEmpty(body)) {
+      body = ''
     }
+    let text = ''
+    text += header.nonce
+    text += header.randomKey
+    text += header.serverAsymSign
+    text += header.clientAsymSign
+    text += body
+    let sign = SignatureUtil.sign(text)
+    return sign
+  },
+  verifySecureHeader(body, header) {
+    let sign = this.makeSecureSign(body, header)
+    return sign == header.sign
+  },
+  decodeEncTrueUrl(encodeUrl) {
+    let text = B64.decrypt(text)
+    text = Base64Obfuscator.decode(encodeUrl)
+    let arr = text.split(';')
+    if (arr.length != 2) {
+      throw SecureException.newObj(SecureErrorCode.BAD_SECURE_REQUEST(), "不正确的URL请求")
+    }
+    let sign = arr[0]
+    let url = arr[1]
+    let usign = SignatureUtil.sign(url)
+    if (usign != sign) {
+      throw SecureException.newObj(SecureErrorCode.BAD_SIGN(), "签名验证失败")
+    }
+    let trueUrl = B64.decrypt(Base64Obfuscator.decode(url))
+    return trueUrl
+  },
+  encodeEncTrueUrl(trueUrl) {
+    let url = Base64Obfuscator.encode(B64.encrypt(trueUrl), false)
+    let sign = SignatureUtil.sign(url)
+    let text = Base64Obfuscator.encode(sign + ';' + url, false)
+    text = B64.encrypt(text)
+    return encodeURIComponent(text)
+  }
 }
 
 export default SecureUtils

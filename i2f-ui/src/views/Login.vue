@@ -32,22 +32,30 @@ export default {
         url: '/login',
         method: 'post',
         data: this.form
-      }).then(data=>{
-        let token=data.data
+      }).then(({data}) => {
+        let token = data
         Auth.setToken(token)
         this.$axios({
           url: 'sys/user/info',
           method: 'post'
-        }).then(data=>{
+        }).then(({data}) => {
           Auth.setUser(data)
-          let user=Auth.getUser()
-          Auth.setRoutes(['/','/hello','/home','/about'])
-          Auth.resolveRedirect('/hello')
+          let user = Auth.getUser()
+          Auth.setRoutes(user.tag.urls)
+          Auth.resolveRedirect('/home')
         })
-
       })
 
-    }
+    },
+    logout() {
+      this.$axios({
+        url: '/logout',
+        method: 'get'
+      }).then(data => {
+        this.$router.replace({path: '/'})
+        this.$message.noticeInfo(data.msg)
+      })
+    },
   }
 }
 </script>

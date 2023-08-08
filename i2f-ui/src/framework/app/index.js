@@ -14,19 +14,27 @@ import Message from "@/framework/message"
 import DownloadRequest from "@/framework/request/download"
 import MultipartRequest from "@/framework/request/multipart"
 
+import '@/assets/css/scorll-bar.css'
+import '@/assets/css/media-adapt.css'
 
+
+//////////////////////////////////////////////////////////
+import Directives from "@/framework/directives";
+import DirectiveInstaller from "@/framework/directives/install";
 // 使用路由创建App
 const VueApp = createApp(App)
-    .use(Router)
+  .use(Router)
   .use(Store)
 
+// 注册指令
+DirectiveInstaller.installAll(VueApp, Directives)
 // 将内容挂载到原型上
-VueApp.config.globalProperties.$axios=BaseRequest
-VueApp.config.globalProperties.$download=DownloadRequest
-VueApp.config.globalProperties.$multipart=MultipartRequest
-VueApp.config.globalProperties.$auth=Auth
-VueApp.config.globalProperties.$config=Config
-VueApp.config.globalProperties.$message=Message
+VueApp.config.globalProperties.$axios = BaseRequest
+VueApp.config.globalProperties.$download = DownloadRequest
+VueApp.config.globalProperties.$multipart = MultipartRequest
+VueApp.config.globalProperties.$auth = Auth
+VueApp.config.globalProperties.$config = Config
+VueApp.config.globalProperties.$message = Message
 
 // 在setup语法中，可以使用如下方式获取对象
 // import { getCurrentInstance } from 'vue'
