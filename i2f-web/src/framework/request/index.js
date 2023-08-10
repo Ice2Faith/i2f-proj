@@ -67,6 +67,7 @@ BaseRequest.interceptors.response.use(res => {
 }, error => {
   SecureTransferFilter.responseFilter(error.response)
   AxiosExceptionHandler.handleResponseInterceptorError(error)
+  return Promise.reject(error)
 })
 
 export default BaseRequest

@@ -150,6 +150,9 @@ const SecureTransferFilter = {
   // 分别表示响应头和响应体
   // 当响应头中存在SECURE_DATA_HEADER时，将会自动解密响应体
   responseFilter(res) {
+    if (res == null || res == undefined) {
+      return
+    }
     if (SecureConfig.enableDebugLog) {
       console.log('response:beforeSecureRes:', (res.config.secure.url || res.config.url), ObjectUtils.deepClone(res))
     }

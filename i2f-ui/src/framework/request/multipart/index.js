@@ -76,6 +76,7 @@ MultipartRequest.interceptors.response.use(res => {
   return res.data
 }, error => {
   AxiosExceptionHandler.handleResponseInterceptorError(error)
+  return Promise.reject(error)
 })
 
 export default MultipartRequest

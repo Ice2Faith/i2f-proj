@@ -9,14 +9,15 @@ const Exception = {
   CODE_INFO: () => 300,
   CODE_SUCCESS: () => 200,
 
-  newError(code, msg, type = null) {
-    return new Error(this.toErrorMsg(this.newObj(code, msg, type)))
+  newError(code, msg, type = null, data = null) {
+    return new Error(this.toErrorMsg(this.newObj(code, msg, type, data)))
   },
-  newObj(code, msg, type = null) {
+  newObj(code, msg, type = null, data = null) {
     return {
       _type: Exception.concatType(type),
       code: code,
-      msg: msg
+      msg: msg,
+      data: data
     }
   },
   concatType(subType) {
