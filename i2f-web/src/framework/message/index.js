@@ -21,6 +21,13 @@ const Message = {
       str = JSON.stringify(str)
     }
     message.info(str)
+  },
+  noticeSuccess(str) {
+    console.log("[SUCCESS] ", str)
+    if (typeof str !== "string") {
+      str = JSON.stringify(str)
+    }
+    message.success(str)
   }
 }
 export default Message

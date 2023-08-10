@@ -70,6 +70,7 @@ VueMarkdownEditor.use(createKatexPlugin());
 
 import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/cdn';
 import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css';
+
 VueMarkdownEditor.use(createMermaidPlugin());
 //////////////////////////////////////////////////////////
 
@@ -79,6 +80,8 @@ import EchartsCustomTheme from '@/plugins/echarts/theme/custom'
 //////////////////////////////////////////////////////////
 import Directives from "@/framework/directives";
 import DirectiveInstaller from "@/framework/directives/install";
+//////////////////////////////////////////////////////////
+import GlobalExceptionInstaller from "@/framework/exception/installer/GlobalExceptionInstaller";
 
 // 使用路由创建App
 const VueApp = createApp(App)
@@ -88,7 +91,11 @@ const VueApp = createApp(App)
   .use(VueMarkdownEditor)
 
 // 注册指令
-DirectiveInstaller.installAll(VueApp,Directives)
+DirectiveInstaller.installAll(VueApp, Directives)
+
+// 注册全局异常处理器
+GlobalExceptionInstaller.installJs()
+GlobalExceptionInstaller.installVue(VueApp)
 
 // 全局注册ant-icon
 Object.keys(AntIcons).forEach(key => {

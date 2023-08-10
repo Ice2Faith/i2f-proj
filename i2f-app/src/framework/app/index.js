@@ -24,6 +24,9 @@ import 'vant/lib/index.css'
 //////////////////////////////////////////////////////////
 import Directives from "@/framework/directives";
 import DirectiveInstaller from "@/framework/directives/install";
+//////////////////////////////////////////////////////////
+import GlobalExceptionInstaller from "@/framework/exception/installer/GlobalExceptionInstaller";
+
 // 使用路由创建App
 const VueApp = createApp(App)
   .use(Router)
@@ -32,6 +35,11 @@ const VueApp = createApp(App)
 
 // 注册指令
 DirectiveInstaller.installAll(VueApp, Directives)
+
+// 注册全局异常处理器
+GlobalExceptionInstaller.installJs()
+GlobalExceptionInstaller.installVue(VueApp)
+
 // 将内容挂载到原型上
 VueApp.config.globalProperties.$axios = BaseRequest
 VueApp.config.globalProperties.$download = DownloadRequest

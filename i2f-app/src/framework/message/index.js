@@ -20,6 +20,13 @@ const Message = {
     if (typeof str !== "string") {
       str = JSON.stringify(str)
     }
+    showNotify({type: 'primary', message: str});
+  },
+  noticeSuccess(str) {
+    console.log("[SUCCESS] ", str)
+    if (typeof str !== "string") {
+      str = JSON.stringify(str)
+    }
     showNotify({type: 'success', message: str});
   }
 }
