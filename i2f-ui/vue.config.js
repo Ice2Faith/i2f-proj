@@ -140,6 +140,7 @@ module.exports = defineConfig({
 
       // 开启分包，便于初次快速加载显示页面
       config.optimization.splitChunks({
+        automaticNameDelimiter: '-',
         cacheGroups: {
           // 定义本项目的公共部分，也就是最后的被其他分包打包的部分
           common: {
