@@ -143,55 +143,82 @@ module.exports = defineConfig({
       config.optimization.splitChunks({
         automaticNameDelimiter: '-',
         cacheGroups: {
-          // 定义本项目的公共部分，也就是最后的被其他分包打包的部分
-          common: {
-            name: 'chunk-common', // 打包后的文件名
+          basic: {
+            name: 'chunk-basic', // 打包后的文件名
             chunks: 'initial', // all：所有代码有效 ，async 代码分割时对异步代码生效，initial 同步代码有效
-            minSize: 0, // 代码分割最小的模块大小，引入的模块大于多少字节才做代码分割
+            minSize: 128 * 1024, // 代码分割最小的模块大小，引入的模块大于多少字节才做代码分割
             maxSize: 2 * 1024 * 1024, // 代码分割最大的模块大小，大于多少要进行代码分割，一般使用默认值
-            minChunks: 1, // 引入的次数大于等于此值时分离打包
+            minChunks: 2, // 引入的次数大于等于此值时分离打包
             maxAsyncRequests: 10, // 最大的异步请求数量,也就是同时加载的模块最大模块数量
             maxInitialRequests: 5, // 入口文件做代码分割最多分成多少个 js 文件
             priority: 0, // 分包的优先级，越大越优先分包
             reuseExistingChunk: true // 如果模块已经被打包了，不再重复打包
           },
-          commonAsync: {
-            name: 'chunk-common-async', // 打包后的文件名
-            chunks: 'async', // all：所有代码有效 ，async 代码分割时对异步代码生效，initial 同步代码有效
-            minSize: 0, // 代码分割最小的模块大小，引入的模块大于多少字节才做代码分割
+          // 定义本项目的公共部分，也就是最后的被其他分包打包的部分
+          common: {
+            name: 'chunk-common', // 打包后的文件名
+            chunks: 'initial', // all：所有代码有效 ，async 代码分割时对异步代码生效，initial 同步代码有效
+            minSize: 512 * 1024, // 代码分割最小的模块大小，引入的模块大于多少字节才做代码分割
             maxSize: 2 * 1024 * 1024, // 代码分割最大的模块大小，大于多少要进行代码分割，一般使用默认值
             minChunks: 1, // 引入的次数大于等于此值时分离打包
             maxAsyncRequests: 10, // 最大的异步请求数量,也就是同时加载的模块最大模块数量
             maxInitialRequests: 5, // 入口文件做代码分割最多分成多少个 js 文件
-            priority: 1, // 分包的优先级，越大越优先分包
+            priority: 10, // 分包的优先级，越大越优先分包
             reuseExistingChunk: true // 如果模块已经被打包了，不再重复打包
+            // enforce: true // 为true时，忽略minSize，minChunks，maxAsyncRequests和maxInitialRequests选项
+          },
+          commonAsync: {
+            name: 'chunk-common-async', // 打包后的文件名
+            chunks: 'async', // all：所有代码有效 ，async 代码分割时对异步代码生效，initial 同步代码有效
+            minSize: 512 * 1024, // 代码分割最小的模块大小，引入的模块大于多少字节才做代码分割
+            maxSize: 2 * 1024 * 1024, // 代码分割最大的模块大小，大于多少要进行代码分割，一般使用默认值
+            minChunks: 1, // 引入的次数大于等于此值时分离打包
+            maxAsyncRequests: 10, // 最大的异步请求数量,也就是同时加载的模块最大模块数量
+            maxInitialRequests: 5, // 入口文件做代码分割最多分成多少个 js 文件
+            priority: 11, // 分包的优先级，越大越优先分包
+            reuseExistingChunk: true // 如果模块已经被打包了，不再重复打包
+            // enforce: true // 为true时，忽略minSize，minChunks，maxAsyncRequests和maxInitialRequests选项
+          },
+          src: {
+            name: 'chunk-src', // 打包后的文件名
+            test: resolve('/src'),
+            chunks: 'all', // all：所有代码有效 ，async 代码分割时对异步代码生效，initial 同步代码有效
+            minSize: 512 * 1024, // 代码分割最小的模块大小，引入的模块大于多少字节才做代码分割
+            maxSize: 2 * 1024 * 1024, // 代码分割最大的模块大小，大于多少要进行代码分割，一般使用默认值
+            minChunks: 1, // 引入的次数大于等于此值时分离打包
+            maxAsyncRequests: 10, // 最大的异步请求数量,也就是同时加载的模块最大模块数量
+            maxInitialRequests: 5, // 入口文件做代码分割最多分成多少个 js 文件
+            priority: 12, // 分包的优先级，越大越优先分包
+            reuseExistingChunk: true // 如果模块已经被打包了，不再重复打包
+            // enforce: true // 为true时，忽略minSize，minChunks，maxAsyncRequests和maxInitialRequests选项
           },
           // 定义本项目引用的第三方库的部分
           vendors: {
             name: 'chunk-vendors',
             test: /[\\/]node_modules[\\/]/,
             chunks: 'initial',
-            minSize: 0, // 代码分割最小的模块大小，引入的模块大于多少字节才做代码分割
+            minSize: 512 * 1024, // 代码分割最小的模块大小，引入的模块大于多少字节才做代码分割
             maxSize: 2 * 1024 * 1024, // 代码分割最大的模块大小，大于多少要进行代码分割，一般使用默认值
             minChunks: 1, // 引入的次数大于等于此值时分离打包
             maxAsyncRequests: 10, // 最大的异步请求数量,也就是同时加载的模块最大模块数量
             maxInitialRequests: 5, // 入口文件做代码分割最多分成多少个 js 文件
-            priority: 10,
+            priority: 20,
             reuseExistingChunk: true,
-            enforce: true
+            // enforce: true // 为true时，忽略minSize，minChunks，maxAsyncRequests和maxInitialRequests选项
           },
+          // 定义本项目引用的第三方库的部分
           vendorsAsync: {
             name: 'chunk-vendors-async',
             test: /[\\/]node_modules[\\/]/,
             chunks: 'async',
-            minSize: 0, // 代码分割最小的模块大小，引入的模块大于多少字节才做代码分割
+            minSize: 512 * 1024, // 代码分割最小的模块大小，引入的模块大于多少字节才做代码分割
             maxSize: 2 * 1024 * 1024, // 代码分割最大的模块大小，大于多少要进行代码分割，一般使用默认值
             minChunks: 1, // 引入的次数大于等于此值时分离打包
             maxAsyncRequests: 10, // 最大的异步请求数量,也就是同时加载的模块最大模块数量
             maxInitialRequests: 5, // 入口文件做代码分割最多分成多少个 js 文件
-            priority: 11,
+            priority: 21,
             reuseExistingChunk: true,
-            enforce: true
+            // enforce: true // 为true时，忽略minSize，minChunks，maxAsyncRequests和maxInitialRequests选项
           },
         }
       })
@@ -199,5 +226,7 @@ module.exports = defineConfig({
 
     // 启用文件名hash，避免重新部署之后的缓存问题
     config.output.filename('js/[name].[hash].js').end()
+
+    config.output.chunkFilename('js/[name].[hash].js').end()
   }
 })
