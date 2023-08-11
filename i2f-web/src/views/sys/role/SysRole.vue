@@ -69,7 +69,6 @@
         </a-select>
       </a-form-item>
 
-
       <a-form-item :wrapper-col="{ offset: 0, span: 24 }">
         <a-row :gutter="20" justify="center" type="flex">
           <a-col>
@@ -220,16 +219,16 @@
 </template>
 <script>
 
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-import Detail from "./components/Detail";
-import ListManageMixin from "@/mixins/ListManageMixin";
+import FormDetailMode from '@/framework/consts/FormDetailMode'
+import Detail from './components/Detail'
+import ListManageMixin from '@/mixins/ListManageMixin'
 
 export default {
   components: {
     Detail
   },
-  mixins:[ListManageMixin],
-  data() {
+  mixins: [ListManageMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/sys/role',
 
@@ -245,125 +244,122 @@ export default {
 
       },
       dialogs: {
-        auth:{
+        auth: {
           title: '角色授权',
           show: false,
-          record:{},
-          checkedKeys: [],
+          record: {},
+          checkedKeys: []
         }
       },
-      metas:{
-        statusList:[{
+      metas: {
+        statusList: [{
           value: 0,
-          label: '禁用',
+          label: '禁用'
         }, {
           value: 1,
-          label: '启用',
+          label: '启用'
         }, {
           value: 99,
-          label: '删除',
+          label: '删除'
         }],
-        boolList:[{
+        boolList: [{
           value: 0,
-          label: '否',
+          label: '否'
         }, {
           value: 1,
-          label: '是',
+          label: '是'
         }],
-        resourceTreeData:[]
+        resourceTreeData: []
       },
       tableColumns: [
-          {
-            title: '角色键',
-            dataIndex: 'roleKey',
-          },
-          {
-            title: '角色名称',
-            dataIndex: 'roleName',
-          },
-          {
-            title: '状态',
-            dataIndex: 'statusDesc',
-          },
-          {
-            title: '是否可删除',
-            dataIndex: 'delFlagDesc',
-          },
-          {
-            title: '是否系统',
-            dataIndex: 'sysFlagDesc',
-          },
-          {
-            title: '更新日期',
-            dataIndex: 'updateTime',
-          },
-          {
-            title: '更新人',
-            dataIndex: 'updateUser',
-          },
-          {
-            title: '创建日期',
-            dataIndex: 'createTime',
-          },
-          {
-            title: '创建人',
-            dataIndex: 'createUser',
-          },
-          {
-            title: '操作',
-            key: 'action',
-            fixed: 'right',
-            width: '200px',
-            align: 'center'
-          },
-        ]
+        {
+          title: '角色键',
+          dataIndex: 'roleKey'
+        },
+        {
+          title: '角色名称',
+          dataIndex: 'roleName'
+        },
+        {
+          title: '状态',
+          dataIndex: 'statusDesc'
+        },
+        {
+          title: '是否可删除',
+          dataIndex: 'delFlagDesc'
+        },
+        {
+          title: '是否系统',
+          dataIndex: 'sysFlagDesc'
+        },
+        {
+          title: '更新日期',
+          dataIndex: 'updateTime'
+        },
+        {
+          title: '更新人',
+          dataIndex: 'updateUser'
+        },
+        {
+          title: '创建日期',
+          dataIndex: 'createTime'
+        },
+        {
+          title: '创建人',
+          dataIndex: 'createUser'
+        },
+        {
+          title: '操作',
+          key: 'action',
+          fixed: 'right',
+          width: '200px',
+          align: 'center'
+        }
+      ]
 
     }
   },
 
   methods: {
-    hookAfterMounted(){
+    hookAfterMounted () {
       this.loadResourcesTreeData()
     },
-    loadResourcesTreeData(){
+    loadResourcesTreeData () {
       this.$axios({
-        url: `/api/sys/resources/tree`,
+        url: '/api/sys/resources/tree',
         method: 'get'
-      }).then(({data})=>{
-        this.metas.resourceTreeData=data
+      }).then(({ data }) => {
+        this.metas.resourceTreeData = data
       })
     },
-    doImport() {
+    doImport () {
 
     },
-    doExport() {
+    doExport () {
 
     },
-    onAuthCancel(){
-      this.dialogs.auth.show=false
-
+    onAuthCancel () {
+      this.dialogs.auth.show = false
     },
-    onAuthSubmit(){
-
+    onAuthSubmit () {
       this.$axios({
         url: `${this.moduleBaseUrl}/resources/update/${this.dialogs.auth.record.id}`,
         method: 'put',
         data: this.dialogs.auth.checkedKeys
-      }).then((data)=>{
-        this.dialogs.auth.show=false
+      }).then((data) => {
+        this.dialogs.auth.show = false
       })
-
     },
-    doAuthResources(record){
-      this.dialogs.auth.record=record
+    doAuthResources (record) {
+      this.dialogs.auth.record = record
       this.$axios({
-        url:`${this.moduleBaseUrl}/resources/ids/${this.dialogs.auth.record.id}`,
-        method:'get'
-      }).then(({data})=>{
-        this.dialogs.auth.checkedKeys=data
-        this.dialogs.auth.show=true
+        url: `${this.moduleBaseUrl}/resources/ids/${this.dialogs.auth.record.id}`,
+        method: 'get'
+      }).then(({ data }) => {
+        this.dialogs.auth.checkedKeys = data
+        this.dialogs.auth.show = true
       })
-    },
+    }
   }
 }
 </script>

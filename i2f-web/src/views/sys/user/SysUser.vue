@@ -211,7 +211,6 @@
               @submit="handleDetailOk"></Detail>
     </a-modal>
 
-
     <a-drawer
       v-model:visible="dialogs.auth.show"
       :title="dialogs.auth.title"
@@ -294,16 +293,16 @@
 </template>
 <script>
 
-import Detail from "./components/Detail";
+import Detail from './components/Detail'
 
-import ListManageMixin from "@/mixins/ListManageMixin";
+import ListManageMixin from '@/mixins/ListManageMixin'
 
 export default {
   components: {
     Detail
   },
   mixins: [ListManageMixin],
-  data() {
+  data () {
     return {
       moduleBaseUrl: '/api/sys/user',
 
@@ -318,90 +317,90 @@ export default {
       },
       rules: {},
       dialogs: {
-        auth:{
+        auth: {
           title: '用户授权',
           show: false,
-          record:{},
+          record: {},
           roleKeys: [],
-          deptKeys:[],
+          deptKeys: []
         },
-        deptRole:{
+        deptRole: {
           title: '部门角色授权',
           show: false,
           deptId: null,
-          roleKeys:[],
-          roleList:[]
+          roleKeys: [],
+          roleList: []
         }
       },
       metas: {
-        statusList:[{
+        statusList: [{
           value: 0,
-          label: '禁用',
+          label: '禁用'
         }, {
           value: 1,
-          label: '启用',
+          label: '启用'
         }, {
           value: 99,
-          label: '删除',
+          label: '删除'
         }],
-        boolList:[{
+        boolList: [{
           value: 0,
-          label: '否',
+          label: '否'
         }, {
           value: 1,
-          label: '是',
+          label: '是'
         }],
-        roleList:[],
-        deptTreeData:[]
+        roleList: [],
+        deptTreeData: []
       },
       tableColumns: [
         {
           title: '登录用户名',
-          dataIndex: 'username',
+          dataIndex: 'username'
         },
         {
           title: '用户名',
-          dataIndex: 'realname',
+          dataIndex: 'realname'
         },
         {
           title: '电话号码',
-          dataIndex: 'phone',
+          dataIndex: 'phone'
         },
         {
           title: '电子邮箱',
-          dataIndex: 'email',
+          dataIndex: 'email'
         },
         {
           title: '注册时间',
-          dataIndex: 'regDate',
+          dataIndex: 'regDate'
         },
         {
           title: '状态',
-          dataIndex: 'statusDesc',
+          dataIndex: 'statusDesc'
         },
         {
           title: '是否可删除',
-          dataIndex: 'delFlagDesc',
+          dataIndex: 'delFlagDesc'
         },
         {
           title: '是否系统',
-          dataIndex: 'sysFlagDesc',
+          dataIndex: 'sysFlagDesc'
         },
         {
           title: '更新日期',
-          dataIndex: 'updateTime',
+          dataIndex: 'updateTime'
         },
         {
           title: '更新人',
-          dataIndex: 'updateUser',
+          dataIndex: 'updateUser'
         },
         {
           title: '创建日期',
-          dataIndex: 'createTime',
+          dataIndex: 'createTime'
         },
         {
           title: '创建人',
-          dataIndex: 'createUser',
+          dataIndex: 'createUser'
         },
         {
           title: '操作',
@@ -409,47 +408,46 @@ export default {
           fixed: 'right',
           width: '200px',
           align: 'center'
-        },
+        }
       ]
     }
   },
 
   methods: {
-    hookAfterMounted(){
+    hookAfterMounted () {
       this.loadDeptTreeData()
       this.loadRoleListData()
     },
-    loadDeptTreeData(){
+    loadDeptTreeData () {
       this.$axios({
-        url: `/api/sys/dept/tree`,
+        url: '/api/sys/dept/tree',
         method: 'get'
-      }).then(({data})=>{
-        this.metas.deptTreeData=data
+      }).then(({ data }) => {
+        this.metas.deptTreeData = data
       })
     },
-    loadRoleListData(){
+    loadRoleListData () {
       this.$axios({
-        url: `/api/sys/role/list`,
+        url: '/api/sys/role/list',
         method: 'get'
-      }).then(({data})=>{
-        data.map(item=>{
-          item.value=item.id
-          item.label=item.roleName
+      }).then(({ data }) => {
+        data.map(item => {
+          item.value = item.id
+          item.label = item.roleName
         })
-        this.metas.roleList=data
+        this.metas.roleList = data
       })
     },
-    doImport() {
+    doImport () {
 
     },
-    doExport() {
+    doExport () {
 
     },
-    onAuthCancel(){
-      this.dialogs.auth.show=false
-
+    onAuthCancel () {
+      this.dialogs.auth.show = false
     },
-    onAuthSubmit(){
+    onAuthSubmit () {
       Promise.all([
         this.$axios({
           url: `${this.moduleBaseUrl}/role/update/${this.dialogs.auth.record.id}`,
@@ -460,63 +458,62 @@ export default {
           url: `${this.moduleBaseUrl}/dept/update/${this.dialogs.auth.record.id}`,
           method: 'put',
           data: this.dialogs.auth.deptKeys
-        }),
-      ]).then(arr=>{
-        this.dialogs.auth.show=false
+        })
+      ]).then(arr => {
+        this.dialogs.auth.show = false
       })
     },
-    doAuthUser(record){
-      this.dialogs.auth.record=record
+    doAuthUser (record) {
+      this.dialogs.auth.record = record
       Promise.all([
-          this.$axios({
+        this.$axios({
           url: `${this.moduleBaseUrl}/role/ids/${this.dialogs.auth.record.id}`,
-          method: 'get',
+          method: 'get'
         }),
         this.$axios({
           url: `${this.moduleBaseUrl}/dept/ids/${this.dialogs.auth.record.id}`,
-          method: 'get',
-        }),
-        ]
-      ).then((arr)=>{
-        this.dialogs.auth.roleKeys=arr[0].data
-        this.dialogs.auth.deptKeys=arr[1].data
-        this.dialogs.auth.show=true
-      })
-    },
-    doAuthDeptRoles(deptId){
-      this.dialogs.deptRole.deptId=deptId
-      Promise.all([
-          this.$axios({
-            url: `/api/sys/dept/role/list`,
-            method: 'get',
-            params:{
-              deptId: deptId
-            }
-          }),
-          this.$axios({
-            url: `${this.moduleBaseUrl}/dept/role/ids/${this.dialogs.auth.record.id}/${this.dialogs.deptRole.deptId}`,
-            method: 'get',
-          }),
-        ]
-      ).then((arr)=>{
-        let roleList=arr[0].data;
-        roleList.map(item=>{
-          item.value=item.id
-          item.label=item.roleName
+          method: 'get'
         })
-        this.dialogs.deptRole.roleList=roleList
-        this.dialogs.deptRole.roleKeys=arr[1].data
-        this.dialogs.deptRole.show=true
+      ]
+      ).then((arr) => {
+        this.dialogs.auth.roleKeys = arr[0].data
+        this.dialogs.auth.deptKeys = arr[1].data
+        this.dialogs.auth.show = true
       })
-
     },
-    submitAuthDeptRole(){
+    doAuthDeptRoles (deptId) {
+      this.dialogs.deptRole.deptId = deptId
+      Promise.all([
+        this.$axios({
+          url: '/api/sys/dept/role/list',
+          method: 'get',
+          params: {
+            deptId: deptId
+          }
+        }),
+        this.$axios({
+          url: `${this.moduleBaseUrl}/dept/role/ids/${this.dialogs.auth.record.id}/${this.dialogs.deptRole.deptId}`,
+          method: 'get'
+        })
+      ]
+      ).then((arr) => {
+        const roleList = arr[0].data
+        roleList.map(item => {
+          item.value = item.id
+          item.label = item.roleName
+        })
+        this.dialogs.deptRole.roleList = roleList
+        this.dialogs.deptRole.roleKeys = arr[1].data
+        this.dialogs.deptRole.show = true
+      })
+    },
+    submitAuthDeptRole () {
       this.$axios({
         url: `${this.moduleBaseUrl}/dept/role/update/${this.dialogs.auth.record.id}/${this.dialogs.deptRole.deptId}`,
         method: 'put',
         data: this.dialogs.deptRole.roleKeys
-      }).then(({data})=>{
-        this.dialogs.deptRole.show=false
+      }).then(({ data }) => {
+        this.dialogs.deptRole.show = false
       })
     }
   }

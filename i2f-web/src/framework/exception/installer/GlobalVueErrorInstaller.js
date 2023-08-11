@@ -1,5 +1,5 @@
-import GlobalExceptionHandler from "@/framework/exception/handler/GlobalExceptionHandler";
-import Exception from "@/framework/exception/Exception";
+import GlobalExceptionHandler from '@/framework/exception/handler/GlobalExceptionHandler'
+import Exception from '@/framework/exception/Exception'
 
 /**
  * 全局vue发生error的异常安裝器
@@ -13,7 +13,7 @@ import Exception from "@/framework/exception/Exception";
  * vueInstance.mount('#app')
  */
 const GlobalVueErrorInstaller = {
-  install(vueInstance) {
+  install (vueInstance) {
     vueInstance.config.errorHandler = (error, instance, info) => {
       let msg = error.message
       let code = Exception.CODE_ERROR()

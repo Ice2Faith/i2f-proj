@@ -190,22 +190,22 @@
 </template>
 <script>
 
-import Detail from "./components/Detail";
+import Detail from './components/Detail'
 
-import ListManageMixin from "@/mixins/ListManageMixin";
-import FormDetailMode from "@/framework/consts/FormDetailMode";
+import ListManageMixin from '@/mixins/ListManageMixin'
+import FormDetailMode from '@/framework/consts/FormDetailMode'
 
 export default {
   components: {
     Detail
   },
-  props:{
-    record:{
+  props: {
+    record: {
       type: Object
     }
   },
   mixins: [ListManageMixin],
-  data() {
+  data () {
     return {
       moduleBaseUrl: '/api/sys/config/item',
 
@@ -220,81 +220,81 @@ export default {
 
       },
       metas: {
-        statusList:[{
+        statusList: [{
           value: 0,
-          label: '禁用',
+          label: '禁用'
         }, {
           value: 1,
-          label: '启用',
+          label: '启用'
         }, {
           value: 99,
-          label: '删除',
-        }],
+          label: '删除'
+        }]
       },
       tableColumns: [
         {
           title: '项ID',
-          dataIndex: 'entryId',
+          dataIndex: 'entryId'
         },
         {
           title: '项键',
-          dataIndex: 'entryKey',
+          dataIndex: 'entryKey'
         },
         {
           title: '项名称',
-          dataIndex: 'entryName',
+          dataIndex: 'entryName'
         },
         {
           title: '项描述',
-          dataIndex: 'entryDesc',
+          dataIndex: 'entryDesc'
         },
         {
           title: '项描述',
-          dataIndex: 'entryDesc',
+          dataIndex: 'entryDesc'
         },
         {
           title: '项排序',
-          dataIndex: 'entryOrder',
+          dataIndex: 'entryOrder'
         },
         {
           title: '状态',
-          dataIndex: 'statusDesc',
+          dataIndex: 'statusDesc'
         },
         {
           title: '生效时间',
-          dataIndex: 'validTime',
+          dataIndex: 'validTime'
         },
         {
           title: '失效时间',
-          dataIndex: 'invalidTime',
+          dataIndex: 'invalidTime'
         },
         {
           title: '是否可修改',
-          dataIndex: 'modFlagDesc',
+          dataIndex: 'modFlagDesc'
         },
         {
           title: '是否可删除',
-          dataIndex: 'delFlagDesc',
+          dataIndex: 'delFlagDesc'
         },
         {
           title: '是否系统',
-          dataIndex: 'sysFlagDesc',
+          dataIndex: 'sysFlagDesc'
         },
         {
           title: '更新日期',
-          dataIndex: 'updateTime',
+          dataIndex: 'updateTime'
         },
         {
           title: '更新人',
-          dataIndex: 'updateUser',
+          dataIndex: 'updateUser'
         },
         {
           title: '创建日期',
-          dataIndex: 'createTime',
+          dataIndex: 'createTime'
         },
         {
           title: '创建人',
-          dataIndex: 'createUser',
+          dataIndex: 'createUser'
         },
         {
           title: '操作',
@@ -302,13 +302,13 @@ export default {
           fixed: 'right',
           width: '200px',
           align: 'center'
-        },
+        }
       ]
     }
   },
 
   methods: {
-    getData(reset) {
+    getData (reset) {
       if (reset) {
         this.tablePage.current = 1
       }
@@ -317,22 +317,22 @@ export default {
         url: `${this.moduleBaseUrl}/tree/id/${this.record.id}`,
         method: 'get',
         params: this.form
-      }).then(({data}) => {
+      }).then(({ data }) => {
         this.tableData = data
       }).finally(() => {
         this.queryLoading = false
       })
     },
-    doImport() {
+    doImport () {
 
     },
-    doExport() {
+    doExport () {
 
     },
-    doAddChildren(record){
-      this.dialogDetail.mode=FormDetailMode.ADD()
-      this.dialogDetail.title='新增'
-      this.dialogDetail.record={
+    doAddChildren (record) {
+      this.dialogDetail.mode = FormDetailMode.ADD()
+      this.dialogDetail.title = '新增'
+      this.dialogDetail.record = {
         parentId: record.id
       }
       this.dialogDetail.show = true

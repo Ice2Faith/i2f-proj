@@ -109,11 +109,11 @@
 </template>
 <script>
 
-import ListDetailMixin from "@/mixins/ListDetailMixin";
+import ListDetailMixin from '@/mixins/ListDetailMixin'
 export default {
   components: {},
-  mixins:[ListDetailMixin],
-  data() {
+  mixins: [ListDetailMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/sys/config',
       form: {
@@ -129,18 +129,18 @@ export default {
         createUser: ''
       },
       rules: {
-        configKey: [{required: true, message: '请输入配置键!'}],
-        name: [{required: true, message: '请输入名称!'}],
+        configKey: [{ required: true, message: '请输入配置键!' }],
+        name: [{ required: true, message: '请输入名称!' }]
       },
       metas: {
-        boolList:[{
+        boolList: [{
           value: 0,
-          label: '否',
+          label: '否'
         }, {
           value: 1,
-          label: '是',
-        }],
-      },
+          label: '是'
+        }]
+      }
     }
   },
   methods: {

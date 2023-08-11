@@ -25,7 +25,6 @@
         <a-input v-model:value="form.platform"/>
       </a-form-item>
 
-
       <a-form-item
         :rules="rules.url"
         label="链接"
@@ -75,7 +74,6 @@
         <a-input disabled v-model:value="form.createTime"/>
       </a-form-item>
 
-
     </a-form>
 
     <a-row :gutter="20" justify="end" type="flex" style="margin-top:12px">
@@ -92,8 +90,8 @@
 </template>
 <script>
 
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-import ListDetailMixin from "@/mixins/ListDetailMixin";
+import FormDetailMode from '@/framework/consts/FormDetailMode'
+import ListDetailMixin from '@/mixins/ListDetailMixin'
 
 export default {
   props: {
@@ -106,8 +104,8 @@ export default {
       default: {}
     }
   },
-  mixins:[ListDetailMixin],
-  data() {
+  mixins: [ListDetailMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/biz/passwordBook',
 
@@ -119,15 +117,15 @@ export default {
         password: '',
         remark: '',
         updateTime: '',
-        createTime: '',
+        createTime: ''
       },
       rules: {
-        name: [{required: true, message: '请输入名称!'}],
-        account: [{required: true, message: '请输入账号!'}]
+        name: [{ required: true, message: '请输入名称!' }],
+        account: [{ required: true, message: '请输入账号!' }]
       },
       metas: {
 
-      },
+      }
     }
   },
   methods: {

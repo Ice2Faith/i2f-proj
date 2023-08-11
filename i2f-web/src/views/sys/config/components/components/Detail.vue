@@ -235,17 +235,17 @@
 </template>
 <script>
 
-import ListDetailMixin from "@/mixins/ListDetailMixin";
+import ListDetailMixin from '@/mixins/ListDetailMixin'
 export default {
   components: {},
-  mixins:[ListDetailMixin],
-  props:{
-    config:{
+  mixins: [ListDetailMixin],
+  props: {
+    config: {
       type: Object,
       default: {}
     }
   },
-  data() {
+  data () {
     return {
       moduleBaseUrl: '/api/sys/config/item',
       form: {
@@ -275,43 +275,43 @@ export default {
         createUser: ''
       },
       rules: {
-        entryId: [{required: true, message: '请输入键!'}],
-        entryName: [{required: true, message: '请输入名称!'}],
+        entryId: [{ required: true, message: '请输入键!' }],
+        entryName: [{ required: true, message: '请输入名称!' }]
       },
       metas: {
-        configItemsTreeData:[],
-        statusList:[{
+        configItemsTreeData: [],
+        statusList: [{
           value: 0,
-          label: '禁用',
+          label: '禁用'
         }, {
           value: 1,
-          label: '启用',
+          label: '启用'
         }, {
           value: 99,
-          label: '删除',
+          label: '删除'
         }],
-        boolList:[{
+        boolList: [{
           value: 0,
-          label: '否',
+          label: '否'
         }, {
           value: 1,
-          label: '是',
-        }],
-      },
+          label: '是'
+        }]
+      }
     }
   },
   methods: {
-    hookAfterMounted(){
-      this.form.configId=this.config.id
+    hookAfterMounted () {
+      this.form.configId = this.config.id
       this.loadConfigTreeData()
     },
-    loadConfigTreeData(){
+    loadConfigTreeData () {
       this.$axios({
         url: `${this.moduleBaseUrl}/tree/id/${this.config.id}`,
         method: 'get',
         params: this.form
-      }).then(({data}) => {
-        this.metas.configItemsTreeData=[{
+      }).then(({ data }) => {
+        this.metas.configItemsTreeData = [{
           entryId: 0,
           entryName: '根节点',
           children: data

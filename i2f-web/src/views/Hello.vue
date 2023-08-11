@@ -10,7 +10,7 @@
 export default {
   name: 'Hello',
   methods: {
-    testSvc() {
+    testSvc () {
       this.$axios({
         url: 'api/hello/hello',
         method: 'post',
@@ -21,7 +21,7 @@ export default {
       }).then(data => {
         this.$message.noticeInfo(data.msg)
       })
-    },
+    }
   }
 }
 </script>

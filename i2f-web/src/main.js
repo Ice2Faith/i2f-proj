@@ -1,3 +1,3 @@
-import VueApp from "@/framework/app"
+import VueApp from '@/framework/app'
 
-VueApp.mount("#app")
+VueApp.mount('#app')

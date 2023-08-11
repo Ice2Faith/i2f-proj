@@ -35,21 +35,20 @@
 </template>
 <script>
 
-
-import SysDeptRole from "@/views/sys/dept/components/role/SysDeptRole";
-import SysDeptResources from "@/views/sys/dept/components/resources/SysDeptResources";
+import SysDeptRole from '@/views/sys/dept/components/role/SysDeptRole'
+import SysDeptResources from '@/views/sys/dept/components/resources/SysDeptResources'
 export default {
   components: {
     SysDeptResources,
     SysDeptRole
   },
-  props:{
-    dept:{
+  props: {
+    dept: {
       type: Object,
       default: {}
     }
   },
-  data() {
+  data () {
     return {
       activeKey: 'role'
     }

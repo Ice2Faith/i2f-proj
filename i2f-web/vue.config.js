@@ -1,11 +1,11 @@
-const {defineConfig} = require('@vue/cli-service')
+const { defineConfig } = require('@vue/cli-service')
 // 压缩
 const CompressionPlugin = require('compression-webpack-plugin')
 const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i
 // webpack
 const path = require('path')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
@@ -22,9 +22,9 @@ module.exports = defineConfig({
   // 输出路径
   outputDir: 'dist',
   // 静态资源路径
-  assetsDir: "static",
+  assetsDir: 'static',
   // html的输出路径
-  indexPath: "index.html",
+  indexPath: 'index.html',
   // 是否开启文件名hash，开启之后可以避免缓存无法刷新
   filenameHashing: true,
   // 是否在保存时使用eslint检查
@@ -32,7 +32,7 @@ module.exports = defineConfig({
   // 是否启用运行时编译版本，允许在组件中使用template
   runtimeCompiler: true,
   // 是否保留代码定位信息
-  productionSourceMap: process.env.NODE_ENV == 'prod' ? false : true,
+  productionSourceMap: process.env.NODE_ENV != 'prod',
   // 开发服务配置
   devServer: {
     // 主机，绑定任意地址
@@ -40,13 +40,13 @@ module.exports = defineConfig({
     // 使用环境的端口
     port: process.env.VUE_APP_PORT,
     // 是否自动打开浏览器
-    open: process.env.NODE_ENV == 'dev' ? true : false,
+    open: process.env.NODE_ENV == 'dev',
     // 设置是否https
     https: false,
     // 是否热加载
     hot: true,
     // 是否启用压缩
-    compress: process.env.NODE_ENV != 'dev' ? true : false,
+    compress: process.env.NODE_ENV != 'dev',
     // 客户端配置
     client: {
       // 当出现编译错误或警告时，在浏览器中是否显示全屏覆盖。
@@ -55,15 +55,15 @@ module.exports = defineConfig({
         errors: false,
         warnings: false,
         runtimeErrors: false
-      },
+      }
     },
     // 代理配置
     proxy: {
       // 代理的接口路径
-      "/proxy-api": {
+      '/proxy-api': {
         // 重写路径
         pathRewrite: {
-          "^/proxy-api": ""
+          '^/proxy-api': ''
         },
         // 代理到环境的baseURL
         target: process.env.VUE_APP_BASE_URL,
@@ -74,7 +74,7 @@ module.exports = defineConfig({
         // 是否热更改
         hot: true
       }
-    },
+    }
 
   },
   // webpack配置
@@ -87,13 +87,13 @@ module.exports = defineConfig({
           uglifyOptions: {
             output: {
               // 删除注释
-              comments: process.env.NODE_ENV == 'prod' ? true : false
+              comments: process.env.NODE_ENV == 'prod'
             },
-            //生产环境自动删除console
+            // 生产环境自动删除console
             compress: {
-              warnings: process.env.NODE_ENV == 'prod' ? false : true, // 若打包错误，则注释这行
-              drop_debugger: process.env.NODE_ENV == 'prod' ? false : true,  //清除 debugger 语句
-              drop_console: process.env.NODE_ENV == 'prod' ? false : true,   //清除console语句
+              warnings: process.env.NODE_ENV != 'prod', // 若打包错误，则注释这行
+              drop_debugger: process.env.NODE_ENV != 'prod', // 清除 debugger 语句
+              drop_console: process.env.NODE_ENV != 'prod', // 清除console语句
               pure_funcs: process.env.NODE_ENV == 'prod' ? ['console.log'] : []
             }
           },
@@ -101,7 +101,7 @@ module.exports = defineConfig({
           parallel: true
         })
       ]
-    },
+    }
 
   },
   // 打包配置
@@ -115,7 +115,7 @@ module.exports = defineConfig({
         .use(
           new BundleAnalyzerPlugin({
             analyzerPort: 'auto', // server端口，默认8888, auto任意可用端口 / 指定端口
-            analyzerMode: 'server', // 模式，默认server，server服务模式 / static只生成静态文件 json文件模式，disabled 禁用
+            analyzerMode: 'server' // 模式，默认server，server服务模式 / static只生成静态文件 json文件模式，disabled 禁用
           })
         )
         .end()
@@ -203,7 +203,7 @@ module.exports = defineConfig({
             maxAsyncRequests: 10, // 最大的异步请求数量,也就是同时加载的模块最大模块数量
             maxInitialRequests: 5, // 入口文件做代码分割最多分成多少个 js 文件
             priority: 20,
-            reuseExistingChunk: true,
+            reuseExistingChunk: true
             // enforce: true // 为true时，忽略minSize，minChunks，maxAsyncRequests和maxInitialRequests选项
           },
           // 定义本项目引用的第三方库的部分
@@ -217,9 +217,9 @@ module.exports = defineConfig({
             maxAsyncRequests: 10, // 最大的异步请求数量,也就是同时加载的模块最大模块数量
             maxInitialRequests: 5, // 入口文件做代码分割最多分成多少个 js 文件
             priority: 21,
-            reuseExistingChunk: true,
+            reuseExistingChunk: true
             // enforce: true // 为true时，忽略minSize，minChunks，maxAsyncRequests和maxInitialRequests选项
-          },
+          }
         }
       })
     }

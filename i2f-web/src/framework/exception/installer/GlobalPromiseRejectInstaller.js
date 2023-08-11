@@ -1,12 +1,12 @@
-import GlobalExceptionHandler from "@/framework/exception/handler/GlobalExceptionHandler";
-import Exception from "@/framework/exception/Exception";
+import GlobalExceptionHandler from '@/framework/exception/handler/GlobalExceptionHandler'
+import Exception from '@/framework/exception/Exception'
 
 /**
  * 全局promise发生未捕获的reject的异常安裝器
  * 需要参数为window实例，即全局window对象
  */
 const GlobalPromiseRejectInstaller = {
-  install(windowInstance) {
+  install (windowInstance) {
     // 处理全局的promise.reject异常
     windowInstance.addEventListener('unhandledrejection', (event) => {
       let msg = event.reason

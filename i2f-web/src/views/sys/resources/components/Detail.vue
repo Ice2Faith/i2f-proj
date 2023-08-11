@@ -160,8 +160,8 @@
 </template>
 <script>
 
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-import ListDetailMixin from "@/mixins/ListDetailMixin";
+import FormDetailMode from '@/framework/consts/FormDetailMode'
+import ListDetailMixin from '@/mixins/ListDetailMixin'
 
 export default {
   props: {
@@ -174,8 +174,8 @@ export default {
       default: {}
     }
   },
-  mixins:[ListDetailMixin],
-  data() {
+  mixins: [ListDetailMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/sys/resources',
 
@@ -185,7 +185,7 @@ export default {
         type: 0,
         url: '',
         permKey: '',
-        remark:'',
+        remark: '',
         parentId: null,
         status: 1,
         orderIndex: 1,
@@ -197,41 +197,41 @@ export default {
         createUser: ''
       },
       rules: {
-        name: [{required: true, message: '请输入名称!'}],
-        type: [{required: true, message: '请输入类型!'}],
+        name: [{ required: true, message: '请输入名称!' }],
+        type: [{ required: true, message: '请输入类型!' }]
       },
       metas: {
-        statusList:[{
+        statusList: [{
           value: 0,
-          label: '禁用',
+          label: '禁用'
         }, {
           value: 1,
-          label: '启用',
+          label: '启用'
         }, {
           value: 99,
-          label: '删除',
+          label: '删除'
         }],
-        menuTypeList:[{
+        menuTypeList: [{
           value: 0,
-          label: '菜单',
+          label: '菜单'
         }, {
           value: 1,
-          label: '权限',
+          label: '权限'
         }],
-        resourceTreeData:[],
-      },
+        resourceTreeData: []
+      }
     }
   },
   methods: {
-    hookAfterMounted(){
+    hookAfterMounted () {
       this.loadResourcesTreeData()
     },
-    loadResourcesTreeData(){
+    loadResourcesTreeData () {
       this.$axios({
         url: `${this.moduleBaseUrl}/tree`,
         method: 'get'
-      }).then(({data})=>{
-        this.metas.resourceTreeData=[{
+      }).then(({ data }) => {
+        this.metas.resourceTreeData = [{
           id: 0,
           name: '根节点',
           children: data

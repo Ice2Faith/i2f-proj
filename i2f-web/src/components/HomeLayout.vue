@@ -84,15 +84,15 @@
   </div>
 </template>
 <script>
-import MenuTree from "@/components/MenuTree";
-import Auth from "../framework/auth";
+import MenuTree from '@/components/MenuTree'
+import Auth from '../framework/auth'
 
 export default {
   name: 'HomeLayout',
   components: {
     MenuTree
   },
-  data() {
+  data () {
     return {
       user: {},
       noticeCount: 0,
@@ -105,7 +105,7 @@ export default {
           title: '首页',
           icon: 'home-outlined',
           url: '/home'
-        },
+        }
       ],
       menuConfig: {
         key: 'id',
@@ -143,21 +143,21 @@ export default {
                   key: '2.1.1',
                   title: '欢迎',
                   icon: 'pie-chart-outlined',
-                  url: '/hello',
-                },
-              ],
-            },
-          ],
-        },
+                  url: '/hello'
+                }
+              ]
+            }
+          ]
+        }
       ]
     }
   },
-  created() {
-    this.user = Auth.getUser();
+  created () {
+    this.user = Auth.getUser()
     this.loadMenu()
   },
   methods: {
-    onTabEdit(targetKey, action) {
+    onTabEdit (targetKey, action) {
       let idx = -1
       for (let i = 0; i < this.tabs.length; i++) {
         if (this.tabs[i].key == targetKey) {
@@ -170,13 +170,12 @@ export default {
       }
       if (this.tabs.length > 0) {
         if (idx >= 0) {
-          let menu = this.tabs[Math.max(idx - 1, 0)]
+          const menu = this.tabs[Math.max(idx - 1, 0)]
           this.onClickTab(menu.key)
         }
       }
-
     },
-    onClickMenu(menu) {
+    onClickMenu (menu) {
       if (!menu.key) {
         return
       }
@@ -191,7 +190,7 @@ export default {
       }
       this.activeTab = menu.key
     },
-    onClickTab(key) {
+    onClickTab (key) {
       this.tabs.forEach(item => {
         if (item.key == key) {
           if (!item.url || item.url == '') {
@@ -201,30 +200,30 @@ export default {
           if (item.url.indexOf('://') >= 0) {
             window.open(item.url, '_blank')
           } else {
-            this.$router.push({path: item.url})
+            this.$router.push({ path: item.url })
           }
         }
       })
     },
-    showNotice() {
+    showNotice () {
       this.$message.noticeInfo('功能还未开发')
     },
-    editUserInfo() {
+    editUserInfo () {
       this.$message.noticeInfo('功能还未开发')
     },
-    changePassword() {
+    changePassword () {
       this.$message.noticeInfo('功能还未开发')
     },
-    logout() {
+    logout () {
       this.$axios({
         url: '/logout',
         method: 'get'
       }).then(data => {
-        this.$router.replace({path: '/'})
+        this.$router.replace({ path: '/' })
         this.$message.noticeInfo(data.msg)
       })
     },
-    loadMenu() {
+    loadMenu () {
       this.$axios({
         url: '/sys/user/menus',
         method: 'post'

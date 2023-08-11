@@ -9,43 +9,43 @@
  * 此时，user就需要在component中重写age属性，因为这不是第一层
  * 没有进行深层合并
  */
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-import ListManageMixinData from "@/mixins/ListManageMixinData";
+import FormDetailMode from '@/framework/consts/FormDetailMode'
+import ListManageMixinData from '@/mixins/ListManageMixinData'
 
-const ListManageMixin={
-  data() {
+const ListManageMixin = {
+  data () {
     return ListManageMixinData()
   },
-  mounted() {
+  mounted () {
     this.hookBeforeMounted()
     this.doSearch()
     this.hookAfterMounted()
   },
   methods: {
-    hookBeforeMounted(){
+    hookBeforeMounted () {
 
     },
-    hookAfterMounted(){
+    hookAfterMounted () {
 
     },
-    hookBeforeGetData(){
+    hookBeforeGetData () {
 
     },
-    filterOption(input, option) {
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    filterOption (input, option) {
+      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
     },
-    onClickUrl(url){
-      if(url &&url!=''){
-        window.open(url,'_blank')
+    onClickUrl (url) {
+      if (url && url != '') {
+        window.open(url, '_blank')
       }
     },
-    doSearch() {
+    doSearch () {
       this.getData(true)
     },
-    doReset() {
+    doReset () {
       this.$refs.form.resetFields()
     },
-    getData(reset) {
+    getData (reset) {
       if (reset) {
         this.tablePage.current = 1
       }
@@ -55,7 +55,7 @@ const ListManageMixin={
         url: `${this.moduleBaseUrl}/page/${this.tablePage.pageSize}/${(this.tablePage.current - 1)}`,
         method: 'get',
         params: this.form
-      }).then(({data}) => {
+      }).then(({ data }) => {
         this.tableData = data.list
         this.tablePage.current = data.index + 1
         this.tablePage.pageSize = data.size
@@ -64,59 +64,57 @@ const ListManageMixin={
         this.queryLoading = false
       })
     },
-    handleTableChange(pagination, filters, sorter, {currentDataSource}) {
+    handleTableChange (pagination, filters, sorter, { currentDataSource }) {
       this.tablePage = pagination
     },
-    doAdd() {
-      this.dialogDetail.mode=FormDetailMode.ADD()
-      this.dialogDetail.title='新增'
+    doAdd () {
+      this.dialogDetail.mode = FormDetailMode.ADD()
+      this.dialogDetail.title = '新增'
       this.dialogDetail.show = true
     },
-    handleDetailOk() {
+    handleDetailOk () {
       this.dialogDetail.show = false
       this.doSearch()
     },
-    handleDetailCancel() {
+    handleDetailCancel () {
       this.dialogDetail.show = false
     },
-    doImport() {
+    doImport () {
 
     },
-    doExport() {
+    doExport () {
 
     },
-    doView(record) {
-      this.dialogDetail.mode=FormDetailMode.VIEW()
-      this.dialogDetail.title='详情'
-      this.dialogDetail.record=record
+    doView (record) {
+      this.dialogDetail.mode = FormDetailMode.VIEW()
+      this.dialogDetail.title = '详情'
+      this.dialogDetail.record = record
       this.dialogDetail.show = true
     },
-    doEdit(record) {
-      this.dialogDetail.mode=FormDetailMode.EDIT()
-      this.dialogDetail.title='编辑'
-      this.dialogDetail.record=record
+    doEdit (record) {
+      this.dialogDetail.mode = FormDetailMode.EDIT()
+      this.dialogDetail.title = '编辑'
+      this.dialogDetail.record = record
       this.dialogDetail.show = true
     },
-    doDelete(record) {
-      let _this=this
+    doDelete (record) {
+      const _this = this
       this.$modal.confirm({
         title: '删除确认框',
         content: '您真的要要删除此项吗?',
-        onOk() {
+        onOk () {
           _this.$axios({
             url: `${_this.moduleBaseUrl}/delete/${record.id}`,
             method: 'delete',
             data: {}
-          }).then(()=>{
+          }).then(() => {
             _this.doSearch()
           })
         },
-        onCancel() {
+        onCancel () {
           _this.$message.noticeInfo('操作已取消')
-        },
-      });
-
-
+        }
+      })
     }
   }
 }

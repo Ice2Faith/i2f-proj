@@ -1,30 +1,30 @@
-import {message} from 'ant-design-vue';
+import { message } from 'ant-design-vue'
 
 const Message = {
-  noticeError(str) {
-    console.log("[ERROR] ", str)
-    if (typeof str !== "string") {
+  noticeError (str) {
+    console.log('[ERROR] ', str)
+    if (typeof str !== 'string') {
       str = JSON.stringify(str)
     }
     message.error(str)
   },
-  noticeWarning(str) {
-    console.log("[WARN] ", str)
-    if (typeof str !== "string") {
+  noticeWarning (str) {
+    console.log('[WARN] ', str)
+    if (typeof str !== 'string') {
       str = JSON.stringify(str)
     }
     message.warning(str)
   },
-  noticeInfo(str) {
-    console.log("[INFO] ", str)
-    if (typeof str !== "string") {
+  noticeInfo (str) {
+    console.log('[INFO] ', str)
+    if (typeof str !== 'string') {
       str = JSON.stringify(str)
     }
     message.info(str)
   },
-  noticeSuccess(str) {
-    console.log("[SUCCESS] ", str)
-    if (typeof str !== "string") {
+  noticeSuccess (str) {
+    console.log('[SUCCESS] ', str)
+    if (typeof str !== 'string') {
       str = JSON.stringify(str)
     }
     message.success(str)

@@ -1,7 +1,7 @@
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-import ListDetailMixinData from "@/mixins/ListDetailMixinData";
+import FormDetailMode from '@/framework/consts/FormDetailMode'
+import ListDetailMixinData from '@/mixins/ListDetailMixinData'
 
-const ListDetailMixin={
+const ListDetailMixin = {
   props: {
     mode: {
       type: String,
@@ -12,10 +12,10 @@ const ListDetailMixin={
       default: {}
     }
   },
-  data() {
+  data () {
     return ListDetailMixinData()
   },
-  mounted() {
+  mounted () {
     this.hookBeforeMounted()
     if (this.record) {
       this.form = Object.assign({}, this.form, this.record)
@@ -24,49 +24,49 @@ const ListDetailMixin={
       this.form.id = null
     }
     this.hookAfterMounted()
-    if(this.needFindDetail){
+    if (this.needFindDetail) {
       this.doFindDetail()
     }
   },
   methods: {
-    hookBeforeMounted(){
+    hookBeforeMounted () {
 
     },
-    hookAfterMounted(){
+    hookAfterMounted () {
 
     },
-    hookBeforeSubmit(){
+    hookBeforeSubmit () {
 
     },
-    hasAddMode() {
+    hasAddMode () {
       return this.mode == FormDetailMode.ADD()
     },
-    hasEditMode(){
+    hasEditMode () {
       return this.mode == FormDetailMode.EDIT()
     },
-    hasSubmitButton() {
+    hasSubmitButton () {
       return this.mode == FormDetailMode.ADD() || this.mode == FormDetailMode.EDIT()
     },
-    filterOption(input, option) {
-      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    filterOption (input, option) {
+      return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
     },
-    doCancel() {
+    doCancel () {
       this.$emit('cancel')
     },
-    doFindDetail(){
-      if(this.form[this.formRowKey]==null || this.form[this.formRowKey]==undefined || this.form[this.formRowKey]==''){
+    doFindDetail () {
+      if (this.form[this.formRowKey] == null || this.form[this.formRowKey] == undefined || this.form[this.formRowKey] == '') {
         return
       }
       this.$axios({
         url: `${this.moduleBaseUrl}/find/${this.form[this.formRowKey]}`,
         method: 'get'
-      }).then(({data})=>{
-        this.form=Object.assign({},this.form,data)
+      }).then(({ data }) => {
+        this.form = Object.assign({}, this.form, data)
       })
     },
-    doSubmit() {
+    doSubmit () {
       this.$refs.form.validateFields().then(() => {
-        let _this = this
+        const _this = this
         _this.hookBeforeSubmit()
         _this.controls.loading = true
         let reqConfig = null
@@ -85,7 +85,6 @@ const ListDetailMixin={
           }
         }
         if (reqConfig) {
-
           this.$axios(reqConfig).then(resp => {
           })
             .finally(() => {

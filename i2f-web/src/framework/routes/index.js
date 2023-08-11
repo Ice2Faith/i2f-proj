@@ -1,11 +1,10 @@
-import Config from "@/framework/config"
-import Error404 from "@/framework/error/Error404"
-import Login from "@/views/Login"
-import Hello from "@/views/Hello"
-import Home from "@/components/HomeLayout";
-import Registry from "@/views/Registry";
-import PassReset from "@/views/PassReset";
-
+import Config from '@/framework/config'
+import Error404 from '@/framework/error/Error404'
+import Login from '@/views/Login'
+import Hello from '@/views/Hello'
+import Home from '@/components/HomeLayout'
+import Registry from '@/views/Registry'
+import PassReset from '@/views/PassReset'
 
 const Routes = [
   {
@@ -114,10 +113,9 @@ const Routes = [
           // 未指定的活明确指定为true的，则都需要对应的权限
           permission: false
         }
-      },
+      }
     ]
   },
-
 
   // 最后捕获所有路径，走到这里，表示没有任何路由匹配，也就是404了
   {

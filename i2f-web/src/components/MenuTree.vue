@@ -24,14 +24,14 @@
   </div>
 </template>
 <script>
-import {defineComponent} from 'vue';
+import { defineComponent } from 'vue'
 
 const SubMenu = {
   name: 'SubMenu',
   props: {
     menu: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     config: {
       type: Object,
@@ -42,17 +42,17 @@ const SubMenu = {
         children: 'children',
         url: 'url'
       }
-    },
+    }
   },
   methods: {
-    onClickMenu(item) {
+    onClickMenu (item) {
       if (!item[this.config.url] || item[this.config.url] == '') {
         return
       }
       if (item[this.config.url].indexOf('://') >= 0) {
         window.open(item[this.config.url], '_blank')
       } else {
-        this.$router.push({path: item[this.config.url]})
+        this.$router.push({ path: item[this.config.url] })
       }
       this.$emit('click', {
         key: item[this.config.key],
@@ -62,11 +62,11 @@ const SubMenu = {
         url: item[this.config.url]
       }, item)
     },
-    popClickMenu(item, originItem) {
+    popClickMenu (item, originItem) {
       this.$emit('click', item, originItem)
     }
   },
-  setup() {
+  setup () {
 
   },
   template: `
@@ -90,7 +90,7 @@ const SubMenu = {
     </template>
     </a-sub-menu>
   `
-};
+}
 
 /**
  menus : [
@@ -134,7 +134,7 @@ export default defineComponent({
   props: {
     menus: {
       type: Array,
-      default: [],
+      default: []
     },
     config: {
       type: Object,
@@ -168,14 +168,14 @@ export default defineComponent({
     }
   },
   methods: {
-    onClickMenu(item) {
+    onClickMenu (item) {
       if (!item[this.config.url] || item[this.config.url] == '') {
         return
       }
       if (item[this.config.url].indexOf('://') >= 0) {
         window.open(item[this.config.url], '_blank')
       } else {
-        this.$router.push({path: item[this.config.url]})
+        this.$router.push({ path: item[this.config.url] })
       }
       this.$emit('click', {
         key: item[this.config.key],
@@ -185,15 +185,15 @@ export default defineComponent({
         url: item[this.config.url]
       }, item)
     },
-    popClickMenu(item, originItem) {
+    popClickMenu (item, originItem) {
       this.$emit('click', item, originItem)
     }
   },
-  setup() {
+  setup () {
 
   },
   components: {
     'sub-menu': SubMenu
-  },
-});
+  }
+})
 </script>

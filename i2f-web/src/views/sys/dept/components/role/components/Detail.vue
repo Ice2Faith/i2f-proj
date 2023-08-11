@@ -83,8 +83,8 @@
 </template>
 <script>
 
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-import ListDetailMixin from "@/mixins/ListDetailMixin";
+import FormDetailMode from '@/framework/consts/FormDetailMode'
+import ListDetailMixin from '@/mixins/ListDetailMixin'
 
 export default {
   props: {
@@ -96,13 +96,13 @@ export default {
       type: Object,
       default: {}
     },
-    dept:{
+    dept: {
       type: Object,
       default: {}
     }
   },
-  mixins:[ListDetailMixin],
-  data() {
+  mixins: [ListDetailMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/sys/dept/role',
       form: {
@@ -116,37 +116,37 @@ export default {
         createUser: ''
       },
       controls: {
-        loading: false,
+        loading: false
       },
       rules: {
-        roleKey: [{required: true, message: '请输入角色键!'}],
-        roleName: [{required: true, message: '请输入角色名称!'}],
+        roleKey: [{ required: true, message: '请输入角色键!' }],
+        roleName: [{ required: true, message: '请输入角色名称!' }]
       },
       metas: {
-        statusList:[{
+        statusList: [{
           value: 0,
-          label: '禁用',
+          label: '禁用'
         }, {
           value: 1,
-          label: '启用',
+          label: '启用'
         }, {
           value: 99,
-          label: '删除',
+          label: '删除'
         }],
-        boolList:[{
+        boolList: [{
           value: 0,
-          label: '否',
+          label: '否'
         }, {
           value: 1,
-          label: '是',
-        }],
-      },
+          label: '是'
+        }]
+      }
     }
   },
   methods: {
-    hookBeforeMounted(){
-      this.form.deptId=this.dept.id
-    },
+    hookBeforeMounted () {
+      this.form.deptId = this.dept.id
+    }
   }
 }
 </script>

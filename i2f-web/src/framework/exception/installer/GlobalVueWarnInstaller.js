@@ -1,5 +1,5 @@
-import GlobalExceptionHandler from "@/framework/exception/handler/GlobalExceptionHandler";
-import Exception from "@/framework/exception/Exception";
+import GlobalExceptionHandler from '@/framework/exception/handler/GlobalExceptionHandler'
+import Exception from '@/framework/exception/Exception'
 
 /**
  * 全局vue发生warn的异常安裝器
@@ -13,7 +13,7 @@ import Exception from "@/framework/exception/Exception";
  * vueInstance.mount('#app')
  */
 const GlobalVueWarnInstaller = {
-  install(vueInstance) {
+  install (vueInstance) {
     vueInstance.config.warnHandler = (message, instance, trace) => {
       let msg = message
       let code = Exception.CODE_WARN()

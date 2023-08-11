@@ -62,24 +62,24 @@ export default {
     }
   },
   components: {},
-  data() {
+  data () {
     return {
       previewMode: false,
       form: {
         content: '',
         html: '',
-        fileList:[]
+        fileList: []
       },
       dialogs: {
         detail: {
           title: '保存 HTML',
-          show: false,
+          show: false
         }
       },
       editor: {
         instance: null,
         mode: 'editable',
-        leftToolbar: 'undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code | save | tip emoji more',
+        leftToolbar: 'undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code | save | tip emoji more'
       }
     }
   },
@@ -94,7 +94,7 @@ export default {
       immediate: true,
       handler: function (val, old) {
         this.editor.mode = val ? 'editable' : 'preview'
-        this.previewMode=!val
+        this.previewMode = !val
       }
     },
     previewMode: {
@@ -103,69 +103,69 @@ export default {
       }
     }
   },
-  created() {
+  created () {
 
   },
   methods: {
-    beforeUpload(file){
-      this.form.fileList.value = [...this.form.fileList, file];
+    beforeUpload (file) {
+      this.form.fileList.value = [...this.form.fileList, file]
 
       this.$multipart({
         url: '/api/sys/file/upload',
-        data:{
+        data: {
           file: file
         }
-      }).then(({data})=>{
-        let url=data.url
-        let filename=data.filename
+      }).then(({ data }) => {
+        const url = data.url
+        const filename = data.filename
         this.editor.instance.insert(function (selected) {
-          const prefix = `[`;
-          const suffix = `](${url})`;
-          const placeholder = '链接';
-          const content = selected || filename || placeholder;
+          const prefix = '['
+          const suffix = `](${url})`
+          const placeholder = '链接'
+          const content = selected || filename || placeholder
 
           return {
             text: `${prefix}${content}${suffix}`,
-            selected: content,
-          };
-        });
+            selected: content
+          }
+        })
       })
 
-      return false;
+      return false
     },
 
-    handleUploadImage(event, insertImage, files) {
+    handleUploadImage (event, insertImage, files) {
       this.$multipart({
         url: '/api/sys/file/upload',
-        data:{
+        data: {
           file: files[0]
         }
-      }).then(({data})=>{
-        let url=data.url
-        let filename=data.filename
+      }).then(({ data }) => {
+        const url = data.url
+        const filename = data.filename
 
         // Here is just an example
         insertImage({
           url: url,
-          desc: filename,
+          desc: filename
           // width: 'auto',
           // height: 'auto',
-        });
+        })
       })
     },
-    handleChange(text, html) {
+    handleChange (text, html) {
       this.$emit('update:text', text)
       this.$emit('change', text, html)
     },
-    handleCopyCodeSuccess() {
+    handleCopyCodeSuccess () {
       this.$message.noticeInfo('复制成功')
     },
-    handleSave(text, html) {
+    handleSave (text, html) {
       this.form.html = html
       this.dialogs.detail.show = true
     },
-    getToolbar() {
-      let _this = this
+    getToolbar () {
+      const _this = this
       return {
         more: {
           title: '更多',
@@ -174,91 +174,91 @@ export default {
             {
               name: 'katex',
               text: 'katex 公式',
-              action(editor) {
+              action (editor) {
                 editor.insert(function (selected) {
-                  const prefix = '$$';
-                  const suffix = '$$';
-                  const placeholder = '\\sum_{i=1}^n a_i=0';
-                  const content = selected || placeholder;
+                  const prefix = '$$'
+                  const suffix = '$$'
+                  const placeholder = '\\sum_{i=1}^n a_i=0'
+                  const content = selected || placeholder
 
                   return {
                     text: `${prefix}${content}${suffix}`,
-                    selected: content,
-                  };
-                });
-              },
+                    selected: content
+                  }
+                })
+              }
             },
             {
               name: 'mermaid',
               text: 'mermaid 流程图',
-              action(editor) {
+              action (editor) {
                 editor.insert(function (selected) {
                   const prefix = '```mermaid\n' +
-                    'graph LR\n';
-                  const suffix = '\n```';
+                    'graph LR\n'
+                  const suffix = '\n```'
                   const placeholder = 'A --- B\n' +
                     'B-->C[fa:fa-ban C]\n' +
-                    'B-->D(fa:fa-spinner D);';
-                  const content = selected || placeholder;
+                    'B-->D(fa:fa-spinner D);'
+                  const content = selected || placeholder
 
                   return {
                     text: `${prefix}${content}${suffix}`,
-                    selected: content,
-                  };
-                });
-              },
+                    selected: content
+                  }
+                })
+              }
             },
             {
               name: 'task-finish',
               text: 'task 待办任务-已完成',
-              action(editor) {
+              action (editor) {
                 editor.insert(function (selected) {
-                  const prefix = '- [x] ';
-                  const suffix = '';
-                  const placeholder = 'placeholder';
-                  const content = selected || placeholder;
+                  const prefix = '- [x] '
+                  const suffix = ''
+                  const placeholder = 'placeholder'
+                  const content = selected || placeholder
 
                   return {
                     text: `${prefix}${content}${suffix}`,
-                    selected: content,
-                  };
-                });
-              },
+                    selected: content
+                  }
+                })
+              }
             },
             {
               name: 'task-new',
               text: 'task 待办任务-未完成',
-              action(editor) {
+              action (editor) {
                 editor.insert(function (selected) {
-                  const prefix = '- [ ] ';
-                  const suffix = '';
-                  const placeholder = 'placeholder';
-                  const content = selected || placeholder;
+                  const prefix = '- [ ] '
+                  const suffix = ''
+                  const placeholder = 'placeholder'
+                  const content = selected || placeholder
 
                   return {
                     text: `${prefix}${content}${suffix}`,
-                    selected: content,
-                  };
-                });
-              },
+                    selected: content
+                  }
+                })
+              }
             },
             {
               name: 'upload-file',
               text: '上传文件',
-              action(editor) {
+              action (editor) {
                 _this.$refs.uploadTriggerBtn.$el.click()
-                _this.editor.instance=editor
-              },
+                _this.editor.instance = editor
+              }
             },
             {
               name: 'preview',
               text: '预览',
-              action(editor) {
-                _this.previewMode=true
-              },
-            },
+              action (editor) {
+                _this.previewMode = true
+              }
+            }
           ]
-        },
+        }
 
       }
     }

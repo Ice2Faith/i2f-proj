@@ -88,12 +88,12 @@
 </template>
 <script>
 
-import MarkdownEditor from "@/components/MarkdownEditor";
-import ListDetailMixin from "@/mixins/ListDetailMixin";
+import MarkdownEditor from '@/components/MarkdownEditor'
+import ListDetailMixin from '@/mixins/ListDetailMixin'
 export default {
-  components: {MarkdownEditor},
-  mixins:[ListDetailMixin],
-  data() {
+  components: { MarkdownEditor },
+  mixins: [ListDetailMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/biz/noteBook',
       form: {
@@ -103,20 +103,20 @@ export default {
         parentId: null,
         remark: '',
         updateTime: '',
-        createTime: '',
+        createTime: ''
       },
       rules: {
-        title: [{required: true, message: '请输入标题!'}],
+        title: [{ required: true, message: '请输入标题!' }]
       },
       metas: {
         parentList: []
-      },
+      }
     }
   },
   methods: {
-    hookAfterMounted(){
-      if(this.form.content==null || this.form.content==undefined){
-        this.form.content=''
+    hookAfterMounted () {
+      if (this.form.content == null || this.form.content == undefined) {
+        this.form.content = ''
       }
     }
   }

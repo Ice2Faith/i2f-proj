@@ -1,4 +1,4 @@
-function ListDetailMixinData(){
+function ListDetailMixinData () {
   return {
     submitLoading: false,
     moduleBaseUrl: '/api',
@@ -15,7 +15,7 @@ function ListDetailMixinData(){
     },
     metas: {
 
-    },
+    }
   }
 }
 

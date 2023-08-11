@@ -1,13 +1,13 @@
-import FormDetailMode from "@/framework/consts/FormDetailMode";
+import FormDetailMode from '@/framework/consts/FormDetailMode'
 
-function ListManageMixinData(){
+function ListManageMixinData () {
   return {
     queryLoading: false,
     dialogDetail: {
       title: '新增',
       show: false,
       mode: FormDetailMode.ADD(),
-      record: {},
+      record: {}
     },
     moduleBaseUrl: '/api',
     tablePage: {
@@ -34,7 +34,7 @@ function ListManageMixinData(){
     dialogs: {
 
     },
-    metas:{
+    metas: {
 
     },
     tableColumns: []

@@ -219,10 +219,10 @@
 </template>
 <script>
 
-import Detail from "./components/Detail";
+import Detail from './components/Detail'
 
-import ListManageMixin from "@/mixins/ListManageMixin";
-import SysConfigItems from "@/views/sys/config/components/SysConfigItems";
+import ListManageMixin from '@/mixins/ListManageMixin'
+import SysConfigItems from '@/views/sys/config/components/SysConfigItems'
 
 export default {
   components: {
@@ -230,7 +230,7 @@ export default {
     Detail
   },
   mixins: [ListManageMixin],
-  data() {
+  data () {
     return {
       moduleBaseUrl: '/api/sys/config',
 
@@ -244,61 +244,61 @@ export default {
       },
       rules: {},
       dialogs: {
-        config:{
+        config: {
           title: '配置修改',
           show: false,
-          record:{},
+          record: {}
         }
       },
       metas: {
-        boolList:[{
+        boolList: [{
           value: 0,
-          label: '否',
+          label: '否'
         }, {
           value: 1,
-          label: '是',
-        }],
+          label: '是'
+        }]
       },
       tableColumns: [
         {
           title: '配置键',
-          dataIndex: 'configKey',
+          dataIndex: 'configKey'
         },
         {
           title: '名称',
-          dataIndex: 'name',
+          dataIndex: 'name'
         },
         {
           title: '是否可修改',
-          dataIndex: 'modFlagDesc',
+          dataIndex: 'modFlagDesc'
         },
         {
           title: '是否可删除',
-          dataIndex: 'delFlagDesc',
+          dataIndex: 'delFlagDesc'
         },
         {
           title: '是否系统',
-          dataIndex: 'sysFlagDesc',
+          dataIndex: 'sysFlagDesc'
         },
         {
           title: '备注',
-          dataIndex: 'remark',
+          dataIndex: 'remark'
         },
         {
           title: '更新日期',
-          dataIndex: 'updateTime',
+          dataIndex: 'updateTime'
         },
         {
           title: '更新人',
-          dataIndex: 'updateUser',
+          dataIndex: 'updateUser'
         },
         {
           title: '创建日期',
-          dataIndex: 'createTime',
+          dataIndex: 'createTime'
         },
         {
           title: '创建人',
-          dataIndex: 'createUser',
+          dataIndex: 'createUser'
         },
         {
           title: '操作',
@@ -306,24 +306,24 @@ export default {
           fixed: 'right',
           width: '200px',
           align: 'center'
-        },
+        }
       ]
     }
   },
 
   methods: {
-    doImport() {
+    doImport () {
 
     },
-    doExport() {
+    doExport () {
 
     },
-    doConfigItems(record){
-      this.dialogs.config.record=record
-      this.dialogs.config.show=true
+    doConfigItems (record) {
+      this.dialogs.config.record = record
+      this.dialogs.config.show = true
     },
-    onConfigCancel(){
-      this.dialogs.config.show=false
+    onConfigCancel () {
+      this.dialogs.config.show = false
     }
   }
 }

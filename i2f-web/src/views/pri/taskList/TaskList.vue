@@ -224,20 +224,20 @@
 </template>
 <script>
 
-import Detail from "@/views/pri/taskList/components/Detail";
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-import ListManageMixin from "@/mixins/ListManageMixin";
+import Detail from '@/views/pri/taskList/components/Detail'
+import FormDetailMode from '@/framework/consts/FormDetailMode'
+import ListManageMixin from '@/mixins/ListManageMixin'
 
 export default {
   components: {
     Detail
   },
-  mixins:[ListManageMixin],
-  data() {
+  mixins: [ListManageMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/biz/taskList',
 
-      beforeForm:{
+      beforeForm: {
         deadline: []
       },
       form: {
@@ -255,8 +255,8 @@ export default {
       dialogs: {
 
       },
-      metas:{
-        statusList:[{
+      metas: {
+        statusList: [{
           value: 0,
           label: '运行',
           color: '#00cc44'
@@ -271,120 +271,120 @@ export default {
         }]
       },
       tableColumns: [
-          {
-            title: '名称',
-            dataIndex: 'name',
-          },
-          {
-            title: '等级',
-            dataIndex: 'level',
-            key: 'level',
-          },
-          {
-            title: '价值',
-            dataIndex: 'value',
-            key: 'value',
-          },
-          {
-            title: '进度',
-            dataIndex: 'progress',
-            key: 'progress',
-          },
-          {
-            title: '处理',
-            dataIndex: 'process',
-          },
-          {
-            title: '截止日期',
-            dataIndex: 'deadline',
-          },
-          {
-            title: '状态',
-            dataIndex: 'statusDesc',
-            key: 'status',
-          },
-          {
-            title: '备注',
-            dataIndex: 'remark',
-          },
-          {
-            title: '更新日期',
-            dataIndex: 'updateTime',
-          },
-          {
-            title: '创建日期',
-            dataIndex: 'createTime',
-          },
-          {
-            title: '操作',
-            key: 'action',
-            fixed: 'right',
-            width: '200px',
-            align: 'center'
-          },
-        ]
+        {
+          title: '名称',
+          dataIndex: 'name'
+        },
+        {
+          title: '等级',
+          dataIndex: 'level',
+          key: 'level'
+        },
+        {
+          title: '价值',
+          dataIndex: 'value',
+          key: 'value'
+        },
+        {
+          title: '进度',
+          dataIndex: 'progress',
+          key: 'progress'
+        },
+        {
+          title: '处理',
+          dataIndex: 'process'
+        },
+        {
+          title: '截止日期',
+          dataIndex: 'deadline'
+        },
+        {
+          title: '状态',
+          dataIndex: 'statusDesc',
+          key: 'status'
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark'
+        },
+        {
+          title: '更新日期',
+          dataIndex: 'updateTime'
+        },
+        {
+          title: '创建日期',
+          dataIndex: 'createTime'
+        },
+        {
+          title: '操作',
+          key: 'action',
+          fixed: 'right',
+          width: '200px',
+          align: 'center'
+        }
+      ]
 
     }
   },
 
   methods: {
 
-    onDeadlineRangeChange(){
-      let range=this.beforeForm.deadline
-      if(range && range.length==2){
-        this.form.deadlineBegin=range[0]
-        this.form.deadlineEnd=range[1]
-      }else{
-        this.form.deadlineBegin=''
-        this.form.deadlineEnd=''
+    onDeadlineRangeChange () {
+      const range = this.beforeForm.deadline
+      if (range && range.length == 2) {
+        this.form.deadlineBegin = range[0]
+        this.form.deadlineEnd = range[1]
+      } else {
+        this.form.deadlineBegin = ''
+        this.form.deadlineEnd = ''
       }
     },
-    getRecordStatusStyle(record){
-      for(let key in this.metas.statusList){
-        let item=this.metas.statusList[key]
-        if(item.value==record.status){
+    getRecordStatusStyle (record) {
+      for (const key in this.metas.statusList) {
+        const item = this.metas.statusList[key]
+        if (item.value == record.status) {
           return {
             backgroundColor: item.color,
-            border:  `solid 1px ${item.color}`,
+            border: `solid 1px ${item.color}`,
             color: 'white'
           }
         }
       }
       return {}
     },
-    doImport() {
+    doImport () {
 
     },
-    doExport() {
+    doExport () {
 
     },
-    doRun(record){
+    doRun (record) {
       this.$axios({
         url: `${this.metas.baseUrl}/run/${record.id}`,
         method: 'put',
         data: {}
-      }).then(()=>{
+      }).then(() => {
         this.doSearch()
       })
     },
-    doSuspend(record){
+    doSuspend (record) {
       this.$axios({
         url: `${this.metas.baseUrl}/suspend/${record.id}`,
         method: 'put',
         data: {}
-      }).then(()=>{
+      }).then(() => {
         this.doSearch()
       })
     },
-    doFinish(record){
+    doFinish (record) {
       this.$axios({
         url: `${this.metas.baseUrl}/finish/${record.id}`,
         method: 'put',
         data: {}
-      }).then(()=>{
+      }).then(() => {
         this.doSearch()
       })
-    },
+    }
 
   }
 }

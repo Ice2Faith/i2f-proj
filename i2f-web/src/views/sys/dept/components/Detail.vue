@@ -118,11 +118,11 @@
 </template>
 <script>
 
-import ListDetailMixin from "@/mixins/ListDetailMixin";
+import ListDetailMixin from '@/mixins/ListDetailMixin'
 export default {
   components: {},
-  mixins:[ListDetailMixin],
-  data() {
+  mixins: [ListDetailMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/sys/dept',
       form: {
@@ -138,34 +138,34 @@ export default {
         createUser: ''
       },
       rules: {
-        deptKey: [{required: true, message: '请输入部门键!'}],
-        name: [{required: true, message: '请输入名称!'}],
+        deptKey: [{ required: true, message: '请输入部门键!' }],
+        name: [{ required: true, message: '请输入名称!' }]
       },
       metas: {
         deptTreeData: [],
-        statusList:[{
+        statusList: [{
           value: 0,
-          label: '禁用',
+          label: '禁用'
         }, {
           value: 1,
-          label: '启用',
+          label: '启用'
         }, {
           value: 99,
-          label: '删除',
-        }],
-      },
+          label: '删除'
+        }]
+      }
     }
   },
   methods: {
-    hookAfterMounted(){
+    hookAfterMounted () {
       this.loadDeptTreeData()
     },
-    loadDeptTreeData(){
+    loadDeptTreeData () {
       this.$axios({
         url: `${this.moduleBaseUrl}/tree`,
         method: 'get'
-      }).then(({data})=>{
-        this.metas.deptTreeData=[{
+      }).then(({ data }) => {
+        this.metas.deptTreeData = [{
           id: 0,
           name: '根节点',
           children: data

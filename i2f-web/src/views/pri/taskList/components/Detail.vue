@@ -154,11 +154,11 @@
 </template>
 <script>
 
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-import ListDetailMixin from "@/mixins/ListDetailMixin";
+import FormDetailMode from '@/framework/consts/FormDetailMode'
+import ListDetailMixin from '@/mixins/ListDetailMixin'
 
 export default {
-  props:{
+  props: {
     mode: {
       type: String,
       default: FormDetailMode.ADD()
@@ -168,8 +168,8 @@ export default {
       default: {}
     }
   },
-  mixins:[ListDetailMixin],
-  data() {
+  mixins: [ListDetailMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/biz/taskList',
 
@@ -184,13 +184,13 @@ export default {
         status: 0,
         remark: '',
         updateTime: '',
-        createTime: '',
+        createTime: ''
       },
       rules: {
-        name: [{required: true, message: '请输入名称!'}]
+        name: [{ required: true, message: '请输入名称!' }]
       },
-      metas:{
-        statusList:[{
+      metas: {
+        statusList: [{
           value: 0,
           label: '运行',
           color: '#00cc44'
@@ -204,36 +204,36 @@ export default {
           color: '#ff7700'
         }]
       },
-      historyList: [],
+      historyList: []
     }
   },
   methods: {
-    hookAfterMounted(){
+    hookAfterMounted () {
       this.loadDetailHistory()
     },
-    hasTimeline(){
-      return this.mode!=FormDetailMode.ADD()
+    hasTimeline () {
+      return this.mode != FormDetailMode.ADD()
     },
-    getRecordStatusColor(record){
-      for(let key in this.metas.statusList){
-        let item=this.metas.statusList[key]
-        if(item.value==record.status){
+    getRecordStatusColor (record) {
+      for (const key in this.metas.statusList) {
+        const item = this.metas.statusList[key]
+        if (item.value == record.status) {
           return item.color
         }
       }
       return 'black'
     },
-    loadDetailHistory(){
-      if(!this.hasTimeline()){
+    loadDetailHistory () {
+      if (!this.hasTimeline()) {
         return
       }
       this.$axios({
         url: `${this.moduleBaseUrl}/history/${this.record.id}`,
-        method:'get'
-      }).then(({data})=>{
-        this.historyList=data
+        method: 'get'
+      }).then(({ data }) => {
+        this.historyList = data
       })
-    },
+    }
   }
 }
 </script>

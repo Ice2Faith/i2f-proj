@@ -88,12 +88,12 @@
 
 <script>
 
-import Config from "@/framework/config";
+import Config from '@/framework/config'
 
 export default {
   name: 'Registry',
   props: {},
-  data() {
+  data () {
     return {
       form: {
         username: '',
@@ -104,21 +104,21 @@ export default {
         email: ''
       },
       controls: {
-        loading: false,
+        loading: false
       },
       rules: {
-        username: [{required: true, message: '请输入用户名!'}],
-        password: [{required: true, message: '请输入密码!'}],
-        repeatPass: [{required: true, message: '请输入确认密码!'}],
-        realname: [{required: true, message: '请输入昵称!'}],
+        username: [{ required: true, message: '请输入用户名!' }],
+        password: [{ required: true, message: '请输入密码!' }],
+        repeatPass: [{ required: true, message: '请输入确认密码!' }],
+        realname: [{ required: true, message: '请输入昵称!' }]
       }
     }
   },
-  mounted() {
+  mounted () {
 
   },
   methods: {
-    doRegistry() {
+    doRegistry () {
       this.$refs.form.validateFields().then(() => {
         if (this.form.password != this.form.repeatPass) {
           this.$message.noticeError('确认密码和密码不一致，请重试')
@@ -129,15 +129,15 @@ export default {
           url: '/sys/entrance/registry',
           method: 'post',
           data: this.form
-        }).then(({data}) => {
-          this.$router.push({path: Config.LOGIN_ROUTE})
+        }).then(({ data }) => {
+          this.$router.push({ path: Config.LOGIN_ROUTE })
         }).finally(() => {
           this.controls.loading = false
         })
       })
     },
-    goLogin() {
-      this.$router.push({path: Config.LOGIN_ROUTE})
+    goLogin () {
+      this.$router.push({ path: Config.LOGIN_ROUTE })
     }
   }
 }

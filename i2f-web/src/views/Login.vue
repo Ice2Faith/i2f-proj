@@ -32,7 +32,6 @@
             <a-input-password v-model:value="form.password"/>
           </a-form-item>
 
-
           <a-form-item :wrapper-col="{ offset: 0, span: 24 }">
             <a-row justify="center" type="flex">
               <a-spin :spinning="controls.loading">
@@ -63,48 +62,48 @@
 </template>
 
 <script>
-import Auth from "@/framework/auth";
+import Auth from '@/framework/auth'
 
 export default {
   name: 'Login',
   props: {},
-  data() {
+  data () {
     return {
       form: {
         username: '',
         password: ''
       },
       controls: {
-        loading: false,
+        loading: false
       },
       rules: {
-        username: [{required: true, message: '请输入用户名!'}],
-        password: [{required: true, message: '请输入密码!'}],
+        username: [{ required: true, message: '请输入用户名!' }],
+        password: [{ required: true, message: '请输入密码!' }]
       }
     }
   },
-  mounted() {
+  mounted () {
     this.logout()
     Auth.removeToken()
     Auth.setRoutes([])
   },
   methods: {
-    doLogin() {
-      this.$refs.form.validateFields().then(()=>{
+    doLogin () {
+      this.$refs.form.validateFields().then(() => {
         this.controls.loading = true
         this.$axios({
           url: '/login',
           method: 'post',
           data: this.form
-        }).then(({data}) => {
-          let token = data
+        }).then(({ data }) => {
+          const token = data
           Auth.setToken(token)
           this.$axios({
             url: 'sys/user/info',
             method: 'post'
-          }).then(({data}) => {
+          }).then(({ data }) => {
             Auth.setUser(data)
-            let user = Auth.getUser()
+            const user = Auth.getUser()
             Auth.setRoutes(user.tag.urls)
             Auth.resolveRedirect('/home')
           })
@@ -113,20 +112,20 @@ export default {
         })
       })
     },
-    logout() {
+    logout () {
       this.$axios({
         url: '/logout',
         method: 'get'
       }).then(data => {
-        this.$router.replace({path: '/'})
+        this.$router.replace({ path: '/' })
         this.$message.noticeInfo(data.msg)
       })
     },
-    goRegistry() {
-      this.$router.push({path: '/registry'})
+    goRegistry () {
+      this.$router.push({ path: '/registry' })
     },
-    goResetPass() {
-      this.$router.push({path: '/pass-reset'})
+    goResetPass () {
+      this.$router.push({ path: '/pass-reset' })
     }
   }
 }

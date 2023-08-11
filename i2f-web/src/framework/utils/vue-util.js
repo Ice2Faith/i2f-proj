@@ -1,10 +1,10 @@
-import Router from "@/framework/router"
+import Router from '@/framework/router'
 
 const VueUtil = {
-  route() {
+  route () {
     return Router.currentRoute.value
   },
-  router() {
+  router () {
     return Router
   }
 }

@@ -213,16 +213,16 @@
 </template>
 <script>
 
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-import Detail from "./components/Detail";
-import ListManageMixin from "@/mixins/ListManageMixin";
+import FormDetailMode from '@/framework/consts/FormDetailMode'
+import Detail from './components/Detail'
+import ListManageMixin from '@/mixins/ListManageMixin'
 
 export default {
   components: {
     Detail
   },
-  mixins:[ListManageMixin],
-  data() {
+  mixins: [ListManageMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/sys/resources',
 
@@ -234,7 +234,7 @@ export default {
         url: '',
         permKey: '',
         remark: '',
-        icon: '',
+        icon: ''
       },
       rules: {
 
@@ -242,88 +242,88 @@ export default {
       dialogs: {
 
       },
-      metas:{
-        statusList:[{
+      metas: {
+        statusList: [{
           value: 0,
-          label: '禁用',
+          label: '禁用'
         }, {
           value: 1,
-          label: '启用',
+          label: '启用'
         }, {
           value: 99,
-          label: '删除',
+          label: '删除'
         }],
-        menuTypeList:[{
+        menuTypeList: [{
           value: 0,
-          label: '菜单',
+          label: '菜单'
         }, {
           value: 1,
-          label: '权限',
-        }],
+          label: '权限'
+        }]
       },
       tableColumns: [
-          {
-            title: '名称',
-            dataIndex: 'name',
-          },
-          {
-            title: '菜单键',
-            dataIndex: 'menuKey',
-          },
-          {
-            title: '类型',
-            dataIndex: 'typeDesc',
-          },
-          {
-            title: 'URL',
-            dataIndex: 'url',
-          },
-          {
-            title: '备注',
-            dataIndex: 'remark',
-          },
-          {
-            title: '状态',
-            dataIndex: 'statusDesc',
-          },
-          {
-            title: '排序字段',
-            dataIndex: 'orderIndex',
-          },
-          {
-            title: 'ICON',
-            dataIndex: 'icon',
-          },
-          {
-            title: '更新日期',
-            dataIndex: 'updateTime',
-          },
-          {
-            title: '更新人',
-            dataIndex: 'updateUser',
-          },
-          {
-            title: '创建日期',
-            dataIndex: 'createTime',
-          },
-          {
-            title: '创建人',
-            dataIndex: 'createUser',
-          },
-          {
-            title: '操作',
-            key: 'action',
-            fixed: 'right',
-            width: '200px',
-            align: 'center'
-          },
-        ]
+        {
+          title: '名称',
+          dataIndex: 'name'
+        },
+        {
+          title: '菜单键',
+          dataIndex: 'menuKey'
+        },
+        {
+          title: '类型',
+          dataIndex: 'typeDesc'
+        },
+        {
+          title: 'URL',
+          dataIndex: 'url'
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark'
+        },
+        {
+          title: '状态',
+          dataIndex: 'statusDesc'
+        },
+        {
+          title: '排序字段',
+          dataIndex: 'orderIndex'
+        },
+        {
+          title: 'ICON',
+          dataIndex: 'icon'
+        },
+        {
+          title: '更新日期',
+          dataIndex: 'updateTime'
+        },
+        {
+          title: '更新人',
+          dataIndex: 'updateUser'
+        },
+        {
+          title: '创建日期',
+          dataIndex: 'createTime'
+        },
+        {
+          title: '创建人',
+          dataIndex: 'createUser'
+        },
+        {
+          title: '操作',
+          key: 'action',
+          fixed: 'right',
+          width: '200px',
+          align: 'center'
+        }
+      ]
 
     }
   },
 
   methods: {
-    getData(reset) {
+    getData (reset) {
       if (reset) {
         this.tablePage.current = 1
       }
@@ -332,22 +332,22 @@ export default {
         url: `${this.moduleBaseUrl}/tree`,
         method: 'get',
         params: this.form
-      }).then(({data}) => {
+      }).then(({ data }) => {
         this.tableData = data
       }).finally(() => {
         this.queryLoading = false
       })
     },
-    doImport() {
+    doImport () {
 
     },
-    doExport() {
+    doExport () {
 
     },
-    doAddChildren(record){
-      this.dialogDetail.mode=FormDetailMode.ADD()
-      this.dialogDetail.title='新增'
-      this.dialogDetail.record={
+    doAddChildren (record) {
+      this.dialogDetail.mode = FormDetailMode.ADD()
+      this.dialogDetail.title = '新增'
+      this.dialogDetail.record = {
         parentId: record.id
       }
       this.dialogDetail.show = true

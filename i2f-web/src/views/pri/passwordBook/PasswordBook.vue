@@ -171,16 +171,16 @@
 </template>
 <script>
 
-import FormDetailMode from "@/framework/consts/FormDetailMode";
-import Detail from "./components/Detail";
-import ListManageMixin from "@/mixins/ListManageMixin";
+import FormDetailMode from '@/framework/consts/FormDetailMode'
+import Detail from './components/Detail'
+import ListManageMixin from '@/mixins/ListManageMixin'
 
 export default {
   components: {
     Detail
   },
-  mixins:[ListManageMixin],
-  data() {
+  mixins: [ListManageMixin],
+  data () {
     return {
       moduleBaseUrl: '/api/biz/passwordBook',
 
@@ -196,63 +196,63 @@ export default {
       dialogs: {
 
       },
-      metas:{
+      metas: {
       },
       tableColumns: [
-          {
-            title: '名称',
-            dataIndex: 'name',
-          },
-          {
-            title: '平台',
-            dataIndex: 'platform',
-          },
-          {
-            title: '链接',
-            dataIndex: 'url',
-            key: 'url',
-          },
-          {
-            title: '账号',
-            dataIndex: 'account',
-            key: 'account',
-          },
-          {
-            title: '密码',
-            dataIndex: 'password',
-            key: 'password',
-          },
-          {
-            title: '备注',
-            dataIndex: 'remark',
-          },
-          {
-            title: '更新日期',
-            dataIndex: 'updateTime',
-          },
-          {
-            title: '创建日期',
-            dataIndex: 'createTime',
-          },
-          {
-            title: '操作',
-            key: 'action',
-            fixed: 'right',
-            width: '200px',
-            align: 'center'
-          },
-        ]
+        {
+          title: '名称',
+          dataIndex: 'name'
+        },
+        {
+          title: '平台',
+          dataIndex: 'platform'
+        },
+        {
+          title: '链接',
+          dataIndex: 'url',
+          key: 'url'
+        },
+        {
+          title: '账号',
+          dataIndex: 'account',
+          key: 'account'
+        },
+        {
+          title: '密码',
+          dataIndex: 'password',
+          key: 'password'
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark'
+        },
+        {
+          title: '更新日期',
+          dataIndex: 'updateTime'
+        },
+        {
+          title: '创建日期',
+          dataIndex: 'createTime'
+        },
+        {
+          title: '操作',
+          key: 'action',
+          fixed: 'right',
+          width: '200px',
+          align: 'center'
+        }
+      ]
 
     }
   },
 
   methods: {
-    doImport() {
+    doImport () {
 
     },
-    doExport() {
+    doExport () {
 
-    },
+    }
 
   }
 }

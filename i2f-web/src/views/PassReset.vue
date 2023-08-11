@@ -80,12 +80,12 @@
 
 <script>
 
-import Config from "@/framework/config";
+import Config from '@/framework/config'
 
 export default {
   name: 'PassReset',
   props: {},
-  data() {
+  data () {
     return {
       form: {
         username: '',
@@ -95,27 +95,27 @@ export default {
         email: ''
       },
       controls: {
-        loading: false,
+        loading: false
       },
       rules: {
-        username: [{required: true, message: '请输入用户名!'}],
-        password: [{required: true, message: '请输入密码!'}],
-        repeatPass: [{required: true, message: '请输入确认密码!'}],
+        username: [{ required: true, message: '请输入用户名!' }],
+        password: [{ required: true, message: '请输入密码!' }],
+        repeatPass: [{ required: true, message: '请输入确认密码!' }]
       }
     }
   },
-  mounted() {
+  mounted () {
 
   },
   methods: {
-    doPassReset() {
+    doPassReset () {
       this.$refs.form.validateFields().then(() => {
         if (this.form.password != this.form.repeatPass) {
           this.$message.noticeError('确认密码和密码不一致，请重试')
           return
         }
-        if ((!this.form.phone || this.form.phone == '')
-          && (!this.form.email || this.form.email == '')
+        if ((!this.form.phone || this.form.phone == '') &&
+          (!this.form.email || this.form.email == '')
         ) {
           this.$message.noticeError('请至少填写电话号码和电子邮箱其中一个进行验证身份，请重试')
           return
@@ -125,15 +125,15 @@ export default {
           url: '/sys/entrance/passReset',
           method: 'put',
           data: this.form
-        }).then(({data}) => {
-          this.$router.push({path: Config.LOGIN_ROUTE})
+        }).then(({ data }) => {
+          this.$router.push({ path: Config.LOGIN_ROUTE })
         }).finally(() => {
           this.controls.loading = false
         })
       })
     },
-    goLogin() {
-      this.$router.push({path: Config.LOGIN_ROUTE})
+    goLogin () {
+      this.$router.push({ path: Config.LOGIN_ROUTE })
     }
   }
 }

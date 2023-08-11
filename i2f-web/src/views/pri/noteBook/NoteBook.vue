@@ -176,10 +176,10 @@
 </template>
 <script>
 
-import Detail from "./components/Detail";
-import MarkdownEditor from "@/components/MarkdownEditor";
+import Detail from './components/Detail'
+import MarkdownEditor from '@/components/MarkdownEditor'
 
-import ListManageMixin from "@/mixins/ListManageMixin";
+import ListManageMixin from '@/mixins/ListManageMixin'
 
 export default {
   components: {
@@ -187,7 +187,7 @@ export default {
     Detail
   },
   mixins: [ListManageMixin],
-  data() {
+  data () {
     return {
       moduleBaseUrl: '/api/biz/noteBook',
 
@@ -201,30 +201,30 @@ export default {
         preview: {
           title: '阅览',
           show: false,
-          record: {},
+          record: {}
         }
       },
       metas: {},
       tableColumns: [
         {
           title: '标题',
-          dataIndex: 'title',
+          dataIndex: 'title'
         },
         {
           title: '关键字',
-          dataIndex: 'keywords',
+          dataIndex: 'keywords'
         },
         {
           title: '备注',
-          dataIndex: 'remark',
+          dataIndex: 'remark'
         },
         {
           title: '更新日期',
-          dataIndex: 'updateTime',
+          dataIndex: 'updateTime'
         },
         {
           title: '创建日期',
-          dataIndex: 'createTime',
+          dataIndex: 'createTime'
         },
         {
           title: '操作',
@@ -232,24 +232,24 @@ export default {
           fixed: 'right',
           width: '200px',
           align: 'center'
-        },
+        }
       ]
     }
   },
 
   methods: {
-    doImport() {
+    doImport () {
 
     },
-    doExport() {
+    doExport () {
 
     },
-    doPreview(record) {
+    doPreview (record) {
       this.dialogs.preview.title = '阅览'
       this.dialogs.preview.record = record
       this.dialogs.preview.show = true
     },
-    doRun(record) {
+    doRun (record) {
       this.$axios({
         url: `${this.moduleBaseUrl}/run/${record.id}`,
         method: 'put',
@@ -258,7 +258,7 @@ export default {
         this.doSearch()
       })
     },
-    doSuspend(record) {
+    doSuspend (record) {
       this.$axios({
         url: `${this.moduleBaseUrl}/suspend/${record.id}`,
         method: 'put',
@@ -267,7 +267,7 @@ export default {
         this.doSearch()
       })
     },
-    doFinish(record) {
+    doFinish (record) {
       this.$axios({
         url: `${this.moduleBaseUrl}/finish/${record.id}`,
         method: 'put',
