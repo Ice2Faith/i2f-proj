@@ -10,6 +10,11 @@ const GlobalExceptionHandler = {
       if (code == Exception.CODE_ERROR()) {
         Message.noticeError(ex.msg)
       } else if (code == Exception.CODE_WARN()) {
+        if (ex._type == 'VueWarnException') {
+          if (process.env.NODE_ENV == 'prod') {
+            return
+          }
+        }
         Message.noticeWarning(ex.msg)
       } else if (code == Exception.CODE_INFO()) {
         Message.noticeInfo(ex.msg)
