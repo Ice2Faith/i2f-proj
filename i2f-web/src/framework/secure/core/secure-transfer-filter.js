@@ -11,6 +11,7 @@ import ObjectUtils from '../util/ObjectUtils'
 import qs from 'qs'
 import SecureException from '../excception/secure-exception'
 import SecureErrorCode from '../consts/secure-error-code'
+import SecureCallback from '@/framework/secure/core/secure-callback'
 
 const SecureTransferFilter = {
   getRequestContentType (config) {
@@ -181,19 +182,34 @@ const SecureTransferFilter = {
     }
     const ok = SecureUtils.verifySecureHeader(res.data, responseHeader)
     if (!ok) {
+      if (SecureCallback.callPubKey) {
+        SecureCallback.callPubKey()
+      }
+      if (SecureCallback.callPriKey) {
+        SecureCallback.callPriKey()
+      }
       throw SecureException.newObj(SecureErrorCode.BAD_SIGN, '签名验证失败')
     }
 
     const digital = SecureTransfer.getResponseDigitalHeader(responseHeader.digital)
     if (digital == null) {
+      if (SecureCallback.callPubKey) {
+        SecureCallback.callPubKey()
+      }
       throw SecureException.newObj(SecureErrorCode.BAD_DIGITAL(), '数字签名验证失败，请重试！')
     }
     if (digital != responseHeader.sign) {
+      if (SecureCallback.callPubKey) {
+        SecureCallback.callPubKey()
+      }
       throw SecureException.newObj(SecureErrorCode.BAD_DIGITAL(), '数字签名验证失败，请重试！')
     }
 
     const symmKey = SecureTransfer.getResponseSecureHeader(responseHeader.randomKey)
     if (symmKey == null) {
+      if (SecureCallback.callPriKey) {
+        SecureCallback.callPriKey()
+      }
       throw SecureException.newObj(SecureErrorCode.BAD_RANDOM_KEY(), '随机秘钥无效或已失效，请重试！')
     }
 

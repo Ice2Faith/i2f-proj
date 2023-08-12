@@ -6,12 +6,15 @@
 
 import SecureTransfer from '@/framework/secure/core/secure-transfer'
 import '../resizer/DebounceResizeObserver'
+import SecureCallback from '@/framework/secure/core/secure-callback'
 
 export default {
   name: 'App',
   created () {
     this.initAsymPubKey()
     this.initAsymPriKey()
+    SecureCallback.callPubKey = this.initAsymPubKey
+    SecureCallback.callPriKey = this.initAsymPriKey
     const _this = this
     window.rsaTimer = setInterval(function () {
       _this.initAsymPubKey()
