@@ -20,7 +20,7 @@ import '@/assets/css/media-adapt.css'
 /// ///////////////////////////////////////////////////////
 import Vant from 'vant'
 import 'vant/lib/index.css'
-
+import * as AntIcons from '@ant-design/icons-vue'
 /// ///////////////////////////////////////////////////////
 import Directives from '@/framework/directives'
 import DirectiveInstaller from '@/framework/directives/install'
@@ -39,6 +39,11 @@ DirectiveInstaller.installAll(VueApp, Directives)
 // 注册全局异常处理器
 GlobalExceptionInstaller.installJs()
 GlobalExceptionInstaller.installVue(VueApp)
+
+// 全局注册ant-icon
+Object.keys(AntIcons).forEach(key => {
+  VueApp.component(key, AntIcons[key])
+})
 
 // 将内容挂载到原型上
 VueApp.config.globalProperties.$axios = BaseRequest

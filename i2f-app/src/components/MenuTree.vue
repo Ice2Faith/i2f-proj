@@ -13,7 +13,20 @@
                      :icon=" 'search' || item[config.icon]"
                      :text="item[config.title]"
                      @click="onClickMenu(item)"
-      />
+      >
+        <template v-if="item[config.children] && item[config.children].length>0">
+          <van-badge>
+            <component slot="icon" :is="item[config.icon]" style="font-size: calc(22vw / 2);height: 80%"></component>
+            <template #content>
+              <van-icon name="ellipsis" class="badge-icon" />
+            </template>
+          </van-badge>
+        </template>
+        <template v-else>
+          <component slot="icon" :is="item[config.icon]" style="font-size: calc(22vw / 2);height: 80%"></component>
+        </template>
+        <span slot="text" style="font-size: calc(22vw / 8);">{{item[config.title]}}</span>
+      </van-grid-item>
     </van-grid>
   </div>
 </template>
@@ -90,5 +103,9 @@ export default {
 }
 </script>
 <style scoped>
-
+.badge-icon {
+  display: block;
+  font-size: 10px;
+  line-height: 16px;
+}
 </style>
