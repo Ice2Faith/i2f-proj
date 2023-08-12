@@ -8,10 +8,10 @@
 export default {
   name: 'Error404',
   props: {},
-  data() {
+  data () {
     return {}
   },
-  mounted() {
+  mounted () {
 
   },
   methods: {}

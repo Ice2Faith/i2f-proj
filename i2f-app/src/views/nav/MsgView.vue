@@ -7,7 +7,7 @@
 export default {
   name: 'MsgView',
   methods: {
-    testSvc() {
+    testSvc () {
       this.$axios({
         url: 'api/hello/hello',
         method: 'post',

@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js'
 
 const Md5Util = {
-  md5(str) {
+  md5 (str) {
     return CryptoJS.MD5(str)
   }
 }

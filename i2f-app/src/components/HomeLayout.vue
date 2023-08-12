@@ -14,49 +14,49 @@
   </div>
 </template>
 <script>
-import Auth from "../framework/auth";
+import Auth from '../framework/auth'
 
 export default {
   name: 'HomeLayout',
   components: {},
-  data() {
+  data () {
     return {
       user: {},
       noticeCount: 0,
       activeTab: 0,
-      menus: [],
+      menus: []
 
     }
   },
-  created() {
-    this.user = Auth.getUser();
+  created () {
+    this.user = Auth.getUser()
   },
   methods: {
-    needShowWorkspace() {
-      let path = this.$router.currentRoute.value.fullPath
+    needShowWorkspace () {
+      const path = this.$router.currentRoute.value.fullPath
       if (['/home', '/menu', '/msg', '/mine'].indexOf(path) >= 0) {
         return false
       }
       return true
     },
-    showNotice() {
+    showNotice () {
       this.$message.noticeInfo('功能还未开发')
     },
-    editUserInfo() {
+    editUserInfo () {
       this.$message.noticeInfo('功能还未开发')
     },
-    changePassword() {
+    changePassword () {
       this.$message.noticeInfo('功能还未开发')
     },
-    logout() {
+    logout () {
       this.$axios({
         url: '/logout',
         method: 'get'
       }).then(data => {
-        this.$router.replace({path: '/'})
+        this.$router.replace({ path: '/' })
         this.$message.noticeInfo(data.msg)
       })
-    },
+    }
   }
 }
 </script>

@@ -1,8 +1,8 @@
 // 定义请求的统一封装
-import axios from "axios"
-import Config from "@/framework/config"
-import Auth from "@/framework/auth"
-import AxiosExceptionHandler from "@/framework/request/exception";
+import axios from 'axios'
+import Config from '@/framework/config'
+import Auth from '@/framework/auth'
+import AxiosExceptionHandler from '@/framework/request/exception'
 
 // 定义默认的参数
 axios.defaults.headers['Content-Type'] = Config.REQUEST_DEFAULT_CONTENT_TYPE
@@ -12,7 +12,7 @@ axios.defaults.timeout = Config.REQUEST_DEFAULT_TIMEOUT
 const DownloadRequest = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
   timeout: Config.REQUEST_DEFAULT_TIMEOUT,
-  responseType: "blob"
+  responseType: 'blob'
 })
 
 // 定义请求拦截
@@ -54,7 +54,7 @@ DownloadRequest.interceptors.response.use(res => {
       const result = patten.exec(contentDisposition)
       filename = decodeURI(escape(result[1])) // 处理文件名,解决中文乱码问题
     } else {
-      let url = res.config.url + '';
+      let url = res.config.url + ''
       let idx = url.lastIndexOf('?')
       if (idx >= 0) {
         url = url.substring(0, idx)

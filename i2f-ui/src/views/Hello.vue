@@ -9,25 +9,25 @@
 <script>
 export default {
   name: 'Hello',
-  methods:{
-    testSvc(){
+  methods: {
+    testSvc () {
       this.$axios({
         url: 'api/hello/hello',
         method: 'post',
-        data:{
+        data: {
           version: 1.0,
           author: 'i2f'
         }
-      }).then(data=>{
+      }).then(data => {
         this.$message.noticeInfo(data)
       })
     },
-    doLogout(){
+    doLogout () {
       this.$axios({
         url: '/logout',
         method: 'get'
-      }).then(data=>{
-        this.$router.replace({path:'/'})
+      }).then(data => {
+        this.$router.replace({ path: '/' })
         this.$message.noticeInfo(data)
       })
     }

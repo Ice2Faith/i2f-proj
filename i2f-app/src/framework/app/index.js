@@ -3,29 +3,29 @@
 // import VueApp from "@/framework/app"
 // VueApp.mount("#app")
 
-import {createApp} from 'vue'
+import { createApp } from 'vue'
 import App from '@/framework/app/App.vue'
 import Router from '@/framework/router'
-import Store from "vuex"
-import BaseRequest from "@/framework/request"
-import Auth from "@/framework/auth"
-import Config from "@/framework/config"
-import Message from "@/framework/message"
-import DownloadRequest from "@/framework/request/download"
-import MultipartRequest from "@/framework/request/multipart"
+import Store from 'vuex'
+import BaseRequest from '@/framework/request'
+import Auth from '@/framework/auth'
+import Config from '@/framework/config'
+import Message from '@/framework/message'
+import DownloadRequest from '@/framework/request/download'
+import MultipartRequest from '@/framework/request/multipart'
 
 import '@/assets/css/scorll-bar.css'
 import '@/assets/css/media-adapt.css'
 
-//////////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////
 import Vant from 'vant'
 import 'vant/lib/index.css'
 
-//////////////////////////////////////////////////////////
-import Directives from "@/framework/directives";
-import DirectiveInstaller from "@/framework/directives/install";
-//////////////////////////////////////////////////////////
-import GlobalExceptionInstaller from "@/framework/exception/installer/GlobalExceptionInstaller";
+/// ///////////////////////////////////////////////////////
+import Directives from '@/framework/directives'
+import DirectiveInstaller from '@/framework/directives/install'
+/// ///////////////////////////////////////////////////////
+import GlobalExceptionInstaller from '@/framework/exception/installer/GlobalExceptionInstaller'
 
 // 使用路由创建App
 const VueApp = createApp(App)

@@ -10,15 +10,15 @@ export default {
   props: {
 
   },
-  data(){
+  data () {
     return {
 
     }
   },
-  mounted() {
+  mounted () {
 
   },
-  methods:{
+  methods: {
 
   }
 }

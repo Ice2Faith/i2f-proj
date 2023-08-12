@@ -15,21 +15,26 @@ import Exception from '@/framework/exception/Exception'
 const GlobalVueWarnInstaller = {
   install (vueInstance) {
     vueInstance.config.warnHandler = (message, instance, trace) => {
-      let msg = message
-      let code = Exception.CODE_WARN()
-      let ex = {}
       try {
-        ex = JSON.parse(msg)
+        console.log('[VueWarn]', message)
+        console.log('[VueWarn]', instance)
+        console.log('[VueWarn]', trace)
+        let msg = message
+        let code = Exception.CODE_WARN()
+        let ex = {}
+        try {
+          ex = JSON.parse(msg)
+        } catch (e) {
+        }
+        msg = ex.msg || msg
+        code = ex.code || code
+
+        GlobalExceptionHandler.handle(Exception.newError(code, msg, 'VueWarn', {
+          message: message,
+          trace: trace
+        }))
       } catch (e) {
       }
-      msg = ex.msg || msg
-      code = ex.code || code
-
-      GlobalExceptionHandler.handle(Exception.newError(code, msg, 'VueWarn', {
-        message: message,
-        instance: instance,
-        trace: trace
-      }))
     }
   }
 }

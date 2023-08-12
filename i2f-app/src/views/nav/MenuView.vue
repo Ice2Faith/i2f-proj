@@ -4,12 +4,12 @@
   </div>
 </template>
 <script>
-import MenuTree from "@/components/MenuTree";
+import MenuTree from '@/components/MenuTree'
 
 export default {
   name: 'MenuView',
-  components: {MenuTree},
-  data() {
+  components: { MenuTree },
+  data () {
     return {
       menuConfig: {
         key: 'id',
@@ -47,20 +47,20 @@ export default {
                   key: '2.1.1',
                   title: '欢迎',
                   icon: 'pie-chart-outlined',
-                  url: '/hello',
-                },
-              ],
-            },
-          ],
-        },
+                  url: '/hello'
+                }
+              ]
+            }
+          ]
+        }
       ]
     }
   },
-  mounted() {
+  mounted () {
     this.loadMenu()
   },
   methods: {
-    loadMenu() {
+    loadMenu () {
       this.$axios({
         url: '/sys/user/menus',
         method: 'post'
@@ -68,7 +68,7 @@ export default {
         this.menus = data.data
       })
     },
-    onClickMenu(item) {
+    onClickMenu (item) {
 
     }
   }

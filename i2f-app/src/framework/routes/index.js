@@ -1,13 +1,12 @@
-import Config from "@/framework/config"
-import Error404 from "@/framework/error/Error404"
-import Login from "@/views/Login"
-import HomeLayout from "@/components/HomeLayout";
-import HomeView from "@/views/nav/HomeView"
-import MenuView from "@/views/nav/MenuView";
-import MsgView from "@/views/nav/MsgView";
-import MineView from "@/views/nav/MineView";
-import Hello from "@/views/Hello"
-
+import Config from '@/framework/config'
+import Error404 from '@/framework/error/Error404'
+import Login from '@/views/Login'
+import HomeLayout from '@/components/HomeLayout'
+import HomeView from '@/views/nav/HomeView'
+import MenuView from '@/views/nav/MenuView'
+import MsgView from '@/views/nav/MsgView'
+import MineView from '@/views/nav/MineView'
+import Hello from '@/views/Hello'
 
 const Routes = [
   {
@@ -85,10 +84,9 @@ const Routes = [
           // 未指定的活明确指定为true的，则都需要对应的权限
           permission: false
         }
-      },
+      }
     ]
   },
-
 
   // 最后捕获所有路径，走到这里，表示没有任何路由匹配，也就是404了
   {

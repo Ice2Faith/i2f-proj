@@ -1,9 +1,8 @@
-import Config from "@/framework/config"
-import Error404 from "@/framework/error/Error404"
-import Login from "@/views/Login"
-import HomeView from "@/views/HomeView"
-import Hello from "@/views/Hello"
-
+import Config from '@/framework/config'
+import Error404 from '@/framework/error/Error404'
+import Login from '@/views/Login'
+import HomeView from '@/views/HomeView'
+import Hello from '@/views/Hello'
 
 const Routes = [
   {

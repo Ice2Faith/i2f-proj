@@ -1,4 +1,4 @@
-import Auth from "@/framework/auth";
+import Auth from '@/framework/auth'
 
 /**
  * 是否具有某个权限
@@ -7,20 +7,20 @@ import Auth from "@/framework/auth";
 const HasPermDirective = {
   name: 'hasPerm',
   // vue3 写法
-  mounted(el, binding, vnode) {
+  mounted (el, binding, vnode) {
     this.action(el, binding, vnode)
   },
   // vue2写法
-  inserted(el, binding, vnode) {
+  inserted (el, binding, vnode) {
     this.action(el, binding, vnode)
   },
-  action(el, binding, vnode) {
+  action (el, binding, vnode) {
     if (binding.value && binding.value != '') {
-      let user = Auth.getUser()
+      const user = Auth.getUser()
       if (!user) {
         return false
       }
-      let arr = user.tag.perms
+      const arr = user.tag.perms
       let ok = false
       if (arr && arr.length > 0) {
         ok = arr.indexOf(binding.value) >= 0
@@ -29,7 +29,6 @@ const HasPermDirective = {
         el.style.display = 'none'
       }
     }
-
   }
 }
 

@@ -3,7 +3,7 @@
  * @type {{isEmpty(*=): *}}
  */
 const StringUtils = {
-  isEmpty(str) {
+  isEmpty (str) {
     return str == null || str == undefined || str == ''
   }
 }

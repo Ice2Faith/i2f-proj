@@ -2,7 +2,6 @@
 // 直接在main.js中引入进行mount即可
 // import VueApp from "@/framework/app"
 // VueApp.mount("#app")
-
 import { createApp } from 'vue'
 import App from '@/framework/app/App.vue'
 import Router from '@/framework/router'
@@ -31,6 +30,7 @@ import VueMarkdownEditor from '@kangc/v-md-editor'
 import '@kangc/v-md-editor/lib/style/base-editor.css'
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js'
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css'
+
 // Prism
 import Prism from 'prismjs'
 // highlight code
@@ -55,9 +55,12 @@ import '@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css'
 
 import createAlignPlugin from '@kangc/v-md-editor/lib/plugins/align'
 
-import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/cdn'
+import 'katex'
+import 'katex/dist/katex.css'
+import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/npm'
 
-import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/cdn'
+import 'mermaid'
+import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/npm'
 import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css'
 /// ///////////////////////////////////////////////////////
 
@@ -69,6 +72,7 @@ import Directives from '@/framework/directives'
 import DirectiveInstaller from '@/framework/directives/install'
 /// ///////////////////////////////////////////////////////
 import GlobalExceptionInstaller from '@/framework/exception/installer/GlobalExceptionInstaller'
+
 VueMarkdownEditor.use(vuepressTheme, {
   Prism
 })

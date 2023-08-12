@@ -11,7 +11,7 @@
 export default {
   name: 'Hello',
   methods: {
-    testSvc() {
+    testSvc () {
       this.$axios({
         url: 'api/hello/hello',
         method: 'post',
@@ -23,12 +23,12 @@ export default {
         this.$message.noticeInfo(data)
       })
     },
-    doLogout() {
+    doLogout () {
       this.$axios({
         url: '/logout',
         method: 'get'
       }).then(data => {
-        this.$router.replace({path: '/'})
+        this.$router.replace({ path: '/' })
         this.$message.noticeInfo(data)
       })
     }

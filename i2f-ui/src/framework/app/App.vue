@@ -4,36 +4,36 @@
 
 <script>
 
-import SecureTransfer from "@/framework/secure/core/secure-transfer";
+import SecureTransfer from '@/framework/secure/core/secure-transfer'
 import '../resizer/DebounceResizeObserver'
 
 export default {
   name: 'App',
-  created() {
+  created () {
     this.initAsymPubKey()
     this.initAsymPriKey()
-    let _this = this
+    const _this = this
     window.rsaTimer = setInterval(function () {
       _this.initAsymPubKey()
     }, 5 * 60 * 1000)
   },
-  destroyed() {
+  unmounted () {
     clearInterval(window.rsaTimer)
   },
   methods: {
-    initAsymPubKey() {
+    initAsymPubKey () {
       this.$axios({
         url: 'secure/key',
         method: 'post'
-      }).then(({data}) => {
+      }).then(({ data }) => {
         SecureTransfer.saveAsymPubKey(data)
       })
     },
-    initAsymPriKey() {
+    initAsymPriKey () {
       this.$axios({
         url: 'secure/clientKey',
         method: 'post'
-      }).then(({data}) => {
+      }).then(({ data }) => {
         SecureTransfer.saveAsymPriKey(data)
       })
     }
@@ -49,6 +49,5 @@ export default {
 
   color: #2c3e50;
 }
-
 
 </style>

@@ -1,8 +1,8 @@
 const JsonUtil = {
-  toJson(obj) {
+  toJson (obj) {
     return JSON.stringify(obj)
   },
-  parseJson(str) {
+  parseJson (str) {
     return JSON.parse(str)
   }
 }

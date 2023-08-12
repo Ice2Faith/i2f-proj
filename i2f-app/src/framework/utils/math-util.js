@@ -1,7 +1,7 @@
-import math from "mathjs"
+import math from 'mathjs'
 
 const MathUtil = {
-  eval(expression) {
+  eval (expression) {
     return math.evaluate(expression)
   }
 }

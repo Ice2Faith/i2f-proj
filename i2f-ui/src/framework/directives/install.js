@@ -1,10 +1,10 @@
 const DirectiveInstaller = {
-  install(vue, one) {
+  install (vue, one) {
     vue.directive(one.name, one)
   },
-  installAll(vue, obj) {
+  installAll (vue, obj) {
     Object.keys(obj).forEach(key => {
-      let one = obj[key]
+      const one = obj[key]
       if (one.name && one.name != '') {
         vue.directive(one.name, one)
       }

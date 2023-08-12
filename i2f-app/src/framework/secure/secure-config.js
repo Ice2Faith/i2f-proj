@@ -1,7 +1,7 @@
 /**
  * 主配置
  */
-import SecureConsts from "./consts/secure-consts";
+import SecureConsts from './consts/secure-consts'
 
 const SecureConfig = {
   // Symm秘钥长度，默认128，可选128,192,256

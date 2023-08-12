@@ -8,23 +8,27 @@ import Exception from '@/framework/exception/Exception'
 const GlobalThrowErrorInstaller = {
   install (windowInstance) {
     windowInstance.onerror = function (message, url, lineNo, columnNo, error) {
-      let msg = error.message
-      let code = Exception.CODE_ERROR()
-      let ex = {}
       try {
-        ex = JSON.parse(msg)
-      } catch (e) {
-      }
-      msg = ex.msg || msg
-      code = ex.code || code
+        let msg = error.message
+        let code = Exception.CODE_ERROR()
+        let ex = {}
+        try {
+          ex = JSON.parse(msg)
+        } catch (e) {
+        }
+        msg = ex.msg || msg
+        code = ex.code || code
 
-      GlobalExceptionHandler.handle(Exception.newError(code, msg, 'ThrowError', {
-        message: message,
-        url: url,
-        lineNo: lineNo,
-        columnNo: columnNo,
-        error: error
-      }))
+        GlobalExceptionHandler.handle(Exception.newError(code, msg, 'ThrowError', {
+          message: message,
+          url: url,
+          lineNo: lineNo,
+          columnNo: columnNo,
+          error: error
+        }))
+      } catch (e) {
+
+      }
     }
   }
 }

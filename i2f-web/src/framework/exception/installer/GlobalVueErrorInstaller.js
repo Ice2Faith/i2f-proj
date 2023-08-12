@@ -15,21 +15,27 @@ import Exception from '@/framework/exception/Exception'
 const GlobalVueErrorInstaller = {
   install (vueInstance) {
     vueInstance.config.errorHandler = (error, instance, info) => {
-      let msg = error.message
-      let code = Exception.CODE_ERROR()
-      let ex = {}
       try {
-        ex = JSON.parse(msg)
-      } catch (e) {
-      }
-      msg = ex.msg || msg
-      code = ex.code || code
+        console.log('[VueError]', error)
+        console.log('[VueError]', instance)
+        console.log('[VueError]', info)
+        let msg = error.message
+        let code = Exception.CODE_ERROR()
+        let ex = {}
+        try {
+          ex = JSON.parse(msg)
+        } catch (e) {
+        }
+        msg = ex.msg || msg
+        code = ex.code || code
 
-      GlobalExceptionHandler.handle(Exception.newError(code, msg, 'VueError', {
-        error: error,
-        instance: instance,
-        info: info
-      }))
+        GlobalExceptionHandler.handle(Exception.newError(code, msg, 'VueError', {
+          error: error,
+          info: info
+        }))
+      } catch (e) {
+
+      }
     }
   }
 }

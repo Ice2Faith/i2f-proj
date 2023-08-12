@@ -1,12 +1,12 @@
-import Exception from "@/framework/exception/Exception";
-import Message from "@/framework/message";
+import Exception from '@/framework/exception/Exception'
+import Message from '@/framework/message'
 
 const GlobalExceptionHandler = {
-  handle(error) {
-    let ex = Exception.ofErrorMsg(error)
+  handle (error) {
+    const ex = Exception.ofErrorMsg(error)
     console.log('GlobalExceptionHandler', ex)
     if (ex.code != null && ex.code != undefined) {
-      let code = ex.code
+      const code = ex.code
       if (code == Exception.CODE_ERROR()) {
         Message.noticeError(ex.msg)
       } else if (code == Exception.CODE_WARN()) {

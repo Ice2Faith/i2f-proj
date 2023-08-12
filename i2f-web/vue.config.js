@@ -9,9 +9,6 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
-// JS压缩
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
 // 打包分析
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
@@ -79,29 +76,6 @@ module.exports = defineConfig({
   },
   // webpack配置
   configureWebpack: {
-    // 优化
-    optimization: {
-      nodeEnv: false,
-      minimizer: [
-        new UglifyJsPlugin({
-          uglifyOptions: {
-            output: {
-              // 删除注释
-              comments: process.env.NODE_ENV == 'prod'
-            },
-            // 生产环境自动删除console
-            compress: {
-              warnings: process.env.NODE_ENV != 'prod', // 若打包错误，则注释这行
-              drop_debugger: process.env.NODE_ENV != 'prod', // 清除 debugger 语句
-              drop_console: process.env.NODE_ENV != 'prod', // 清除console语句
-              pure_funcs: process.env.NODE_ENV == 'prod' ? ['console.log'] : []
-            }
-          },
-          sourceMap: false,
-          parallel: true
-        })
-      ]
-    }
 
   },
   // 打包配置

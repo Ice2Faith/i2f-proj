@@ -2,7 +2,7 @@
  * 定义异常
  */
 const SecureException = {
-  newObj(code, msg) {
+  newObj (code, msg) {
     return new Error(JSON.stringify({
       code: code,
       msg: msg

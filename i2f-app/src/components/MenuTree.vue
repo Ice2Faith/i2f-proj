@@ -22,7 +22,7 @@ export default {
   props: {
     menus: {
       type: Array,
-      default: [],
+      default: []
     },
     config: {
       type: Object,
@@ -33,15 +33,15 @@ export default {
         children: 'children',
         url: 'url'
       }
-    },
+    }
   },
-  data() {
+  data () {
     return {
       currents: [],
       parent: []
     }
   },
-  mounted() {
+  mounted () {
 
   },
   watch: {
@@ -55,7 +55,7 @@ export default {
     }
   },
   methods: {
-    onClickMenu(item) {
+    onClickMenu (item) {
       if (item.children && item.children.length > 0) {
         this.parent.push(this.currents)
         this.currents = item.children
@@ -67,7 +67,7 @@ export default {
       if (item[this.config.url].indexOf('://') >= 0) {
         window.open(item[this.config.url], '_blank')
       } else {
-        this.$router.push({path: item[this.config.url]})
+        this.$router.push({ path: item[this.config.url] })
       }
       this.$emit('click', {
         key: item[this.config.key],
@@ -77,7 +77,7 @@ export default {
         url: item[this.config.url]
       }, item)
     },
-    onClickBack() {
+    onClickBack () {
       if (this.parent.length <= 0) {
         this.currents = this.menus
         this.parent = []

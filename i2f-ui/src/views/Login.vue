@@ -7,55 +7,54 @@
 </template>
 
 <script>
-import Auth from "@/framework/auth";
+import Auth from '@/framework/auth'
 
 export default {
   name: 'Login',
   props: {
 
   },
-  data(){
+  data () {
     return {
-      form:{
+      form: {
         username: '',
         password: ''
       }
     }
   },
-  mounted() {
+  mounted () {
     Auth.removeToken()
     Auth.setRoutes([])
   },
-  methods:{
-    doLogin(){
+  methods: {
+    doLogin () {
       this.$axios({
         url: '/login',
         method: 'post',
         data: this.form
-      }).then(({data}) => {
-        let token = data
+      }).then(({ data }) => {
+        const token = data
         Auth.setToken(token)
         this.$axios({
           url: 'sys/user/info',
           method: 'post'
-        }).then(({data}) => {
+        }).then(({ data }) => {
           Auth.setUser(data)
-          let user = Auth.getUser()
+          const user = Auth.getUser()
           Auth.setRoutes(user.tag.urls)
           Auth.resolveRedirect('/home')
         })
       })
-
     },
-    logout() {
+    logout () {
       this.$axios({
         url: '/logout',
         method: 'get'
       }).then(data => {
-        this.$router.replace({path: '/'})
+        this.$router.replace({ path: '/' })
         this.$message.noticeInfo(data.msg)
       })
-    },
+    }
   }
 }
 </script>

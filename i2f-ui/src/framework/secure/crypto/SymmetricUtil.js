@@ -1,8 +1,8 @@
-import B64 from "../util/base64";
-import SecureProvider from "./SecureProvider";
+import B64 from '../util/base64'
+import SecureProvider from './SecureProvider'
 
 const SymmetricUtil = {
-  genKey(size) {
+  genKey (size) {
     return SecureProvider.symmetricEncryptor.genKey(size)
   },
   encrypt: function (data, key) {
@@ -12,13 +12,13 @@ const SymmetricUtil = {
     return SecureProvider.symmetricEncryptor.decrypt(data, key)
   },
   encryptObj: function (data, key) {
-    let srcs = B64.encryptObj(data);
-    return this.encrypt(srcs, key);
+    const srcs = B64.encryptObj(data)
+    return this.encrypt(srcs, key)
   },
   decryptObj: function (data, key) {
-    let srcs = this.decrypt(data, key);
-    return B64.decryptObj(srcs);
+    const srcs = this.decrypt(data, key)
+    return B64.decryptObj(srcs)
   }
 }
 
-export default SymmetricUtil;
+export default SymmetricUtil

@@ -1,10 +1,10 @@
 // 路由配置
 // 从routes中加载路由映射构建路由对象返回
-import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import Routes from '@/framework/routes'
-import Auth from "@/framework/auth"
-import Config from "@/framework/config"
-import Message from "@/framework/message"
+import Auth from '@/framework/auth'
+import Config from '@/framework/config'
+import Message from '@/framework/message'
 
 // 创建路由
 const Router = createRouter({
@@ -25,14 +25,14 @@ Router.beforeEach((to, from, next) => {
   }
   // 未登录
   if (!Auth.isAuth()) {
-    Message.noticeError("未登录，请先登录")
+    Message.noticeError('未登录，请先登录')
     next(Auth.getNextRedirect(to.path, to.query))
     return
   }
-  let routes = Auth.getRoutes()
+  const routes = Auth.getRoutes()
   // 没有资源权限
   if (routes.indexOf(to.path) < 0) {
-    Message.noticeError("没有资源访问权限")
+    Message.noticeError('没有资源访问权限')
     // next(Auth.getNextRedirect(to.path,to.query))
     return
   }

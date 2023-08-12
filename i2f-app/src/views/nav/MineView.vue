@@ -35,28 +35,28 @@
   </div>
 </template>
 <script>
-import Auth from "@/framework/auth";
+import Auth from '@/framework/auth'
 
 export default {
   name: 'MineView',
-  data() {
+  data () {
     return {
-      user: {},
+      user: {}
     }
   },
-  created() {
-    this.user = Auth.getUser();
+  created () {
+    this.user = Auth.getUser()
   },
   methods: {
-    logout() {
+    logout () {
       this.$axios({
         url: '/logout',
         method: 'get'
       }).then(data => {
-        this.$router.replace({path: '/'})
+        this.$router.replace({ path: '/' })
         this.$message.noticeInfo(data.msg)
       })
-    },
+    }
   }
 }
 </script>
