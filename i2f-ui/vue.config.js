@@ -96,7 +96,7 @@ module.exports = defineConfig({
         .end()
     }
 
-    if (process.env.NODE_ENV == 'prod') {
+    if (process.env.NODE_ENV == 'prod' && !process.argv.includes('--report')) {
       /**
        * 配置代碼混淆
        * 参数：options配置对象,排除的结果js数组
@@ -121,7 +121,9 @@ module.exports = defineConfig({
             // 应用概率;在较大的代码库中，建议降低此值，因为大量的控制流转换可能会增加代码的大小并降低代码的速度。
             controlFlowFlatteningThreshold: 0.75,
             // 随机的死代码块(增加了混淆代码的大小)
-            deadCodeInjection: true,
+            // 同时，可能由于增加的死代码库有问题，导致运行问题
+            // 因此需要结合自身项目实际打包结果考虑是否开启
+            deadCodeInjection: false,
             // 死代码块的影响概率
             deadCodeInjectionThreshold: 0.75,
             // 此选项几乎不可能使用开发者工具的控制台选项卡
