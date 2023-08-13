@@ -1,6 +1,9 @@
 import SecureProvider from './SecureProvider'
 
 const AsymmetricUtil = {
+  genKeyPair (size) {
+    return SecureProvider.asymmetricEncryptor.genKeyPair(size)
+  },
   publicKeyEncrypt (pubKey, text) {
     return SecureProvider.asymmetricEncryptor.publicKeyEncrypt(pubKey, text)
   },

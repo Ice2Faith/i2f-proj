@@ -7,6 +7,7 @@ import StringUtils from '../util/string-utils'
 import SignatureUtil from '../crypto/SignatureUtil'
 import AsymmetricUtil from '../crypto/AsymmetricUtil'
 import SymmetricUtil from '../crypto/SymmetricUtil'
+import SecureConfig from '../secure-config'
 
 const SecureTransfer = {
   // 获取安全请求头，参数：是否启用安全参数，是否编码URL
@@ -47,33 +48,70 @@ const SecureTransfer = {
     localStorage.removeItem(key)
   },
   // 存储asym公钥的键名
-  ASYM_PUBKEY_NAME () {
-    return 'SECURE_PUB'
+  ASYM_OTH_PUBKEY_NAME () {
+    return 'SECURE_OTH_PUB'
   },
   // 保存asym公钥
-  saveAsymPubKey (pubKey) {
-    return this.setStorageItem(this.ASYM_PUBKEY_NAME(), pubKey)
+  saveAsymOthPubKey (pubKey) {
+    return this.setStorageItem(this.ASYM_OTH_PUBKEY_NAME(), pubKey)
   },
   // 加载asym公钥
-  loadAsymPubKey () {
-    const pubKey = this.getStorageItem(this.ASYM_PUBKEY_NAME())
+  loadAsymOthPubKey () {
+    const pubKey = this.getStorageItem(this.ASYM_OTH_PUBKEY_NAME())
     return Base64Obfuscator.decode(pubKey)
   },
-  ASYM_PRIKEY_NAME () {
-    return 'SECURE_PRI'
+  ASYM_SLF_PRIKEY_NAME () {
+    return 'SECURE_SLF_PRI'
+  },
+  ASYM_SLF_PUBKEY_SIGN_NAME () {
+    return 'SECURE_SLF_PUB_SIGN'
+  },
+  ASYM_SLF_PUBKEY_NAME () {
+    return 'SECURE_SLF_PUB'
   },
   // 保存asym公钥
-  saveAsymPriKey (priKey) {
-    return this.setStorageItem(this.ASYM_PRIKEY_NAME(), priKey)
+  saveAsymSlfPriKeyBasic (pubSign, priKey) {
+    this.setStorageItem(this.ASYM_SLF_PUBKEY_SIGN_NAME(), pubSign)
+    return this.setStorageItem(this.ASYM_SLF_PRIKEY_NAME(), priKey)
+  },
+  saveAsymSlfPriKey (webPriKey) {
+    const arr = webPriKey.split(SecureConfig.headerSeparator)
+    return this.saveAsymSlfPriKeyBasic(arr[0], arr[1])
   },
   // 加载asym公钥
-  loadAsymPriKey () {
-    const priKey = this.getStorageItem(this.ASYM_PRIKEY_NAME())
+  loadAsymSlfPriKey () {
+    const priKey = this.getStorageItem(this.ASYM_SLF_PRIKEY_NAME())
     return Base64Obfuscator.decode(priKey)
   },
-  existsAsymPriKey () {
-    const priKey = this.getStorageItem(this.ASYM_PRIKEY_NAME())
-    return !StringUtils.isEmpty(priKey)
+  loadWebAsymSlfPubKey () {
+    const pubKey = this.loadAsymSlfPubKey()
+    return Base64Obfuscator.encode(pubKey, true)
+  },
+  loadAsymSlfPubKey () {
+    let pubKey = this.getStorageItem(this.ASYM_SLF_PUBKEY_NAME())
+    if (StringUtils.isEmpty(pubKey)) {
+      const keyPair = this.asymmKeyPairGen(SecureConfig.asymKeySize)
+      const pubk = keyPair.publicKey
+      const prik = keyPair.privateKey
+
+      const pubSign = SignatureUtil.sign(pubk)
+      const priKey = Base64Obfuscator.encode(prik, true)
+      this.saveAsymSlfPriKeyBasic(pubSign, priKey)
+
+      pubKey = Base64Obfuscator.encode(pubk, true)
+      this.setStorageItem(this.ASYM_SLF_PUBKEY_NAME(), pubKey)
+    }
+    return Base64Obfuscator.decode(pubKey)
+  },
+  existsAsymSlfPubKeySign () {
+    const sign = this.getStorageItem(this.ASYM_SLF_PUBKEY_SIGN_NAME())
+    return !StringUtils.isEmpty(sign)
+  },
+  asymmKeyPairGen (size) {
+    return AsymmetricUtil.genKeyPair(size)
+  },
+  asymmKeyPairGen1024 () {
+    return AsymmetricUtil.genKeyPair(1024)
   },
   // 随机生成symm秘钥
   symmKeyGen (size) {
@@ -91,16 +129,18 @@ const SecureTransfer = {
   decrypt (bs64, symmKey) {
     return SymmetricUtil.decryptObj(bs64, symmKey)
   },
-  // 获取asym公钥签名
-  getAsymSign () {
-    const b464 = this.loadAsymPubKey()
-    const asymSign = SignatureUtil.sign(b464)
+  getAsymSign (bs64) {
+    const asymSign = SignatureUtil.sign(bs64)
     return asymSign
   },
   // 获取asym公钥签名
-  getAsymPriSign () {
-    const b464 = this.loadAsymPriKey()
-    const asymSign = SignatureUtil.sign(b464)
+  getAsymOthPubSign () {
+    const bs64 = this.loadAsymOthPubKey()
+    return this.getAsymSign(bs64)
+  },
+  // 获取asym公钥签名
+  getAsymSlfPubSign () {
+    const asymSign = this.getStorageItem(this.ASYM_SLF_PUBKEY_SIGN_NAME())
     return asymSign
   },
   // 获取安全请求头的值
@@ -108,7 +148,7 @@ const SecureTransfer = {
     if (StringUtils.isEmpty(symmKey)) {
       return 'null'
     }
-    const pubKey = this.loadAsymPubKey()
+    const pubKey = this.loadAsymOthPubKey()
     let symmKeyTransfer = AsymmetricUtil.publicKeyEncrypt(pubKey, symmKey)
     symmKeyTransfer = Base64Obfuscator.encode(symmKeyTransfer, true)
     return symmKeyTransfer
@@ -118,7 +158,7 @@ const SecureTransfer = {
     if (StringUtils.isEmpty(symmKey)) {
       return 'null'
     }
-    const priKey = this.loadAsymPriKey()
+    const priKey = this.loadAsymSlfPriKey()
     let symmKeyTransfer = AsymmetricUtil.privateKeyEncrypt(priKey, symmKey)
     symmKeyTransfer = Base64Obfuscator.encode(symmKeyTransfer, true)
     return symmKeyTransfer
@@ -128,7 +168,7 @@ const SecureTransfer = {
     if (StringUtils.isEmpty(symmKeyTransfer)) {
       return null
     }
-    const priKey = this.loadAsymPriKey()
+    const priKey = this.loadAsymSlfPriKey()
     symmKeyTransfer = symmKeyTransfer.trim()
     // 解除模糊之后使用asym进行解密得到symm秘钥
     let symmKey = Base64Obfuscator.decode(symmKeyTransfer)
@@ -140,7 +180,7 @@ const SecureTransfer = {
     if (StringUtils.isEmpty(symmKeyTransfer)) {
       return null
     }
-    const pubKey = this.loadAsymPubKey()
+    const pubKey = this.loadAsymOthPubKey()
     symmKeyTransfer = symmKeyTransfer.trim()
     // 解除模糊之后使用asym进行解密得到symm秘钥
     let symmKey = Base64Obfuscator.decode(symmKeyTransfer)

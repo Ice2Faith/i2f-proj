@@ -24,10 +24,10 @@ const StringSignature = {
       i++
     }
     return num1.toString(16) +
-      '' + num2.toString(16) +
-      '' + len.toString(16) +
-      '' + num3.toString(16) +
-      '' + num4.toString(16)
+            '' + num2.toString(16) +
+            '' + len.toString(16) +
+            '' + num3.toString(16) +
+            '' + num4.toString(16)
   }
 }
 

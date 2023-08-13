@@ -8,32 +8,26 @@
   'use strict'
 
   const BI_RM = '0123456789abcdefghijklmnopqrstuvwxyz'
-
   function int2char (n) {
     return BI_RM.charAt(n)
   }
-
   // #region BIT_OPERATIONS
   // (public) this & a
   function op_and (x, y) {
     return x & y
   }
-
   // (public) this | a
   function op_or (x, y) {
     return x | y
   }
-
   // (public) this ^ a
   function op_xor (x, y) {
     return x ^ y
   }
-
   // (public) this & ~a
   function op_andnot (x, y) {
     return x & ~y
   }
-
   // return index of lowest 1-bit in x, x < 2^31
   function lbit (x) {
     if (x == 0) {
@@ -61,7 +55,6 @@
     }
     return r
   }
-
   // return number of 1 bits in x
   function cbit (x) {
     let r = 0
@@ -71,12 +64,10 @@
     }
     return r
   }
-
   // #endregion BIT_OPERATIONS
 
   const b64map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
   const b64pad = '='
-
   function hex2b64 (h) {
     let i
     let c
@@ -97,7 +88,6 @@
     }
     return ret
   }
-
   // convert a base64 string to hex
   function b64tohex (s) {
     let ret = ''
@@ -155,22 +145,14 @@ PERFORMANCE OF THIS SOFTWARE.
 
   var extendStatics = function (d, b) {
     extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) {
-              d.__proto__ = b
-            }) ||
-            function (d, b) {
-              for (const p in b) if (b.hasOwnProperty(p)) d[p] = b[p]
-            }
+      ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b }) ||
+      function (d, b) { for (const p in b) if (b.hasOwnProperty(p)) d[p] = b[p] }
     return extendStatics(d, b)
   }
 
   function __extends (d, b) {
     extendStatics(d, b)
-
-    function __ () {
-      this.constructor = d
-    }
-
+    function __ () { this.constructor = d }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __())
   }
 
@@ -341,7 +323,6 @@ PERFORMANCE OF THIS SOFTWARE.
     function Int10 (value) {
       this.buf = [+value || 0]
     }
-
     Int10.prototype.mulAdd = function (m, c) {
       // assert(m <= 256)
       const b = this.buf
@@ -412,14 +393,12 @@ PERFORMANCE OF THIS SOFTWARE.
   const ellipsis = '\u2026'
   const reTimeS = /^(\d\d)(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])([01]\d|2[0-3])(?:([0-5]\d)(?:([0-5]\d)(?:[.,](\d{1,3}))?)?)?(Z|[-+](?:[0]\d|1[0-2])([0-5]\d)?)?$/
   const reTimeL = /^(\d\d\d\d)(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])([01]\d|2[0-3])(?:([0-5]\d)(?:([0-5]\d)(?:[.,](\d{1,3}))?)?)?(Z|[-+](?:[0]\d|1[0-2])([0-5]\d)?)?$/
-
   function stringCut (str, len) {
     if (str.length > len) {
       str = str.substring(0, len) + ellipsis
     }
     return str
   }
-
   const Stream = /** @class */ (function () {
     function Stream (enc, pos) {
       this.hexDigits = '0123456789ABCDEF'
@@ -432,7 +411,6 @@ PERFORMANCE OF THIS SOFTWARE.
         this.pos = pos
       }
     }
-
     Stream.prototype.get = function (pos) {
       if (pos === undefined) {
         pos = this.pos++
@@ -653,7 +631,6 @@ PERFORMANCE OF THIS SOFTWARE.
       this.tag = tag
       this.sub = sub
     }
-
     ASN1.prototype.typeName = function () {
       switch (this.tag.tagClass) {
         case 0: // universal
@@ -750,14 +727,14 @@ PERFORMANCE OF THIS SOFTWARE.
           return this.sub
             ? '(' + this.sub.length + ' elem)'
             : this.stream.parseOctetString(content, content + len, maxLength)
-          // case 0x05: // NULL
+        // case 0x05: // NULL
         case 0x06: // OBJECT_IDENTIFIER
           return this.stream.parseOID(content, content + len, maxLength)
-          // case 0x07: // ObjectDescriptor
-          // case 0x08: // EXTERNAL
-          // case 0x09: // REAL
-          // case 0x0A: // ENUMERATED
-          // case 0x0B: // EMBEDDED_PDV
+        // case 0x07: // ObjectDescriptor
+        // case 0x08: // EXTERNAL
+        // case 0x09: // REAL
+        // case 0x0A: // ENUMERATED
+        // case 0x0B: // EMBEDDED_PDV
         case 0x10: // SEQUENCE
         case 0x11: // SET
           if (this.sub !== null) {
@@ -772,7 +749,7 @@ PERFORMANCE OF THIS SOFTWARE.
         case 0x14: // TeletexString
         case 0x15: // VideotexString
         case 0x16: // IA5String
-          // case 0x19: // GraphicString
+        // case 0x19: // GraphicString
         case 0x1A: // VisibleString
           // case 0x1B: // GeneralString
           // case 0x1C: // UniversalString
@@ -843,10 +820,10 @@ PERFORMANCE OF THIS SOFTWARE.
       return buf
     }
     /**
-         * Retrieve the hexadecimal value (as a string) of the current ASN.1 element
-         * @returns {string}
-         * @public
-         */
+     * Retrieve the hexadecimal value (as a string) of the current ASN.1 element
+     * @returns {string}
+     * @public
+     */
     ASN1.prototype.getHexStringValue = function () {
       const hexString = this.toHexString()
       const offset = this.header * 2
@@ -880,7 +857,7 @@ PERFORMANCE OF THIS SOFTWARE.
         } else {
           // undefined length
           try {
-            for (; ;) {
+            for (;;) {
               const s = ASN1.decode(stream)
               if (s.tag.isEOC()) {
                 break
@@ -941,7 +918,6 @@ PERFORMANCE OF THIS SOFTWARE.
         this.tagNumber = n.simplify()
       }
     }
-
     ASN1Tag.prototype.isUniversal = function () {
       return this.tagClass === 0x00
     }
@@ -974,7 +950,6 @@ PERFORMANCE OF THIS SOFTWARE.
         }
       }
     }
-
     // #region PUBLIC
     // BigInteger.prototype.toString = bnToString;
     // (public) return string representation in given radix
@@ -2276,9 +2251,7 @@ PERFORMANCE OF THIS SOFTWARE.
           if (g > 0) {
             y.lShiftTo(g, y)
           }
-          setTimeout(function () {
-            callback(y)
-          }, 0) // escape
+          setTimeout(function () { callback(y) }, 0) // escape
         } else {
           setTimeout(gcda1, 0)
         }
@@ -2305,9 +2278,7 @@ PERFORMANCE OF THIS SOFTWARE.
               bnp_1.subTo(BigInteger.ONE.shiftLeft(a - 1), bnp_1)
             }
             if (bnp_1.isProbablePrime(b)) {
-              setTimeout(function () {
-                callback()
-              }, 0) // escape
+              setTimeout(function () { callback() }, 0) // escape
             } else {
               setTimeout(bnpfn1_1, 0)
             }
@@ -2334,7 +2305,6 @@ PERFORMANCE OF THIS SOFTWARE.
   var NullExp = /** @class */ (function () {
     function NullExp () {
     }
-
     // NullExp.prototype.convert = nNop;
     NullExp.prototype.convert = function (x) {
       return x
@@ -2358,7 +2328,6 @@ PERFORMANCE OF THIS SOFTWARE.
     function Classic (m) {
       this.m = m
     }
-
     // Classic.prototype.convert = cConvert;
     Classic.prototype.convert = function (x) {
       if (x.s < 0 || x.compareTo(this.m) >= 0) {
@@ -2399,7 +2368,6 @@ PERFORMANCE OF THIS SOFTWARE.
       this.um = (1 << (m.DB - 15)) - 1
       this.mt2 = 2 * m.t
     }
-
     // Montgomery.prototype.convert = montConvert;
     // xR mod m
     Montgomery.prototype.convert = function (x) {
@@ -2471,7 +2439,6 @@ PERFORMANCE OF THIS SOFTWARE.
       BigInteger.ONE.dlShiftTo(2 * m.t, this.r2)
       this.mu = this.r2.divide(m)
     }
-
     // Barrett.prototype.convert = barrettConvert;
     Barrett.prototype.convert = function (x) {
       if (x.s < 0 || x.t > 2 * this.m.t) {
@@ -2524,14 +2491,10 @@ PERFORMANCE OF THIS SOFTWARE.
   // #endregion
   // #endregion REDUCERS
   // return new, unset BigInteger
-  function nbi () {
-    return new BigInteger(null)
-  }
-
+  function nbi () { return new BigInteger(null) }
   function parseBigInt (str, r) {
     return new BigInteger(str, r)
   }
-
   // am: Compute w_j += (x*this_i), propagate carries,
   // c is initial carry, returns final carry.
   // c < 3*dvalue, x < 2*dvalue, this_i < dvalue
@@ -2547,7 +2510,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return c
   }
-
   // am2 avoids a big mult-and-extract completely.
   // Max digit bits should be <= 30 because we do bitwise ops
   // on values up to 2*hdvalue^2-hdvalue-1 (< 2^31)
@@ -2564,7 +2526,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return c
   }
-
   // Alternately, set max digit bits to 28 since some
   // browsers slow down when dealing with 32-bit numbers.
   function am3 (i, x, w, j, c, n) {
@@ -2580,7 +2541,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return c
   }
-
   if (j_lm && (navigator.appName == 'Microsoft Internet Explorer')) {
     BigInteger.prototype.am = am2
     dbits = 30
@@ -2614,19 +2574,16 @@ PERFORMANCE OF THIS SOFTWARE.
   for (vv = 10; vv < 36; ++vv) {
     BI_RC[rr++] = vv
   }
-
   function intAt (s, i) {
     const c = BI_RC[s.charCodeAt(i)]
     return (c == null) ? -1 : c
   }
-
   // return bigint initialized to value
   function nbv (i) {
     const r = nbi()
     r.fromInt(i)
     return r
   }
-
   // returns bit length of the integer x
   function nbits (x) {
     let r = 1
@@ -2653,7 +2610,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return r
   }
-
   // "constants"
   BigInteger.ZERO = nbv(0)
   BigInteger.ONE = nbv(1)
@@ -2665,7 +2621,6 @@ PERFORMANCE OF THIS SOFTWARE.
       this.j = 0
       this.S = []
     }
-
     // Arcfour.prototype.init = ARC4init;
     // Initialize arcfour context from key, an array of ints, each from [0..255]
     Arcfour.prototype.init = function (key) {
@@ -2697,12 +2652,10 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return Arcfour
   }())
-
   // Plug in your RNG constructor here
   function prng_newstate () {
     return new Arcfour()
   }
-
   // Pool size must be a multiple of 4 and greater than 32.
   // An array of bytes the size of the pool will be passed to init()
   const rng_psize = 256
@@ -2750,7 +2703,6 @@ PERFORMANCE OF THIS SOFTWARE.
       window.attachEvent('onmousemove', onMouseMoveListener_1)
     }
   }
-
   function rng_get_byte () {
     if (rng_state == null) {
       rng_state = prng_newstate()
@@ -2768,11 +2720,9 @@ PERFORMANCE OF THIS SOFTWARE.
     // TODO: allow reseeding after first request
     return rng_state.next()
   }
-
   const SecureRandom = /** @class */ (function () {
     function SecureRandom () {
     }
-
     SecureRandom.prototype.nextBytes = function (ba) {
       for (let i = 0; i < ba.length; ++i) {
         ba[i] = rng_get_byte()
@@ -2841,7 +2791,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return new BigInteger(ba)
   }
-
   function pkcs1unpad (d, n, forPrivateKey) {
     const b = d.toByteArray()
     let i = 0
@@ -2884,7 +2833,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return ret
   }
-
   // "empty" RSA key constructor
   const RSAKey = /** @class */ (function () {
     function RSAKey () {
@@ -2897,7 +2845,6 @@ PERFORMANCE OF THIS SOFTWARE.
       this.dmq1 = null
       this.coeff = null
     }
-
     // #region PROTECTED
     // protected
     // RSAKey.prototype.doPublic = RSADoPublic;
@@ -2934,9 +2881,7 @@ PERFORMANCE OF THIS SOFTWARE.
     // RSAKey.prototype.encrypt = RSAEncrypt;
     // Return the PKCS#1 RSA encryption of "text" as an even-length hex string
     RSAKey.prototype.encrypt = function (text, usePrivateKey) {
-      if (usePrivateKey === void 0) {
-        usePrivateKey = false
-      }
+      if (usePrivateKey === void 0) { usePrivateKey = false }
       const wl = (this.n.bitLength() + 7) >> 3
       const m = pkcs1pad(text, wl, usePrivateKey)
       if (m == null) {
@@ -2987,14 +2932,14 @@ PERFORMANCE OF THIS SOFTWARE.
       const qs = B >> 1
       this.e = parseInt(E, 16)
       const ee = new BigInteger(E, 16)
-      for (; ;) {
-        for (; ;) {
+      for (;;) {
+        for (;;) {
           this.p = new BigInteger(B - qs, 1, rng)
           if (this.p.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 && this.p.isProbablePrime(10)) {
             break
           }
         }
-        for (; ;) {
+        for (;;) {
           this.q = new BigInteger(qs, 1, rng)
           if (this.q.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 && this.q.isProbablePrime(10)) {
             break
@@ -3022,9 +2967,7 @@ PERFORMANCE OF THIS SOFTWARE.
     // Return the PKCS#1 RSA decryption of "ctext".
     // "ctext" is an even-length hex string and the output is a plain string.
     RSAKey.prototype.decrypt = function (ctext, usePrivateKey) {
-      if (usePrivateKey === void 0) {
-        usePrivateKey = true
-      }
+      if (usePrivateKey === void 0) { usePrivateKey = true }
       const c = parseBigInt(ctext, 16)
       const m = usePrivateKey ? this.doPrivate(c) : this.doPublic(c)
       if (m == null) {
@@ -3136,11 +3079,9 @@ PERFORMANCE OF THIS SOFTWARE.
     sha512: '3051300d060960864801650304020305000440',
     ripemd160: '3021300906052b2403020105000414'
   }
-
   function getDigestHeader (name) {
     return DIGEST_HEADERS[name] || ''
   }
-
   function removeDigestHeader (str) {
     for (const name_1 in DIGEST_HEADERS) {
       if (DIGEST_HEADERS.hasOwnProperty(name_1)) {
@@ -3153,7 +3094,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return str
   }
-
   // Return the PKCS#1 RSA encryption of "text" as a Base64-encoded string
   // function RSAEncryptB64(text) {
   //  var h = this.encrypt(text);
@@ -3171,27 +3111,26 @@ version: 2.9.0
   const YAHOO = {}
   YAHOO.lang = {
     /**
-         * Utility to set up the prototype, constructor and superclass properties to
-         * support an inheritance strategy that can chain constructors and methods.
-         * Static members will not be inherited.
-         *
-         * @method extend
-         * @static
-         * @param {Function} subc   the object to modify
-         * @param {Function} superc the object to inherit
-         * @param {Object} overrides  additional properties/methods to add to the
-         *                              subclass prototype.  These will override the
-         *                              matching items obtained from the superclass
-         *                              if present.
-         */
+     * Utility to set up the prototype, constructor and superclass properties to
+     * support an inheritance strategy that can chain constructors and methods.
+     * Static members will not be inherited.
+     *
+     * @method extend
+     * @static
+     * @param {Function} subc   the object to modify
+     * @param {Function} superc the object to inherit
+     * @param {Object} overrides  additional properties/methods to add to the
+     *                              subclass prototype.  These will override the
+     *                              matching items obtained from the superclass
+     *                              if present.
+     */
     extend: function (subc, superc, overrides) {
       if (!superc || !subc) {
         throw new Error('YAHOO.lang.extend failed, please check that ' +
-                    'all dependencies are included.')
+          'all dependencies are included.')
       }
 
-      const F = function () {
-      }
+      const F = function () {}
       F.prototype = superc.prototype
       subc.prototype = new F()
       subc.prototype.constructor = subc
@@ -3217,8 +3156,7 @@ version: 2.9.0
              * @static
              * @private
              */
-        let _IEEnumFix = function () {
-        }
+        let _IEEnumFix = function () {}
         const ADD = ['toString', 'valueOf']
         try {
           if (/MSIE/.test(navigator.userAgent)) {
@@ -3231,9 +3169,7 @@ version: 2.9.0
               }
             }
           }
-        } catch (ex) {
-        }
-        _IEEnumFix(subc.prototype, overrides)
+        } catch (ex) {} _IEEnumFix(subc.prototype, overrides)
       }
     }
   }
@@ -3242,88 +3178,88 @@ version: 2.9.0
  */
 
   /**
-     * @fileOverview
-     * @name asn1-1.0.js
-     * @author Kenji Urushima kenji.urushima@gmail.com
-     * @version asn1 1.0.13 (2017-Jun-02)
-     * @since jsrsasign 2.1
-     * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
-     */
+   * @fileOverview
+   * @name asn1-1.0.js
+   * @author Kenji Urushima kenji.urushima@gmail.com
+   * @version asn1 1.0.13 (2017-Jun-02)
+   * @since jsrsasign 2.1
+   * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
+   */
 
   /**
-     * kjur's class library name space
-     * <p>
-     * This name space provides following name spaces:
-     * <ul>
-     * <li>{@link KJUR.asn1} - ASN.1 primitive hexadecimal encoder</li>
-     * <li>{@link KJUR.asn1.x509} - ASN.1 structure for X.509 certificate and CRL</li>
-     * <li>{@link KJUR.crypto} - Java Cryptographic Extension(JCE) style MessageDigest/Signature
-     * class and utilities</li>
-     * </ul>
-     * </p>
-     * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
-     * @name KJUR
-     * @namespace kjur's class library name space
-     */
+   * kjur's class library name space
+   * <p>
+   * This name space provides following name spaces:
+   * <ul>
+   * <li>{@link KJUR.asn1} - ASN.1 primitive hexadecimal encoder</li>
+   * <li>{@link KJUR.asn1.x509} - ASN.1 structure for X.509 certificate and CRL</li>
+   * <li>{@link KJUR.crypto} - Java Cryptographic Extension(JCE) style MessageDigest/Signature
+   * class and utilities</li>
+   * </ul>
+   * </p>
+   * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
+   * @name KJUR
+   * @namespace kjur's class library name space
+   */
   const KJUR = {}
 
   /**
-     * kjur's ASN.1 class library name space
-     * <p>
-     * This is ITU-T X.690 ASN.1 DER encoder class library and
-     * class structure and methods is very similar to
-     * org.bouncycastle.asn1 package of
-     * well known BouncyCaslte Cryptography Library.
-     * <h4>PROVIDING ASN.1 PRIMITIVES</h4>
-     * Here are ASN.1 DER primitive classes.
-     * <ul>
-     * <li>0x01 {@link KJUR.asn1.DERBoolean}</li>
-     * <li>0x02 {@link KJUR.asn1.DERInteger}</li>
-     * <li>0x03 {@link KJUR.asn1.DERBitString}</li>
-     * <li>0x04 {@link KJUR.asn1.DEROctetString}</li>
-     * <li>0x05 {@link KJUR.asn1.DERNull}</li>
-     * <li>0x06 {@link KJUR.asn1.DERObjectIdentifier}</li>
-     * <li>0x0a {@link KJUR.asn1.DEREnumerated}</li>
-     * <li>0x0c {@link KJUR.asn1.DERUTF8String}</li>
-     * <li>0x12 {@link KJUR.asn1.DERNumericString}</li>
-     * <li>0x13 {@link KJUR.asn1.DERPrintableString}</li>
-     * <li>0x14 {@link KJUR.asn1.DERTeletexString}</li>
-     * <li>0x16 {@link KJUR.asn1.DERIA5String}</li>
-     * <li>0x17 {@link KJUR.asn1.DERUTCTime}</li>
-     * <li>0x18 {@link KJUR.asn1.DERGeneralizedTime}</li>
-     * <li>0x30 {@link KJUR.asn1.DERSequence}</li>
-     * <li>0x31 {@link KJUR.asn1.DERSet}</li>
-     * </ul>
-     * <h4>OTHER ASN.1 CLASSES</h4>
-     * <ul>
-     * <li>{@link KJUR.asn1.ASN1Object}</li>
-     * <li>{@link KJUR.asn1.DERAbstractString}</li>
-     * <li>{@link KJUR.asn1.DERAbstractTime}</li>
-     * <li>{@link KJUR.asn1.DERAbstractStructured}</li>
-     * <li>{@link KJUR.asn1.DERTaggedObject}</li>
-     * </ul>
-     * <h4>SUB NAME SPACES</h4>
-     * <ul>
-     * <li>{@link KJUR.asn1.cades} - CAdES long term signature format</li>
-     * <li>{@link KJUR.asn1.cms} - Cryptographic Message Syntax</li>
-     * <li>{@link KJUR.asn1.csr} - Certificate Signing Request (CSR/PKCS#10)</li>
-     * <li>{@link KJUR.asn1.tsp} - RFC 3161 Timestamping Protocol Format</li>
-     * <li>{@link KJUR.asn1.x509} - RFC 5280 X.509 certificate and CRL</li>
-     * </ul>
-     * </p>
-     * NOTE: Please ignore method summary and document of this namespace.
-     * This caused by a bug of jsdoc2.
-     * @name KJUR.asn1
-     * @namespace
-     */
+   * kjur's ASN.1 class library name space
+   * <p>
+   * This is ITU-T X.690 ASN.1 DER encoder class library and
+   * class structure and methods is very similar to
+   * org.bouncycastle.asn1 package of
+   * well known BouncyCaslte Cryptography Library.
+   * <h4>PROVIDING ASN.1 PRIMITIVES</h4>
+   * Here are ASN.1 DER primitive classes.
+   * <ul>
+   * <li>0x01 {@link KJUR.asn1.DERBoolean}</li>
+   * <li>0x02 {@link KJUR.asn1.DERInteger}</li>
+   * <li>0x03 {@link KJUR.asn1.DERBitString}</li>
+   * <li>0x04 {@link KJUR.asn1.DEROctetString}</li>
+   * <li>0x05 {@link KJUR.asn1.DERNull}</li>
+   * <li>0x06 {@link KJUR.asn1.DERObjectIdentifier}</li>
+   * <li>0x0a {@link KJUR.asn1.DEREnumerated}</li>
+   * <li>0x0c {@link KJUR.asn1.DERUTF8String}</li>
+   * <li>0x12 {@link KJUR.asn1.DERNumericString}</li>
+   * <li>0x13 {@link KJUR.asn1.DERPrintableString}</li>
+   * <li>0x14 {@link KJUR.asn1.DERTeletexString}</li>
+   * <li>0x16 {@link KJUR.asn1.DERIA5String}</li>
+   * <li>0x17 {@link KJUR.asn1.DERUTCTime}</li>
+   * <li>0x18 {@link KJUR.asn1.DERGeneralizedTime}</li>
+   * <li>0x30 {@link KJUR.asn1.DERSequence}</li>
+   * <li>0x31 {@link KJUR.asn1.DERSet}</li>
+   * </ul>
+   * <h4>OTHER ASN.1 CLASSES</h4>
+   * <ul>
+   * <li>{@link KJUR.asn1.ASN1Object}</li>
+   * <li>{@link KJUR.asn1.DERAbstractString}</li>
+   * <li>{@link KJUR.asn1.DERAbstractTime}</li>
+   * <li>{@link KJUR.asn1.DERAbstractStructured}</li>
+   * <li>{@link KJUR.asn1.DERTaggedObject}</li>
+   * </ul>
+   * <h4>SUB NAME SPACES</h4>
+   * <ul>
+   * <li>{@link KJUR.asn1.cades} - CAdES long term signature format</li>
+   * <li>{@link KJUR.asn1.cms} - Cryptographic Message Syntax</li>
+   * <li>{@link KJUR.asn1.csr} - Certificate Signing Request (CSR/PKCS#10)</li>
+   * <li>{@link KJUR.asn1.tsp} - RFC 3161 Timestamping Protocol Format</li>
+   * <li>{@link KJUR.asn1.x509} - RFC 5280 X.509 certificate and CRL</li>
+   * </ul>
+   * </p>
+   * NOTE: Please ignore method summary and document of this namespace.
+   * This caused by a bug of jsdoc2.
+   * @name KJUR.asn1
+   * @namespace
+   */
   if (typeof KJUR.asn1 === 'undefined' || !KJUR.asn1) KJUR.asn1 = {}
 
   /**
-     * ASN1 utilities class
-     * @name KJUR.asn1.ASN1Util
-     * @class ASN1 utilities class
-     * @since asn1 1.0.2
-     */
+   * ASN1 utilities class
+   * @name KJUR.asn1.ASN1Util
+   * @class ASN1 utilities class
+   * @since asn1 1.0.2
+   */
   KJUR.asn1.ASN1Util = new function () {
     this.integerToByteHex = function (i) {
       let h = i.toString(16)
@@ -3361,77 +3297,77 @@ version: 2.9.0
       return h
     }
     /**
-         * get PEM string from hexadecimal data and header string
-         * @name getPEMStringFromHex
-         * @memberOf KJUR.asn1.ASN1Util
-         * @function
-         * @param {String} dataHex hexadecimal string of PEM body
-         * @param {String} pemHeader PEM header string (ex. 'RSA PRIVATE KEY')
-         * @return {String} PEM formatted string of input data
-         * @description
-         * This method converts a hexadecimal string to a PEM string with
-         * a specified header. Its line break will be CRLF("\r\n").
-         * @example
-         * var pem  = KJUR.asn1.ASN1Util.getPEMStringFromHex('616161', 'RSA PRIVATE KEY');
-         * // value of pem will be:
-         * -----BEGIN PRIVATE KEY-----
-         * YWFh
-         * -----END PRIVATE KEY-----
-         */
+     * get PEM string from hexadecimal data and header string
+     * @name getPEMStringFromHex
+     * @memberOf KJUR.asn1.ASN1Util
+     * @function
+     * @param {String} dataHex hexadecimal string of PEM body
+     * @param {String} pemHeader PEM header string (ex. 'RSA PRIVATE KEY')
+     * @return {String} PEM formatted string of input data
+     * @description
+     * This method converts a hexadecimal string to a PEM string with
+     * a specified header. Its line break will be CRLF("\r\n").
+     * @example
+     * var pem  = KJUR.asn1.ASN1Util.getPEMStringFromHex('616161', 'RSA PRIVATE KEY');
+     * // value of pem will be:
+     * -----BEGIN PRIVATE KEY-----
+     * YWFh
+     * -----END PRIVATE KEY-----
+     */
     this.getPEMStringFromHex = function (dataHex, pemHeader) {
       return hextopem(dataHex, pemHeader)
     }
 
     /**
-         * generate ASN1Object specifed by JSON parameters
-         * @name newObject
-         * @memberOf KJUR.asn1.ASN1Util
-         * @function
-         * @param {Array} param JSON parameter to generate ASN1Object
-         * @return {KJUR.asn1.ASN1Object} generated object
-         * @since asn1 1.0.3
-         * @description
-         * generate any ASN1Object specified by JSON param
-         * including ASN.1 primitive or structured.
-         * Generally 'param' can be described as follows:
-         * <blockquote>
-         * {TYPE-OF-ASNOBJ: ASN1OBJ-PARAMETER}
-         * </blockquote>
-         * 'TYPE-OF-ASN1OBJ' can be one of following symbols:
-         * <ul>
-         * <li>'bool' - DERBoolean</li>
-         * <li>'int' - DERInteger</li>
-         * <li>'bitstr' - DERBitString</li>
-         * <li>'octstr' - DEROctetString</li>
-         * <li>'null' - DERNull</li>
-         * <li>'oid' - DERObjectIdentifier</li>
-         * <li>'enum' - DEREnumerated</li>
-         * <li>'utf8str' - DERUTF8String</li>
-         * <li>'numstr' - DERNumericString</li>
-         * <li>'prnstr' - DERPrintableString</li>
-         * <li>'telstr' - DERTeletexString</li>
-         * <li>'ia5str' - DERIA5String</li>
-         * <li>'utctime' - DERUTCTime</li>
-         * <li>'gentime' - DERGeneralizedTime</li>
-         * <li>'seq' - DERSequence</li>
-         * <li>'set' - DERSet</li>
-         * <li>'tag' - DERTaggedObject</li>
-         * </ul>
-         * @example
-         * newObject({'prnstr': 'aaa'});
-         * newObject({'seq': [{'int': 3}, {'prnstr': 'aaa'}]})
-         * // ASN.1 Tagged Object
-         * newObject({'tag': {'tag': 'a1',
-         *                    'explicit': true,
-         *                    'obj': {'seq': [{'int': 3}, {'prnstr': 'aaa'}]}}});
-         * // more simple representation of ASN.1 Tagged Object
-         * newObject({'tag': ['a1',
-         *                    true,
-         *                    {'seq': [
-         *                      {'int': 3},
-         *                      {'prnstr': 'aaa'}]}
-         *                   ]});
-         */
+     * generate ASN1Object specifed by JSON parameters
+     * @name newObject
+     * @memberOf KJUR.asn1.ASN1Util
+     * @function
+     * @param {Array} param JSON parameter to generate ASN1Object
+     * @return {KJUR.asn1.ASN1Object} generated object
+     * @since asn1 1.0.3
+     * @description
+     * generate any ASN1Object specified by JSON param
+     * including ASN.1 primitive or structured.
+     * Generally 'param' can be described as follows:
+     * <blockquote>
+     * {TYPE-OF-ASNOBJ: ASN1OBJ-PARAMETER}
+     * </blockquote>
+     * 'TYPE-OF-ASN1OBJ' can be one of following symbols:
+     * <ul>
+     * <li>'bool' - DERBoolean</li>
+     * <li>'int' - DERInteger</li>
+     * <li>'bitstr' - DERBitString</li>
+     * <li>'octstr' - DEROctetString</li>
+     * <li>'null' - DERNull</li>
+     * <li>'oid' - DERObjectIdentifier</li>
+     * <li>'enum' - DEREnumerated</li>
+     * <li>'utf8str' - DERUTF8String</li>
+     * <li>'numstr' - DERNumericString</li>
+     * <li>'prnstr' - DERPrintableString</li>
+     * <li>'telstr' - DERTeletexString</li>
+     * <li>'ia5str' - DERIA5String</li>
+     * <li>'utctime' - DERUTCTime</li>
+     * <li>'gentime' - DERGeneralizedTime</li>
+     * <li>'seq' - DERSequence</li>
+     * <li>'set' - DERSet</li>
+     * <li>'tag' - DERTaggedObject</li>
+     * </ul>
+     * @example
+     * newObject({'prnstr': 'aaa'});
+     * newObject({'seq': [{'int': 3}, {'prnstr': 'aaa'}]})
+     * // ASN.1 Tagged Object
+     * newObject({'tag': {'tag': 'a1',
+     *                    'explicit': true,
+     *                    'obj': {'seq': [{'int': 3}, {'prnstr': 'aaa'}]}}});
+     * // more simple representation of ASN.1 Tagged Object
+     * newObject({'tag': ['a1',
+     *                    true,
+     *                    {'seq': [
+     *                      {'int': 3},
+     *                      {'prnstr': 'aaa'}]}
+     *                   ]});
+     */
     this.newObject = function (param) {
       const _KJUR = KJUR
       const _KJUR_asn1 = _KJUR.asn1
@@ -3498,7 +3434,7 @@ version: 2.9.0
       if (key == 'tag') {
         const tagParam = param[key]
         if (Object.prototype.toString.call(tagParam) === '[object Array]' &&
-                    tagParam.length == 3) {
+          tagParam.length == 3) {
           const obj = _newObject(tagParam[2])
           return new _DERTaggedObject({
             tag: tagParam[0],
@@ -3517,19 +3453,19 @@ version: 2.9.0
     }
 
     /**
-         * get encoded hexadecimal string of ASN1Object specifed by JSON parameters
-         * @name jsonToASN1HEX
-         * @memberOf KJUR.asn1.ASN1Util
-         * @function
-         * @param {Array} param JSON parameter to generate ASN1Object
-         * @return hexadecimal string of ASN1Object
-         * @since asn1 1.0.4
-         * @description
-         * As for ASN.1 object representation of JSON object,
-         * please see {@link newObject}.
-         * @example
-         * jsonToASN1HEX({'prnstr': 'aaa'});
-         */
+     * get encoded hexadecimal string of ASN1Object specifed by JSON parameters
+     * @name jsonToASN1HEX
+     * @memberOf KJUR.asn1.ASN1Util
+     * @function
+     * @param {Array} param JSON parameter to generate ASN1Object
+     * @return hexadecimal string of ASN1Object
+     * @since asn1 1.0.4
+     * @description
+     * As for ASN.1 object representation of JSON object,
+     * please see {@link newObject}.
+     * @example
+     * jsonToASN1HEX({'prnstr': 'aaa'});
+     */
     this.jsonToASN1HEX = function (param) {
       const asn1Obj = this.newObject(param)
       return asn1Obj.getEncodedHex()
@@ -3537,19 +3473,19 @@ version: 2.9.0
   }()
 
   /**
-     * get dot noted oid number string from hexadecimal value of OID
-     * @name oidHexToInt
-     * @memberOf KJUR.asn1.ASN1Util
-     * @function
-     * @param {String} hex hexadecimal value of object identifier
-     * @return {String} dot noted string of object identifier
-     * @since jsrsasign 4.8.3 asn1 1.0.7
-     * @description
-     * This static method converts from hexadecimal string representation of
-     * ASN.1 value of object identifier to oid number string.
-     * @example
-     * KJUR.asn1.ASN1Util.oidHexToInt('550406') &rarr; "2.5.4.6"
-     */
+   * get dot noted oid number string from hexadecimal value of OID
+   * @name oidHexToInt
+   * @memberOf KJUR.asn1.ASN1Util
+   * @function
+   * @param {String} hex hexadecimal value of object identifier
+   * @return {String} dot noted string of object identifier
+   * @since jsrsasign 4.8.3 asn1 1.0.7
+   * @description
+   * This static method converts from hexadecimal string representation of
+   * ASN.1 value of object identifier to oid number string.
+   * @example
+   * KJUR.asn1.ASN1Util.oidHexToInt('550406') &rarr; "2.5.4.6"
+   */
   KJUR.asn1.ASN1Util.oidHexToInt = function (hex) {
     var s = ''
     const i01 = parseInt(hex.substr(0, 2), 16)
@@ -3572,19 +3508,19 @@ version: 2.9.0
   }
 
   /**
-     * get hexadecimal value of object identifier from dot noted oid value
-     * @name oidIntToHex
-     * @memberOf KJUR.asn1.ASN1Util
-     * @function
-     * @param {String} oidString dot noted string of object identifier
-     * @return {String} hexadecimal value of object identifier
-     * @since jsrsasign 4.8.3 asn1 1.0.7
-     * @description
-     * This static method converts from object identifier value string.
-     * to hexadecimal string representation of it.
-     * @example
-     * KJUR.asn1.ASN1Util.oidIntToHex("2.5.4.6") &rarr; "550406"
-     */
+   * get hexadecimal value of object identifier from dot noted oid value
+   * @name oidIntToHex
+   * @memberOf KJUR.asn1.ASN1Util
+   * @function
+   * @param {String} oidString dot noted string of object identifier
+   * @return {String} hexadecimal value of object identifier
+   * @since jsrsasign 4.8.3 asn1 1.0.7
+   * @description
+   * This static method converts from object identifier value string.
+   * to hexadecimal string representation of it.
+   * @example
+   * KJUR.asn1.ASN1Util.oidIntToHex("2.5.4.6") &rarr; "550406"
+   */
   KJUR.asn1.ASN1Util.oidIntToHex = function (oidString) {
     const itox = function (i) {
       let h = i.toString(16)
@@ -3630,26 +3566,26 @@ version: 2.9.0
   // ********************************************************************
 
   /**
-     * base class for ASN.1 DER encoder object
-     * @name KJUR.asn1.ASN1Object
-     * @class base class for ASN.1 DER encoder object
-     * @property {Boolean} isModified flag whether internal data was changed
-     * @property {String} hTLV hexadecimal string of ASN.1 TLV
-     * @property {String} hT hexadecimal string of ASN.1 TLV tag(T)
-     * @property {String} hL hexadecimal string of ASN.1 TLV length(L)
-     * @property {String} hV hexadecimal string of ASN.1 TLV value(V)
-     * @description
-     */
+   * base class for ASN.1 DER encoder object
+   * @name KJUR.asn1.ASN1Object
+   * @class base class for ASN.1 DER encoder object
+   * @property {Boolean} isModified flag whether internal data was changed
+   * @property {String} hTLV hexadecimal string of ASN.1 TLV
+   * @property {String} hT hexadecimal string of ASN.1 TLV tag(T)
+   * @property {String} hL hexadecimal string of ASN.1 TLV length(L)
+   * @property {String} hV hexadecimal string of ASN.1 TLV value(V)
+   * @description
+   */
   KJUR.asn1.ASN1Object = function () {
     const hV = ''
 
     /**
-         * get hexadecimal ASN.1 TLV length(L) bytes from TLV value(V)
-         * @name getLengthHexFromValue
-         * @memberOf KJUR.asn1.ASN1Object#
-         * @function
-         * @return {String} hexadecimal string of ASN.1 TLV length(L)
-         */
+     * get hexadecimal ASN.1 TLV length(L) bytes from TLV value(V)
+     * @name getLengthHexFromValue
+     * @memberOf KJUR.asn1.ASN1Object#
+     * @function
+     * @return {String} hexadecimal string of ASN.1 TLV length(L)
+     */
     this.getLengthHexFromValue = function () {
       if (typeof this.hV === 'undefined' || this.hV == null) {
         throw 'this.hV is null or undefined.'
@@ -3675,12 +3611,12 @@ version: 2.9.0
     }
 
     /**
-         * get hexadecimal string of ASN.1 TLV bytes
-         * @name getEncodedHex
-         * @memberOf KJUR.asn1.ASN1Object#
-         * @function
-         * @return {String} hexadecimal string of ASN.1 TLV
-         */
+     * get hexadecimal string of ASN.1 TLV bytes
+     * @name getEncodedHex
+     * @memberOf KJUR.asn1.ASN1Object#
+     * @function
+     * @return {String} hexadecimal string of ASN.1 TLV
+     */
     this.getEncodedHex = function () {
       if (this.hTLV == null || this.isModified) {
         this.hV = this.getFreshValueHex()
@@ -3693,12 +3629,12 @@ version: 2.9.0
     }
 
     /**
-         * get hexadecimal string of ASN.1 TLV value(V) bytes
-         * @name getValueHex
-         * @memberOf KJUR.asn1.ASN1Object#
-         * @function
-         * @return {String} hexadecimal string of ASN.1 TLV value(V) bytes
-         */
+     * get hexadecimal string of ASN.1 TLV value(V) bytes
+     * @name getValueHex
+     * @memberOf KJUR.asn1.ASN1Object#
+     * @function
+     * @return {String} hexadecimal string of ASN.1 TLV value(V) bytes
+     */
     this.getValueHex = function () {
       this.getEncodedHex()
       return this.hV
@@ -3711,43 +3647,43 @@ version: 2.9.0
 
   // == BEGIN DERAbstractString ================================================
   /**
-     * base class for ASN.1 DER string classes
-     * @name KJUR.asn1.DERAbstractString
-     * @class base class for ASN.1 DER string classes
-     * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
-     * @property {String} s internal string of value
-     * @extends KJUR.asn1.ASN1Object
-     * @description
-     * <br/>
-     * As for argument 'params' for constructor, you can specify one of
-     * following properties:
-     * <ul>
-     * <li>str - specify initial ASN.1 value(V) by a string</li>
-     * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
-     * </ul>
-     * NOTE: 'params' can be omitted.
-     */
+   * base class for ASN.1 DER string classes
+   * @name KJUR.asn1.DERAbstractString
+   * @class base class for ASN.1 DER string classes
+   * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+   * @property {String} s internal string of value
+   * @extends KJUR.asn1.ASN1Object
+   * @description
+   * <br/>
+   * As for argument 'params' for constructor, you can specify one of
+   * following properties:
+   * <ul>
+   * <li>str - specify initial ASN.1 value(V) by a string</li>
+   * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+   * </ul>
+   * NOTE: 'params' can be omitted.
+   */
   KJUR.asn1.DERAbstractString = function (params) {
     KJUR.asn1.DERAbstractString.superclass.constructor.call(this)
 
     /**
-         * get string value of this string object
-         * @name getString
-         * @memberOf KJUR.asn1.DERAbstractString#
-         * @function
-         * @return {String} string value of this string object
-         */
+     * get string value of this string object
+     * @name getString
+     * @memberOf KJUR.asn1.DERAbstractString#
+     * @function
+     * @return {String} string value of this string object
+     */
     this.getString = function () {
       return this.s
     }
 
     /**
-         * set value by a string
-         * @name setString
-         * @memberOf KJUR.asn1.DERAbstractString#
-         * @function
-         * @param {String} newS value by a string to set
-         */
+     * set value by a string
+     * @name setString
+     * @memberOf KJUR.asn1.DERAbstractString#
+     * @function
+     * @param {String} newS value by a string to set
+     */
     this.setString = function (newS) {
       this.hTLV = null
       this.isModified = true
@@ -3756,12 +3692,12 @@ version: 2.9.0
     }
 
     /**
-         * set value by a hexadecimal string
-         * @name setStringHex
-         * @memberOf KJUR.asn1.DERAbstractString#
-         * @function
-         * @param {String} newHexString value by a hexadecimal string to set
-         */
+     * set value by a hexadecimal string
+     * @name setStringHex
+     * @memberOf KJUR.asn1.DERAbstractString#
+     * @function
+     * @param {String} newHexString value by a hexadecimal string to set
+     */
     this.setStringHex = function (newHexString) {
       this.hTLV = null
       this.isModified = true
@@ -3788,14 +3724,14 @@ version: 2.9.0
 
   // == BEGIN DERAbstractTime ==================================================
   /**
-     * base class for ASN.1 DER Generalized/UTCTime class
-     * @name KJUR.asn1.DERAbstractTime
-     * @class base class for ASN.1 DER Generalized/UTCTime class
-     * @param {Array} params associative array of parameters (ex. {'str': '130430235959Z'})
-     * @extends KJUR.asn1.ASN1Object
-     * @description
-     * @see KJUR.asn1.ASN1Object - superclass
-     */
+   * base class for ASN.1 DER Generalized/UTCTime class
+   * @name KJUR.asn1.DERAbstractTime
+   * @class base class for ASN.1 DER Generalized/UTCTime class
+   * @param {Array} params associative array of parameters (ex. {'str': '130430235959Z'})
+   * @extends KJUR.asn1.ASN1Object
+   * @description
+   * @see KJUR.asn1.ASN1Object - superclass
+   */
   KJUR.asn1.DERAbstractTime = function (params) {
     KJUR.asn1.DERAbstractTime.superclass.constructor.call(this)
 
@@ -3845,23 +3781,23 @@ version: 2.9.0
 
     // --- PUBLIC METHODS --------------------
     /**
-         * get string value of this string object
-         * @name getString
-         * @memberOf KJUR.asn1.DERAbstractTime#
-         * @function
-         * @return {String} string value of this time object
-         */
+     * get string value of this string object
+     * @name getString
+     * @memberOf KJUR.asn1.DERAbstractTime#
+     * @function
+     * @return {String} string value of this time object
+     */
     this.getString = function () {
       return this.s
     }
 
     /**
-         * set value by a string
-         * @name setString
-         * @memberOf KJUR.asn1.DERAbstractTime#
-         * @function
-         * @param {String} newS value by a string to set such like "130430235959Z"
-         */
+     * set value by a string
+     * @name setString
+     * @memberOf KJUR.asn1.DERAbstractTime#
+     * @function
+     * @param {String} newS value by a string to set such like "130430235959Z"
+     */
     this.setString = function (newS) {
       this.hTLV = null
       this.isModified = true
@@ -3870,17 +3806,17 @@ version: 2.9.0
     }
 
     /**
-         * set value by a Date object
-         * @name setByDateValue
-         * @memberOf KJUR.asn1.DERAbstractTime#
-         * @function
-         * @param {Integer} year year of date (ex. 2013)
-         * @param {Integer} month month of date between 1 and 12 (ex. 12)
-         * @param {Integer} day day of month
-         * @param {Integer} hour hours of date
-         * @param {Integer} min minutes of date
-         * @param {Integer} sec seconds of date
-         */
+     * set value by a Date object
+     * @name setByDateValue
+     * @memberOf KJUR.asn1.DERAbstractTime#
+     * @function
+     * @param {Integer} year year of date (ex. 2013)
+     * @param {Integer} month month of date between 1 and 12 (ex. 12)
+     * @param {Integer} day day of month
+     * @param {Integer} hour hours of date
+     * @param {Integer} min minutes of date
+     * @param {Integer} sec seconds of date
+     */
     this.setByDateValue = function (year, month, day, hour, min, sec) {
       const dateObject = new Date(Date.UTC(year, month - 1, day, hour, min, sec, 0))
       this.setByDate(dateObject)
@@ -3895,24 +3831,24 @@ version: 2.9.0
 
   // == BEGIN DERAbstractStructured ============================================
   /**
-     * base class for ASN.1 DER structured class
-     * @name KJUR.asn1.DERAbstractStructured
-     * @class base class for ASN.1 DER structured class
-     * @property {Array} asn1Array internal array of ASN1Object
-     * @extends KJUR.asn1.ASN1Object
-     * @description
-     * @see KJUR.asn1.ASN1Object - superclass
-     */
+   * base class for ASN.1 DER structured class
+   * @name KJUR.asn1.DERAbstractStructured
+   * @class base class for ASN.1 DER structured class
+   * @property {Array} asn1Array internal array of ASN1Object
+   * @extends KJUR.asn1.ASN1Object
+   * @description
+   * @see KJUR.asn1.ASN1Object - superclass
+   */
   KJUR.asn1.DERAbstractStructured = function (params) {
     KJUR.asn1.DERAbstractString.superclass.constructor.call(this)
 
     /**
-         * set value by array of ASN1Object
-         * @name setByASN1ObjectArray
-         * @memberOf KJUR.asn1.DERAbstractStructured#
-         * @function
-         * @param {array} asn1ObjectArray array of ASN1Object to set
-         */
+     * set value by array of ASN1Object
+     * @name setByASN1ObjectArray
+     * @memberOf KJUR.asn1.DERAbstractStructured#
+     * @function
+     * @param {array} asn1ObjectArray array of ASN1Object to set
+     */
     this.setByASN1ObjectArray = function (asn1ObjectArray) {
       this.hTLV = null
       this.isModified = true
@@ -3920,12 +3856,12 @@ version: 2.9.0
     }
 
     /**
-         * append an ASN1Object to internal array
-         * @name appendASN1Object
-         * @memberOf KJUR.asn1.DERAbstractStructured#
-         * @function
-         * @param {ASN1Object} asn1Object to add
-         */
+     * append an ASN1Object to internal array
+     * @name appendASN1Object
+     * @memberOf KJUR.asn1.DERAbstractStructured#
+     * @function
+     * @param {ASN1Object} asn1Object to add
+     */
     this.appendASN1Object = function (asn1Object) {
       this.hTLV = null
       this.isModified = true
@@ -3947,13 +3883,13 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER Boolean
-     * @name KJUR.asn1.DERBoolean
-     * @class class for ASN.1 DER Boolean
-     * @extends KJUR.asn1.ASN1Object
-     * @description
-     * @see KJUR.asn1.ASN1Object - superclass
-     */
+   * class for ASN.1 DER Boolean
+   * @name KJUR.asn1.DERBoolean
+   * @class class for ASN.1 DER Boolean
+   * @extends KJUR.asn1.ASN1Object
+   * @description
+   * @see KJUR.asn1.ASN1Object - superclass
+   */
   KJUR.asn1.DERBoolean = function () {
     KJUR.asn1.DERBoolean.superclass.constructor.call(this)
     this.hT = '01'
@@ -3963,32 +3899,32 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER Integer
-     * @name KJUR.asn1.DERInteger
-     * @class class for ASN.1 DER Integer
-     * @extends KJUR.asn1.ASN1Object
-     * @description
-     * <br/>
-     * As for argument 'params' for constructor, you can specify one of
-     * following properties:
-     * <ul>
-     * <li>int - specify initial ASN.1 value(V) by integer value</li>
-     * <li>bigint - specify initial ASN.1 value(V) by BigInteger object</li>
-     * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
-     * </ul>
-     * NOTE: 'params' can be omitted.
-     */
+   * class for ASN.1 DER Integer
+   * @name KJUR.asn1.DERInteger
+   * @class class for ASN.1 DER Integer
+   * @extends KJUR.asn1.ASN1Object
+   * @description
+   * <br/>
+   * As for argument 'params' for constructor, you can specify one of
+   * following properties:
+   * <ul>
+   * <li>int - specify initial ASN.1 value(V) by integer value</li>
+   * <li>bigint - specify initial ASN.1 value(V) by BigInteger object</li>
+   * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+   * </ul>
+   * NOTE: 'params' can be omitted.
+   */
   KJUR.asn1.DERInteger = function (params) {
     KJUR.asn1.DERInteger.superclass.constructor.call(this)
     this.hT = '02'
 
     /**
-         * set value by Tom Wu's BigInteger object
-         * @name setByBigInteger
-         * @memberOf KJUR.asn1.DERInteger#
-         * @function
-         * @param {BigInteger} bigIntegerValue to set
-         */
+     * set value by Tom Wu's BigInteger object
+     * @name setByBigInteger
+     * @memberOf KJUR.asn1.DERInteger#
+     * @function
+     * @param {BigInteger} bigIntegerValue to set
+     */
     this.setByBigInteger = function (bigIntegerValue) {
       this.hTLV = null
       this.isModified = true
@@ -3996,32 +3932,32 @@ version: 2.9.0
     }
 
     /**
-         * set value by integer value
-         * @name setByInteger
-         * @memberOf KJUR.asn1.DERInteger
-         * @function
-         * @param {Integer} integer value to set
-         */
+     * set value by integer value
+     * @name setByInteger
+     * @memberOf KJUR.asn1.DERInteger
+     * @function
+     * @param {Integer} integer value to set
+     */
     this.setByInteger = function (intValue) {
       const bi = new BigInteger(String(intValue), 10)
       this.setByBigInteger(bi)
     }
 
     /**
-         * set value by integer value
-         * @name setValueHex
-         * @memberOf KJUR.asn1.DERInteger#
-         * @function
-         * @param {String} hexadecimal string of integer value
-         * @description
-         * <br/>
-         * NOTE: Value shall be represented by minimum octet length of
-         * two's complement representation.
-         * @example
-         * new KJUR.asn1.DERInteger(123);
-         * new KJUR.asn1.DERInteger({'int': 123});
-         * new KJUR.asn1.DERInteger({'hex': '1fad'});
-         */
+     * set value by integer value
+     * @name setValueHex
+     * @memberOf KJUR.asn1.DERInteger#
+     * @function
+     * @param {String} hexadecimal string of integer value
+     * @description
+     * <br/>
+     * NOTE: Value shall be represented by minimum octet length of
+     * two's complement representation.
+     * @example
+     * new KJUR.asn1.DERInteger(123);
+     * new KJUR.asn1.DERInteger({'int': 123});
+     * new KJUR.asn1.DERInteger({'hex': '1fad'});
+     */
     this.setValueHex = function (newHexString) {
       this.hV = newHexString
     }
@@ -4046,43 +3982,43 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER encoded BitString primitive
-     * @name KJUR.asn1.DERBitString
-     * @class class for ASN.1 DER encoded BitString primitive
-     * @extends KJUR.asn1.ASN1Object
-     * @description
-     * <br/>
-     * As for argument 'params' for constructor, you can specify one of
-     * following properties:
-     * <ul>
-     * <li>bin - specify binary string (ex. '10111')</li>
-     * <li>array - specify array of boolean (ex. [true,false,true,true])</li>
-     * <li>hex - specify hexadecimal string of ASN.1 value(V) including unused bits</li>
-     * <li>obj - specify {@link KJUR.asn1.ASN1Util.newObject}
-     * argument for "BitString encapsulates" structure.</li>
-     * </ul>
-     * NOTE1: 'params' can be omitted.<br/>
-     * NOTE2: 'obj' parameter have been supported since
-     * asn1 1.0.11, jsrsasign 6.1.1 (2016-Sep-25).<br/>
-     * @example
-     * // default constructor
-     * o = new KJUR.asn1.DERBitString();
-     * // initialize with binary string
-     * o = new KJUR.asn1.DERBitString({bin: "1011"});
-     * // initialize with boolean array
-     * o = new KJUR.asn1.DERBitString({array: [true,false,true,true]});
-     * // initialize with hexadecimal string (04 is unused bits)
-     * o = new KJUR.asn1.DEROctetString({hex: "04bac0"});
-     * // initialize with ASN1Util.newObject argument for encapsulated
-     * o = new KJUR.asn1.DERBitString({obj: {seq: [{int: 3}, {prnstr: 'aaa'}]}});
-     * // above generates a ASN.1 data like this:
-     * // BIT STRING, encapsulates {
-     * //   SEQUENCE {
-     * //     INTEGER 3
-     * //     PrintableString 'aaa'
-     * //     }
-     * //   }
-     */
+   * class for ASN.1 DER encoded BitString primitive
+   * @name KJUR.asn1.DERBitString
+   * @class class for ASN.1 DER encoded BitString primitive
+   * @extends KJUR.asn1.ASN1Object
+   * @description
+   * <br/>
+   * As for argument 'params' for constructor, you can specify one of
+   * following properties:
+   * <ul>
+   * <li>bin - specify binary string (ex. '10111')</li>
+   * <li>array - specify array of boolean (ex. [true,false,true,true])</li>
+   * <li>hex - specify hexadecimal string of ASN.1 value(V) including unused bits</li>
+   * <li>obj - specify {@link KJUR.asn1.ASN1Util.newObject}
+   * argument for "BitString encapsulates" structure.</li>
+   * </ul>
+   * NOTE1: 'params' can be omitted.<br/>
+   * NOTE2: 'obj' parameter have been supported since
+   * asn1 1.0.11, jsrsasign 6.1.1 (2016-Sep-25).<br/>
+   * @example
+   * // default constructor
+   * o = new KJUR.asn1.DERBitString();
+   * // initialize with binary string
+   * o = new KJUR.asn1.DERBitString({bin: "1011"});
+   * // initialize with boolean array
+   * o = new KJUR.asn1.DERBitString({array: [true,false,true,true]});
+   * // initialize with hexadecimal string (04 is unused bits)
+   * o = new KJUR.asn1.DEROctetString({hex: "04bac0"});
+   * // initialize with ASN1Util.newObject argument for encapsulated
+   * o = new KJUR.asn1.DERBitString({obj: {seq: [{int: 3}, {prnstr: 'aaa'}]}});
+   * // above generates a ASN.1 data like this:
+   * // BIT STRING, encapsulates {
+   * //   SEQUENCE {
+   * //     INTEGER 3
+   * //     PrintableString 'aaa'
+   * //     }
+   * //   }
+   */
   KJUR.asn1.DERBitString = function (params) {
     if (params !== undefined && typeof params.obj !== 'undefined') {
       const o = KJUR.asn1.ASN1Util.newObject(params.obj)
@@ -4092,12 +4028,12 @@ version: 2.9.0
     this.hT = '03'
 
     /**
-         * set ASN.1 value(V) by a hexadecimal string including unused bits
-         * @name setHexValueIncludingUnusedBits
-         * @memberOf KJUR.asn1.DERBitString#
-         * @function
-         * @param {String} newHexStringIncludingUnusedBits
-         */
+     * set ASN.1 value(V) by a hexadecimal string including unused bits
+     * @name setHexValueIncludingUnusedBits
+     * @memberOf KJUR.asn1.DERBitString#
+     * @function
+     * @param {String} newHexStringIncludingUnusedBits
+     */
     this.setHexValueIncludingUnusedBits = function (newHexStringIncludingUnusedBits) {
       this.hTLV = null
       this.isModified = true
@@ -4105,13 +4041,13 @@ version: 2.9.0
     }
 
     /**
-         * set ASN.1 value(V) by unused bit and hexadecimal string of value
-         * @name setUnusedBitsAndHexValue
-         * @memberOf KJUR.asn1.DERBitString#
-         * @function
-         * @param {Integer} unusedBits
-         * @param {String} hValue
-         */
+     * set ASN.1 value(V) by unused bit and hexadecimal string of value
+     * @name setUnusedBitsAndHexValue
+     * @memberOf KJUR.asn1.DERBitString#
+     * @function
+     * @param {Integer} unusedBits
+     * @param {String} hValue
+     */
     this.setUnusedBitsAndHexValue = function (unusedBits, hValue) {
       if (unusedBits < 0 || unusedBits > 7) {
         throw 'unused bits shall be from 0 to 7: u = ' + unusedBits
@@ -4123,19 +4059,19 @@ version: 2.9.0
     }
 
     /**
-         * set ASN.1 DER BitString by binary string<br/>
-         * @name setByBinaryString
-         * @memberOf KJUR.asn1.DERBitString#
-         * @function
-         * @param {String} binaryString binary value string (i.e. '10111')
-         * @description
-         * Its unused bits will be calculated automatically by length of
-         * 'binaryValue'. <br/>
-         * NOTE: Trailing zeros '0' will be ignored.
-         * @example
-         * o = new KJUR.asn1.DERBitString();
-         * o.setByBooleanArray("01011");
-         */
+     * set ASN.1 DER BitString by binary string<br/>
+     * @name setByBinaryString
+     * @memberOf KJUR.asn1.DERBitString#
+     * @function
+     * @param {String} binaryString binary value string (i.e. '10111')
+     * @description
+     * Its unused bits will be calculated automatically by length of
+     * 'binaryValue'. <br/>
+     * NOTE: Trailing zeros '0' will be ignored.
+     * @example
+     * o = new KJUR.asn1.DERBitString();
+     * o.setByBooleanArray("01011");
+     */
     this.setByBinaryString = function (binaryString) {
       binaryString = binaryString.replace(/0+$/, '')
       let unusedBits = 8 - binaryString.length % 8
@@ -4156,17 +4092,17 @@ version: 2.9.0
     }
 
     /**
-         * set ASN.1 TLV value(V) by an array of boolean<br/>
-         * @name setByBooleanArray
-         * @memberOf KJUR.asn1.DERBitString#
-         * @function
-         * @param {array} booleanArray array of boolean (ex. [true, false, true])
-         * @description
-         * NOTE: Trailing falses will be ignored in the ASN.1 DER Object.
-         * @example
-         * o = new KJUR.asn1.DERBitString();
-         * o.setByBooleanArray([false, true, false, true, true]);
-         */
+     * set ASN.1 TLV value(V) by an array of boolean<br/>
+     * @name setByBooleanArray
+     * @memberOf KJUR.asn1.DERBitString#
+     * @function
+     * @param {array} booleanArray array of boolean (ex. [true, false, true])
+     * @description
+     * NOTE: Trailing falses will be ignored in the ASN.1 DER Object.
+     * @example
+     * o = new KJUR.asn1.DERBitString();
+     * o.setByBooleanArray([false, true, false, true, true]);
+     */
     this.setByBooleanArray = function (booleanArray) {
       let s = ''
       for (let i = 0; i < booleanArray.length; i++) {
@@ -4180,18 +4116,18 @@ version: 2.9.0
     }
 
     /**
-         * generate an array of falses with specified length<br/>
-         * @name newFalseArray
-         * @memberOf KJUR.asn1.DERBitString
-         * @function
-         * @param {Integer} nLength length of array to generate
-         * @return {array} array of boolean falses
-         * @description
-         * This static method may be useful to initialize boolean array.
-         * @example
-         * o = new KJUR.asn1.DERBitString();
-         * o.newFalseArray(3) &rarr; [false, false, false]
-         */
+     * generate an array of falses with specified length<br/>
+     * @name newFalseArray
+     * @memberOf KJUR.asn1.DERBitString
+     * @function
+     * @param {Integer} nLength length of array to generate
+     * @return {array} array of boolean falses
+     * @description
+     * This static method may be useful to initialize boolean array.
+     * @example
+     * o = new KJUR.asn1.DERBitString();
+     * o.newFalseArray(3) &rarr; [false, false, false]
+     */
     this.newFalseArray = function (nLength) {
       const a = new Array(nLength)
       for (let i = 0; i < nLength; i++) {
@@ -4220,41 +4156,41 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER OctetString<br/>
-     * @name KJUR.asn1.DEROctetString
-     * @class class for ASN.1 DER OctetString
-     * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
-     * @extends KJUR.asn1.DERAbstractString
-     * @description
-     * This class provides ASN.1 OctetString simple type.<br/>
-     * Supported "params" attributes are:
-     * <ul>
-     * <li>str - to set a string as a value</li>
-     * <li>hex - to set a hexadecimal string as a value</li>
-     * <li>obj - to set a encapsulated ASN.1 value by JSON object
-     * which is defined in {@link KJUR.asn1.ASN1Util.newObject}</li>
-     * </ul>
-     * NOTE: A parameter 'obj' have been supported
-     * for "OCTET STRING, encapsulates" structure.
-     * since asn1 1.0.11, jsrsasign 6.1.1 (2016-Sep-25).
-     * @see KJUR.asn1.DERAbstractString - superclass
-     * @example
-     * // default constructor
-     * o = new KJUR.asn1.DEROctetString();
-     * // initialize with string
-     * o = new KJUR.asn1.DEROctetString({str: "aaa"});
-     * // initialize with hexadecimal string
-     * o = new KJUR.asn1.DEROctetString({hex: "616161"});
-     * // initialize with ASN1Util.newObject argument
-     * o = new KJUR.asn1.DEROctetString({obj: {seq: [{int: 3}, {prnstr: 'aaa'}]}});
-     * // above generates a ASN.1 data like this:
-     * // OCTET STRING, encapsulates {
-     * //   SEQUENCE {
-     * //     INTEGER 3
-     * //     PrintableString 'aaa'
-     * //     }
-     * //   }
-     */
+   * class for ASN.1 DER OctetString<br/>
+   * @name KJUR.asn1.DEROctetString
+   * @class class for ASN.1 DER OctetString
+   * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+   * @extends KJUR.asn1.DERAbstractString
+   * @description
+   * This class provides ASN.1 OctetString simple type.<br/>
+   * Supported "params" attributes are:
+   * <ul>
+   * <li>str - to set a string as a value</li>
+   * <li>hex - to set a hexadecimal string as a value</li>
+   * <li>obj - to set a encapsulated ASN.1 value by JSON object
+   * which is defined in {@link KJUR.asn1.ASN1Util.newObject}</li>
+   * </ul>
+   * NOTE: A parameter 'obj' have been supported
+   * for "OCTET STRING, encapsulates" structure.
+   * since asn1 1.0.11, jsrsasign 6.1.1 (2016-Sep-25).
+   * @see KJUR.asn1.DERAbstractString - superclass
+   * @example
+   * // default constructor
+   * o = new KJUR.asn1.DEROctetString();
+   * // initialize with string
+   * o = new KJUR.asn1.DEROctetString({str: "aaa"});
+   * // initialize with hexadecimal string
+   * o = new KJUR.asn1.DEROctetString({hex: "616161"});
+   * // initialize with ASN1Util.newObject argument
+   * o = new KJUR.asn1.DEROctetString({obj: {seq: [{int: 3}, {prnstr: 'aaa'}]}});
+   * // above generates a ASN.1 data like this:
+   * // OCTET STRING, encapsulates {
+   * //   SEQUENCE {
+   * //     INTEGER 3
+   * //     PrintableString 'aaa'
+   * //     }
+   * //   }
+   */
   KJUR.asn1.DEROctetString = function (params) {
     if (params !== undefined && typeof params.obj !== 'undefined') {
       const o = KJUR.asn1.ASN1Util.newObject(params.obj)
@@ -4267,13 +4203,13 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER Null
-     * @name KJUR.asn1.DERNull
-     * @class class for ASN.1 DER Null
-     * @extends KJUR.asn1.ASN1Object
-     * @description
-     * @see KJUR.asn1.ASN1Object - superclass
-     */
+   * class for ASN.1 DER Null
+   * @name KJUR.asn1.DERNull
+   * @class class for ASN.1 DER Null
+   * @extends KJUR.asn1.ASN1Object
+   * @description
+   * @see KJUR.asn1.ASN1Object - superclass
+   */
   KJUR.asn1.DERNull = function () {
     KJUR.asn1.DERNull.superclass.constructor.call(this)
     this.hT = '05'
@@ -4283,21 +4219,21 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER ObjectIdentifier
-     * @name KJUR.asn1.DERObjectIdentifier
-     * @class class for ASN.1 DER ObjectIdentifier
-     * @param {Array} params associative array of parameters (ex. {'oid': '2.5.4.5'})
-     * @extends KJUR.asn1.ASN1Object
-     * @description
-     * <br/>
-     * As for argument 'params' for constructor, you can specify one of
-     * following properties:
-     * <ul>
-     * <li>oid - specify initial ASN.1 value(V) by a oid string (ex. 2.5.4.13)</li>
-     * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
-     * </ul>
-     * NOTE: 'params' can be omitted.
-     */
+   * class for ASN.1 DER ObjectIdentifier
+   * @name KJUR.asn1.DERObjectIdentifier
+   * @class class for ASN.1 DER ObjectIdentifier
+   * @param {Array} params associative array of parameters (ex. {'oid': '2.5.4.5'})
+   * @extends KJUR.asn1.ASN1Object
+   * @description
+   * <br/>
+   * As for argument 'params' for constructor, you can specify one of
+   * following properties:
+   * <ul>
+   * <li>oid - specify initial ASN.1 value(V) by a oid string (ex. 2.5.4.13)</li>
+   * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+   * </ul>
+   * NOTE: 'params' can be omitted.
+   */
   KJUR.asn1.DERObjectIdentifier = function (params) {
     const itox = function (i) {
       let h = i.toString(16)
@@ -4325,12 +4261,12 @@ version: 2.9.0
     this.hT = '06'
 
     /**
-         * set value by a hexadecimal string
-         * @name setValueHex
-         * @memberOf KJUR.asn1.DERObjectIdentifier#
-         * @function
-         * @param {String} newHexString hexadecimal value of OID bytes
-         */
+     * set value by a hexadecimal string
+     * @name setValueHex
+     * @memberOf KJUR.asn1.DERObjectIdentifier#
+     * @function
+     * @param {String} newHexString hexadecimal value of OID bytes
+     */
     this.setValueHex = function (newHexString) {
       this.hTLV = null
       this.isModified = true
@@ -4339,15 +4275,15 @@ version: 2.9.0
     }
 
     /**
-         * set value by a OID string<br/>
-         * @name setValueOidString
-         * @memberOf KJUR.asn1.DERObjectIdentifier#
-         * @function
-         * @param {String} oidString OID string (ex. 2.5.4.13)
-         * @example
-         * o = new KJUR.asn1.DERObjectIdentifier();
-         * o.setValueOidString("2.5.4.13");
-         */
+     * set value by a OID string<br/>
+     * @name setValueOidString
+     * @memberOf KJUR.asn1.DERObjectIdentifier#
+     * @function
+     * @param {String} oidString OID string (ex. 2.5.4.13)
+     * @example
+     * o = new KJUR.asn1.DERObjectIdentifier();
+     * o.setValueOidString("2.5.4.13");
+     */
     this.setValueOidString = function (oidString) {
       if (!oidString.match(/^[0-9.]+$/)) {
         throw 'malformed oid string: ' + oidString
@@ -4367,19 +4303,19 @@ version: 2.9.0
     }
 
     /**
-         * set value by a OID name
-         * @name setValueName
-         * @memberOf KJUR.asn1.DERObjectIdentifier#
-         * @function
-         * @param {String} oidName OID name (ex. 'serverAuth')
-         * @since 1.0.1
-         * @description
-         * OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.
-         * Otherwise raise error.
-         * @example
-         * o = new KJUR.asn1.DERObjectIdentifier();
-         * o.setValueName("serverAuth");
-         */
+     * set value by a OID name
+     * @name setValueName
+     * @memberOf KJUR.asn1.DERObjectIdentifier#
+     * @function
+     * @param {String} oidName OID name (ex. 'serverAuth')
+     * @since 1.0.1
+     * @description
+     * OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.
+     * Otherwise raise error.
+     * @example
+     * o = new KJUR.asn1.DERObjectIdentifier();
+     * o.setValueName("serverAuth");
+     */
     this.setValueName = function (oidName) {
       const oid = KJUR.asn1.x509.OID.name2oid(oidName)
       if (oid !== '') {
@@ -4413,35 +4349,35 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER Enumerated
-     * @name KJUR.asn1.DEREnumerated
-     * @class class for ASN.1 DER Enumerated
-     * @extends KJUR.asn1.ASN1Object
-     * @description
-     * <br/>
-     * As for argument 'params' for constructor, you can specify one of
-     * following properties:
-     * <ul>
-     * <li>int - specify initial ASN.1 value(V) by integer value</li>
-     * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
-     * </ul>
-     * NOTE: 'params' can be omitted.
-     * @example
-     * new KJUR.asn1.DEREnumerated(123);
-     * new KJUR.asn1.DEREnumerated({int: 123});
-     * new KJUR.asn1.DEREnumerated({hex: '1fad'});
-     */
+   * class for ASN.1 DER Enumerated
+   * @name KJUR.asn1.DEREnumerated
+   * @class class for ASN.1 DER Enumerated
+   * @extends KJUR.asn1.ASN1Object
+   * @description
+   * <br/>
+   * As for argument 'params' for constructor, you can specify one of
+   * following properties:
+   * <ul>
+   * <li>int - specify initial ASN.1 value(V) by integer value</li>
+   * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+   * </ul>
+   * NOTE: 'params' can be omitted.
+   * @example
+   * new KJUR.asn1.DEREnumerated(123);
+   * new KJUR.asn1.DEREnumerated({int: 123});
+   * new KJUR.asn1.DEREnumerated({hex: '1fad'});
+   */
   KJUR.asn1.DEREnumerated = function (params) {
     KJUR.asn1.DEREnumerated.superclass.constructor.call(this)
     this.hT = '0a'
 
     /**
-         * set value by Tom Wu's BigInteger object
-         * @name setByBigInteger
-         * @memberOf KJUR.asn1.DEREnumerated#
-         * @function
-         * @param {BigInteger} bigIntegerValue to set
-         */
+     * set value by Tom Wu's BigInteger object
+     * @name setByBigInteger
+     * @memberOf KJUR.asn1.DEREnumerated#
+     * @function
+     * @param {BigInteger} bigIntegerValue to set
+     */
     this.setByBigInteger = function (bigIntegerValue) {
       this.hTLV = null
       this.isModified = true
@@ -4449,28 +4385,28 @@ version: 2.9.0
     }
 
     /**
-         * set value by integer value
-         * @name setByInteger
-         * @memberOf KJUR.asn1.DEREnumerated#
-         * @function
-         * @param {Integer} integer value to set
-         */
+     * set value by integer value
+     * @name setByInteger
+     * @memberOf KJUR.asn1.DEREnumerated#
+     * @function
+     * @param {Integer} integer value to set
+     */
     this.setByInteger = function (intValue) {
       const bi = new BigInteger(String(intValue), 10)
       this.setByBigInteger(bi)
     }
 
     /**
-         * set value by integer value
-         * @name setValueHex
-         * @memberOf KJUR.asn1.DEREnumerated#
-         * @function
-         * @param {String} hexadecimal string of integer value
-         * @description
-         * <br/>
-         * NOTE: Value shall be represented by minimum octet length of
-         * two's complement representation.
-         */
+     * set value by integer value
+     * @name setValueHex
+     * @memberOf KJUR.asn1.DEREnumerated#
+     * @function
+     * @param {String} hexadecimal string of integer value
+     * @description
+     * <br/>
+     * NOTE: Value shall be represented by minimum octet length of
+     * two's complement representation.
+     */
     this.setValueHex = function (newHexString) {
       this.hV = newHexString
     }
@@ -4493,14 +4429,14 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER UTF8String
-     * @name KJUR.asn1.DERUTF8String
-     * @class class for ASN.1 DER UTF8String
-     * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
-     * @extends KJUR.asn1.DERAbstractString
-     * @description
-     * @see KJUR.asn1.DERAbstractString - superclass
-     */
+   * class for ASN.1 DER UTF8String
+   * @name KJUR.asn1.DERUTF8String
+   * @class class for ASN.1 DER UTF8String
+   * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+   * @extends KJUR.asn1.DERAbstractString
+   * @description
+   * @see KJUR.asn1.DERAbstractString - superclass
+   */
   KJUR.asn1.DERUTF8String = function (params) {
     KJUR.asn1.DERUTF8String.superclass.constructor.call(this, params)
     this.hT = '0c'
@@ -4509,14 +4445,14 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER NumericString
-     * @name KJUR.asn1.DERNumericString
-     * @class class for ASN.1 DER NumericString
-     * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
-     * @extends KJUR.asn1.DERAbstractString
-     * @description
-     * @see KJUR.asn1.DERAbstractString - superclass
-     */
+   * class for ASN.1 DER NumericString
+   * @name KJUR.asn1.DERNumericString
+   * @class class for ASN.1 DER NumericString
+   * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+   * @extends KJUR.asn1.DERAbstractString
+   * @description
+   * @see KJUR.asn1.DERAbstractString - superclass
+   */
   KJUR.asn1.DERNumericString = function (params) {
     KJUR.asn1.DERNumericString.superclass.constructor.call(this, params)
     this.hT = '12'
@@ -4525,14 +4461,14 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER PrintableString
-     * @name KJUR.asn1.DERPrintableString
-     * @class class for ASN.1 DER PrintableString
-     * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
-     * @extends KJUR.asn1.DERAbstractString
-     * @description
-     * @see KJUR.asn1.DERAbstractString - superclass
-     */
+   * class for ASN.1 DER PrintableString
+   * @name KJUR.asn1.DERPrintableString
+   * @class class for ASN.1 DER PrintableString
+   * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+   * @extends KJUR.asn1.DERAbstractString
+   * @description
+   * @see KJUR.asn1.DERAbstractString - superclass
+   */
   KJUR.asn1.DERPrintableString = function (params) {
     KJUR.asn1.DERPrintableString.superclass.constructor.call(this, params)
     this.hT = '13'
@@ -4541,14 +4477,14 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER TeletexString
-     * @name KJUR.asn1.DERTeletexString
-     * @class class for ASN.1 DER TeletexString
-     * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
-     * @extends KJUR.asn1.DERAbstractString
-     * @description
-     * @see KJUR.asn1.DERAbstractString - superclass
-     */
+   * class for ASN.1 DER TeletexString
+   * @name KJUR.asn1.DERTeletexString
+   * @class class for ASN.1 DER TeletexString
+   * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+   * @extends KJUR.asn1.DERAbstractString
+   * @description
+   * @see KJUR.asn1.DERAbstractString - superclass
+   */
   KJUR.asn1.DERTeletexString = function (params) {
     KJUR.asn1.DERTeletexString.superclass.constructor.call(this, params)
     this.hT = '14'
@@ -4557,14 +4493,14 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER IA5String
-     * @name KJUR.asn1.DERIA5String
-     * @class class for ASN.1 DER IA5String
-     * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
-     * @extends KJUR.asn1.DERAbstractString
-     * @description
-     * @see KJUR.asn1.DERAbstractString - superclass
-     */
+   * class for ASN.1 DER IA5String
+   * @name KJUR.asn1.DERIA5String
+   * @class class for ASN.1 DER IA5String
+   * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+   * @extends KJUR.asn1.DERAbstractString
+   * @description
+   * @see KJUR.asn1.DERAbstractString - superclass
+   */
   KJUR.asn1.DERIA5String = function (params) {
     KJUR.asn1.DERIA5String.superclass.constructor.call(this, params)
     this.hT = '16'
@@ -4573,44 +4509,44 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER UTCTime
-     * @name KJUR.asn1.DERUTCTime
-     * @class class for ASN.1 DER UTCTime
-     * @param {Array} params associative array of parameters (ex. {'str': '130430235959Z'})
-     * @extends KJUR.asn1.DERAbstractTime
-     * @description
-     * <br/>
-     * As for argument 'params' for constructor, you can specify one of
-     * following properties:
-     * <ul>
-     * <li>str - specify initial ASN.1 value(V) by a string (ex.'130430235959Z')</li>
-     * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
-     * <li>date - specify Date object.</li>
-     * </ul>
-     * NOTE: 'params' can be omitted.
-     * <h4>EXAMPLES</h4>
-     * @example
-     * d1 = new KJUR.asn1.DERUTCTime();
-     * d1.setString('130430125959Z');
-     *
-     * d2 = new KJUR.asn1.DERUTCTime({'str': '130430125959Z'});
-     * d3 = new KJUR.asn1.DERUTCTime({'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
-     * d4 = new KJUR.asn1.DERUTCTime('130430125959Z');
-     */
+   * class for ASN.1 DER UTCTime
+   * @name KJUR.asn1.DERUTCTime
+   * @class class for ASN.1 DER UTCTime
+   * @param {Array} params associative array of parameters (ex. {'str': '130430235959Z'})
+   * @extends KJUR.asn1.DERAbstractTime
+   * @description
+   * <br/>
+   * As for argument 'params' for constructor, you can specify one of
+   * following properties:
+   * <ul>
+   * <li>str - specify initial ASN.1 value(V) by a string (ex.'130430235959Z')</li>
+   * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+   * <li>date - specify Date object.</li>
+   * </ul>
+   * NOTE: 'params' can be omitted.
+   * <h4>EXAMPLES</h4>
+   * @example
+   * d1 = new KJUR.asn1.DERUTCTime();
+   * d1.setString('130430125959Z');
+   *
+   * d2 = new KJUR.asn1.DERUTCTime({'str': '130430125959Z'});
+   * d3 = new KJUR.asn1.DERUTCTime({'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
+   * d4 = new KJUR.asn1.DERUTCTime('130430125959Z');
+   */
   KJUR.asn1.DERUTCTime = function (params) {
     KJUR.asn1.DERUTCTime.superclass.constructor.call(this, params)
     this.hT = '17'
 
     /**
-         * set value by a Date object<br/>
-         * @name setByDate
-         * @memberOf KJUR.asn1.DERUTCTime#
-         * @function
-         * @param {Date} dateObject Date object to set ASN.1 value(V)
-         * @example
-         * o = new KJUR.asn1.DERUTCTime();
-         * o.setByDate(new Date("2016/12/31"));
-         */
+     * set value by a Date object<br/>
+     * @name setByDate
+     * @memberOf KJUR.asn1.DERUTCTime#
+     * @function
+     * @param {Date} dateObject Date object to set ASN.1 value(V)
+     * @example
+     * o = new KJUR.asn1.DERUTCTime();
+     * o.setByDate(new Date("2016/12/31"));
+     */
     this.setByDate = function (dateObject) {
       this.hTLV = null
       this.isModified = true
@@ -4644,43 +4580,43 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER GeneralizedTime
-     * @name KJUR.asn1.DERGeneralizedTime
-     * @class class for ASN.1 DER GeneralizedTime
-     * @param {Array} params associative array of parameters (ex. {'str': '20130430235959Z'})
-     * @property {Boolean} withMillis flag to show milliseconds or not
-     * @extends KJUR.asn1.DERAbstractTime
-     * @description
-     * <br/>
-     * As for argument 'params' for constructor, you can specify one of
-     * following properties:
-     * <ul>
-     * <li>str - specify initial ASN.1 value(V) by a string (ex.'20130430235959Z')</li>
-     * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
-     * <li>date - specify Date object.</li>
-     * <li>millis - specify flag to show milliseconds (from 1.0.6)</li>
-     * </ul>
-     * NOTE1: 'params' can be omitted.
-     * NOTE2: 'withMillis' property is supported from asn1 1.0.6.
-     */
+   * class for ASN.1 DER GeneralizedTime
+   * @name KJUR.asn1.DERGeneralizedTime
+   * @class class for ASN.1 DER GeneralizedTime
+   * @param {Array} params associative array of parameters (ex. {'str': '20130430235959Z'})
+   * @property {Boolean} withMillis flag to show milliseconds or not
+   * @extends KJUR.asn1.DERAbstractTime
+   * @description
+   * <br/>
+   * As for argument 'params' for constructor, you can specify one of
+   * following properties:
+   * <ul>
+   * <li>str - specify initial ASN.1 value(V) by a string (ex.'20130430235959Z')</li>
+   * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+   * <li>date - specify Date object.</li>
+   * <li>millis - specify flag to show milliseconds (from 1.0.6)</li>
+   * </ul>
+   * NOTE1: 'params' can be omitted.
+   * NOTE2: 'withMillis' property is supported from asn1 1.0.6.
+   */
   KJUR.asn1.DERGeneralizedTime = function (params) {
     KJUR.asn1.DERGeneralizedTime.superclass.constructor.call(this, params)
     this.hT = '18'
     this.withMillis = false
 
     /**
-         * set value by a Date object
-         * @name setByDate
-         * @memberOf KJUR.asn1.DERGeneralizedTime#
-         * @function
-         * @param {Date} dateObject Date object to set ASN.1 value(V)
-         * @example
-         * When you specify UTC time, use 'Date.UTC' method like this:<br/>
-         * o1 = new DERUTCTime();
-         * o1.setByDate(date);
-         *
-         * date = new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)); #2015JAN31 23:59:59
-         */
+     * set value by a Date object
+     * @name setByDate
+     * @memberOf KJUR.asn1.DERGeneralizedTime#
+     * @function
+     * @param {Date} dateObject Date object to set ASN.1 value(V)
+     * @example
+     * When you specify UTC time, use 'Date.UTC' method like this:<br/>
+     * o1 = new DERUTCTime();
+     * o1.setByDate(date);
+     *
+     * date = new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)); #2015JAN31 23:59:59
+     */
     this.setByDate = function (dateObject) {
       this.hTLV = null
       this.isModified = true
@@ -4717,19 +4653,19 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER Sequence
-     * @name KJUR.asn1.DERSequence
-     * @class class for ASN.1 DER Sequence
-     * @extends KJUR.asn1.DERAbstractStructured
-     * @description
-     * <br/>
-     * As for argument 'params' for constructor, you can specify one of
-     * following properties:
-     * <ul>
-     * <li>array - specify array of ASN1Object to set elements of content</li>
-     * </ul>
-     * NOTE: 'params' can be omitted.
-     */
+   * class for ASN.1 DER Sequence
+   * @name KJUR.asn1.DERSequence
+   * @class class for ASN.1 DER Sequence
+   * @extends KJUR.asn1.DERAbstractStructured
+   * @description
+   * <br/>
+   * As for argument 'params' for constructor, you can specify one of
+   * following properties:
+   * <ul>
+   * <li>array - specify array of ASN1Object to set elements of content</li>
+   * </ul>
+   * NOTE: 'params' can be omitted.
+   */
   KJUR.asn1.DERSequence = function (params) {
     KJUR.asn1.DERSequence.superclass.constructor.call(this, params)
     this.hT = '30'
@@ -4747,21 +4683,21 @@ version: 2.9.0
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER Set
-     * @name KJUR.asn1.DERSet
-     * @class class for ASN.1 DER Set
-     * @extends KJUR.asn1.DERAbstractStructured
-     * @description
-     * <br/>
-     * As for argument 'params' for constructor, you can specify one of
-     * following properties:
-     * <ul>
-     * <li>array - specify array of ASN1Object to set elements of content</li>
-     * <li>sortflag - flag for sort (default: true). ASN.1 BER is not sorted in 'SET OF'.</li>
-     * </ul>
-     * NOTE1: 'params' can be omitted.<br/>
-     * NOTE2: sortflag is supported since 1.0.5.
-     */
+   * class for ASN.1 DER Set
+   * @name KJUR.asn1.DERSet
+   * @class class for ASN.1 DER Set
+   * @extends KJUR.asn1.DERAbstractStructured
+   * @description
+   * <br/>
+   * As for argument 'params' for constructor, you can specify one of
+   * following properties:
+   * <ul>
+   * <li>array - specify array of ASN1Object to set elements of content</li>
+   * <li>sortflag - flag for sort (default: true). ASN.1 BER is not sorted in 'SET OF'.</li>
+   * </ul>
+   * NOTE1: 'params' can be omitted.<br/>
+   * NOTE2: sortflag is supported since 1.0.5.
+   */
   KJUR.asn1.DERSet = function (params) {
     KJUR.asn1.DERSet.superclass.constructor.call(this, params)
     this.hT = '31'
@@ -4779,36 +4715,36 @@ version: 2.9.0
 
     if (typeof params !== 'undefined') {
       if (typeof params.sortflag !== 'undefined' &&
-                params.sortflag == false) { this.sortFlag = false }
+        params.sortflag == false) { this.sortFlag = false }
     }
   }
   YAHOO.lang.extend(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured)
 
   // ********************************************************************
   /**
-     * class for ASN.1 DER TaggedObject
-     * @name KJUR.asn1.DERTaggedObject
-     * @class class for ASN.1 DER TaggedObject
-     * @extends KJUR.asn1.ASN1Object
-     * @description
-     * <br/>
-     * Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.
-     * For example, if you find '[1]' tag in a ASN.1 dump,
-     * 'tagNoHex' will be 'a1'.
-     * <br/>
-     * As for optional argument 'params' for constructor, you can specify *ANY* of
-     * following properties:
-     * <ul>
-     * <li>explicit - specify true if this is explicit tag otherwise false
-     *     (default is 'true').</li>
-     * <li>tag - specify tag (default is 'a0' which means [0])</li>
-     * <li>obj - specify ASN1Object which is tagged</li>
-     * </ul>
-     * @example
-     * d1 = new KJUR.asn1.DERUTF8String({'str':'a'});
-     * d2 = new KJUR.asn1.DERTaggedObject({'obj': d1});
-     * hex = d2.getEncodedHex();
-     */
+   * class for ASN.1 DER TaggedObject
+   * @name KJUR.asn1.DERTaggedObject
+   * @class class for ASN.1 DER TaggedObject
+   * @extends KJUR.asn1.ASN1Object
+   * @description
+   * <br/>
+   * Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.
+   * For example, if you find '[1]' tag in a ASN.1 dump,
+   * 'tagNoHex' will be 'a1'.
+   * <br/>
+   * As for optional argument 'params' for constructor, you can specify *ANY* of
+   * following properties:
+   * <ul>
+   * <li>explicit - specify true if this is explicit tag otherwise false
+   *     (default is 'true').</li>
+   * <li>tag - specify tag (default is 'a0' which means [0])</li>
+   * <li>obj - specify ASN1Object which is tagged</li>
+   * </ul>
+   * @example
+   * d1 = new KJUR.asn1.DERUTF8String({'str':'a'});
+   * d2 = new KJUR.asn1.DERTaggedObject({'obj': d1});
+   * hex = d2.getEncodedHex();
+   */
   KJUR.asn1.DERTaggedObject = function (params) {
     KJUR.asn1.DERTaggedObject.superclass.constructor.call(this)
     this.hT = 'a0'
@@ -4817,14 +4753,14 @@ version: 2.9.0
     this.asn1Object = null
 
     /**
-         * set value by an ASN1Object
-         * @name setString
-         * @memberOf KJUR.asn1.DERTaggedObject#
-         * @function
-         * @param {Boolean} isExplicitFlag flag for explicit/implicit tag
-         * @param {Integer} tagNoHex hexadecimal string of ASN.1 tag
-         * @param {ASN1Object} asn1Object ASN.1 to encapsulate
-         */
+     * set value by an ASN1Object
+     * @name setString
+     * @memberOf KJUR.asn1.DERTaggedObject#
+     * @function
+     * @param {Boolean} isExplicitFlag flag for explicit/implicit tag
+     * @param {Integer} tagNoHex hexadecimal string of ASN.1 tag
+     * @param {ASN1Object} asn1Object ASN.1 to encapsulate
+     */
     this.setASN1Object = function (isExplicitFlag, tagNoHex, asn1Object) {
       this.hT = tagNoHex
       this.isExplicit = isExplicitFlag
@@ -4861,15 +4797,14 @@ version: 2.9.0
   YAHOO.lang.extend(KJUR.asn1.DERTaggedObject, KJUR.asn1.ASN1Object)
 
   /**
-     * Create a new JSEncryptRSAKey that extends Tom Wu's RSA key object.
-     * This object is just a decorator for parsing the key parameter
-     * @param {string|Object} key - The key in string format, or an object containing
-     * the parameters needed to build a RSAKey object.
-     * @constructor
-     */
+   * Create a new JSEncryptRSAKey that extends Tom Wu's RSA key object.
+   * This object is just a decorator for parsing the key parameter
+   * @param {string|Object} key - The key in string format, or an object containing
+   * the parameters needed to build a RSAKey object.
+   * @constructor
+   */
   const JSEncryptRSAKey = /** @class */ (function (_super) {
     __extends(JSEncryptRSAKey, _super)
-
     function JSEncryptRSAKey (key) {
       const _this = _super.call(this) || this
       // Call the super constructor.
@@ -4880,42 +4815,41 @@ version: 2.9.0
         if (typeof key === 'string') {
           _this.parseKey(key)
         } else if (JSEncryptRSAKey.hasPrivateKeyProperty(key) ||
-                    JSEncryptRSAKey.hasPublicKeyProperty(key)) {
+          JSEncryptRSAKey.hasPublicKeyProperty(key)) {
           // Set the values for the key.
           _this.parsePropertiesFrom(key)
         }
       }
       return _this
     }
-
     /**
-         * Method to parse a pem encoded string containing both a public or private key.
-         * The method will translate the pem encoded string in a der encoded string and
-         * will parse private key and public key parameters. This method accepts public key
-         * in the rsaencryption pkcs #1 format (oid: 1.2.840.113549.1.1.1).
-         *
-         * @todo Check how many rsa formats use the same format of pkcs #1.
-         *
-         * The format is defined as:
-         * PublicKeyInfo ::= SEQUENCE {
-         *   algorithm       AlgorithmIdentifier,
-         *   PublicKey       BIT STRING
-         * }
-         * Where AlgorithmIdentifier is:
-         * AlgorithmIdentifier ::= SEQUENCE {
-         *   algorithm       OBJECT IDENTIFIER,     the OID of the enc algorithm
-         *   parameters      ANY DEFINED BY algorithm OPTIONAL (NULL for PKCS #1)
-         * }
-         * and PublicKey is a SEQUENCE encapsulated in a BIT STRING
-         * RSAPublicKey ::= SEQUENCE {
-         *   modulus           INTEGER,  -- n
-         *   publicExponent    INTEGER   -- e
-         * }
-         * it's possible to examine the structure of the keys obtained from openssl using
-         * an asn.1 dumper as the one used here to parse the components: http://lapo.it/asn1js/
-         * @argument {string} pem the pem encoded string, can include the BEGIN/END header/footer
-         * @private
-         */
+     * Method to parse a pem encoded string containing both a public or private key.
+     * The method will translate the pem encoded string in a der encoded string and
+     * will parse private key and public key parameters. This method accepts public key
+     * in the rsaencryption pkcs #1 format (oid: 1.2.840.113549.1.1.1).
+     *
+     * @todo Check how many rsa formats use the same format of pkcs #1.
+     *
+     * The format is defined as:
+     * PublicKeyInfo ::= SEQUENCE {
+     *   algorithm       AlgorithmIdentifier,
+     *   PublicKey       BIT STRING
+     * }
+     * Where AlgorithmIdentifier is:
+     * AlgorithmIdentifier ::= SEQUENCE {
+     *   algorithm       OBJECT IDENTIFIER,     the OID of the enc algorithm
+     *   parameters      ANY DEFINED BY algorithm OPTIONAL (NULL for PKCS #1)
+     * }
+     * and PublicKey is a SEQUENCE encapsulated in a BIT STRING
+     * RSAPublicKey ::= SEQUENCE {
+     *   modulus           INTEGER,  -- n
+     *   publicExponent    INTEGER   -- e
+     * }
+     * it's possible to examine the structure of the keys obtained from openssl using
+     * an asn.1 dumper as the one used here to parse the components: http://lapo.it/asn1js/
+     * @argument {string} pem the pem encoded string, can include the BEGIN/END header/footer
+     * @private
+     */
     JSEncryptRSAKey.prototype.parseKey = function (pem) {
       try {
         let modulus = 0
@@ -4962,23 +4896,23 @@ version: 2.9.0
       }
     }
     /**
-         * Translate rsa parameters in a hex encoded string representing the rsa key.
-         *
-         * The translation follow the ASN.1 notation :
-         * RSAPrivateKey ::= SEQUENCE {
-         *   version           Version,
-         *   modulus           INTEGER,  -- n
-         *   publicExponent    INTEGER,  -- e
-         *   privateExponent   INTEGER,  -- d
-         *   prime1            INTEGER,  -- p
-         *   prime2            INTEGER,  -- q
-         *   exponent1         INTEGER,  -- d mod (p1)
-         *   exponent2         INTEGER,  -- d mod (q-1)
-         *   coefficient       INTEGER,  -- (inverse of q) mod p
-         * }
-         * @returns {string}  DER Encoded String representing the rsa private key
-         * @private
-         */
+     * Translate rsa parameters in a hex encoded string representing the rsa key.
+     *
+     * The translation follow the ASN.1 notation :
+     * RSAPrivateKey ::= SEQUENCE {
+     *   version           Version,
+     *   modulus           INTEGER,  -- n
+     *   publicExponent    INTEGER,  -- e
+     *   privateExponent   INTEGER,  -- d
+     *   prime1            INTEGER,  -- p
+     *   prime2            INTEGER,  -- q
+     *   exponent1         INTEGER,  -- d mod (p1)
+     *   exponent2         INTEGER,  -- d mod (q-1)
+     *   coefficient       INTEGER,  -- (inverse of q) mod p
+     * }
+     * @returns {string}  DER Encoded String representing the rsa private key
+     * @private
+     */
     JSEncryptRSAKey.prototype.getPrivateBaseKey = function () {
       const options = {
         array: [
@@ -4997,33 +4931,33 @@ version: 2.9.0
       return seq.getEncodedHex()
     }
     /**
-         * base64 (pem) encoded version of the DER encoded representation
-         * @returns {string} pem encoded representation without header and footer
-         * @public
-         */
+     * base64 (pem) encoded version of the DER encoded representation
+     * @returns {string} pem encoded representation without header and footer
+     * @public
+     */
     JSEncryptRSAKey.prototype.getPrivateBaseKeyB64 = function () {
       return hex2b64(this.getPrivateBaseKey())
     }
     /**
-         * Translate rsa parameters in a hex encoded string representing the rsa public key.
-         * The representation follow the ASN.1 notation :
-         * PublicKeyInfo ::= SEQUENCE {
-         *   algorithm       AlgorithmIdentifier,
-         *   PublicKey       BIT STRING
-         * }
-         * Where AlgorithmIdentifier is:
-         * AlgorithmIdentifier ::= SEQUENCE {
-         *   algorithm       OBJECT IDENTIFIER,     the OID of the enc algorithm
-         *   parameters      ANY DEFINED BY algorithm OPTIONAL (NULL for PKCS #1)
-         * }
-         * and PublicKey is a SEQUENCE encapsulated in a BIT STRING
-         * RSAPublicKey ::= SEQUENCE {
-         *   modulus           INTEGER,  -- n
-         *   publicExponent    INTEGER   -- e
-         * }
-         * @returns {string} DER Encoded String representing the rsa public key
-         * @private
-         */
+     * Translate rsa parameters in a hex encoded string representing the rsa public key.
+     * The representation follow the ASN.1 notation :
+     * PublicKeyInfo ::= SEQUENCE {
+     *   algorithm       AlgorithmIdentifier,
+     *   PublicKey       BIT STRING
+     * }
+     * Where AlgorithmIdentifier is:
+     * AlgorithmIdentifier ::= SEQUENCE {
+     *   algorithm       OBJECT IDENTIFIER,     the OID of the enc algorithm
+     *   parameters      ANY DEFINED BY algorithm OPTIONAL (NULL for PKCS #1)
+     * }
+     * and PublicKey is a SEQUENCE encapsulated in a BIT STRING
+     * RSAPublicKey ::= SEQUENCE {
+     *   modulus           INTEGER,  -- n
+     *   publicExponent    INTEGER   -- e
+     * }
+     * @returns {string} DER Encoded String representing the rsa public key
+     * @private
+     */
     JSEncryptRSAKey.prototype.getPublicBaseKey = function () {
       const first_sequence = new KJUR.asn1.DERSequence({
         array: [
@@ -5049,21 +4983,21 @@ version: 2.9.0
       return seq.getEncodedHex()
     }
     /**
-         * base64 (pem) encoded version of the DER encoded representation
-         * @returns {string} pem encoded representation without header and footer
-         * @public
-         */
+     * base64 (pem) encoded version of the DER encoded representation
+     * @returns {string} pem encoded representation without header and footer
+     * @public
+     */
     JSEncryptRSAKey.prototype.getPublicBaseKeyB64 = function () {
       return hex2b64(this.getPublicBaseKey())
     }
     /**
-         * wrap the string in block of width chars. The default value for rsa keys is 64
-         * characters.
-         * @param {string} str the pem encoded string without header and footer
-         * @param {Number} [width=64] - the length the string has to be wrapped at
-         * @returns {string}
-         * @private
-         */
+     * wrap the string in block of width chars. The default value for rsa keys is 64
+     * characters.
+     * @param {string} str the pem encoded string without header and footer
+     * @param {Number} [width=64] - the length the string has to be wrapped at
+     * @returns {string}
+     * @private
+     */
     JSEncryptRSAKey.wordwrap = function (str, width) {
       width = width || 64
       if (!str) {
@@ -5073,10 +5007,10 @@ version: 2.9.0
       return str.match(RegExp(regex, 'g')).join('\n')
     }
     /**
-         * Retrieve the pem encoded private key
-         * @returns {string} the pem encoded private key with header/footer
-         * @public
-         */
+     * Retrieve the pem encoded private key
+     * @returns {string} the pem encoded private key with header/footer
+     * @public
+     */
     JSEncryptRSAKey.prototype.getPrivateKey = function () {
       let key = '-----BEGIN RSA PRIVATE KEY-----\n'
       key += JSEncryptRSAKey.wordwrap(this.getPrivateBaseKeyB64()) + '\n'
@@ -5084,10 +5018,10 @@ version: 2.9.0
       return key
     }
     /**
-         * Retrieve the pem encoded public key
-         * @returns {string} the pem encoded public key with header/footer
-         * @public
-         */
+     * Retrieve the pem encoded public key
+     * @returns {string} the pem encoded public key with header/footer
+     * @public
+     */
     JSEncryptRSAKey.prototype.getPublicKey = function () {
       let key = '-----BEGIN PUBLIC KEY-----\n'
       key += JSEncryptRSAKey.wordwrap(this.getPublicBaseKeyB64()) + '\n'
@@ -5095,47 +5029,47 @@ version: 2.9.0
       return key
     }
     /**
-         * Check if the object contains the necessary parameters to populate the rsa modulus
-         * and public exponent parameters.
-         * @param {Object} [obj={}] - An object that may contain the two public key
-         * parameters
-         * @returns {boolean} true if the object contains both the modulus and the public exponent
-         * properties (n and e)
-         * @todo check for types of n and e. N should be a parseable bigInt object, E should
-         * be a parseable integer number
-         * @private
-         */
+     * Check if the object contains the necessary parameters to populate the rsa modulus
+     * and public exponent parameters.
+     * @param {Object} [obj={}] - An object that may contain the two public key
+     * parameters
+     * @returns {boolean} true if the object contains both the modulus and the public exponent
+     * properties (n and e)
+     * @todo check for types of n and e. N should be a parseable bigInt object, E should
+     * be a parseable integer number
+     * @private
+     */
     JSEncryptRSAKey.hasPublicKeyProperty = function (obj) {
       obj = obj || {}
       return (obj.hasOwnProperty('n') &&
-                obj.hasOwnProperty('e'))
+        obj.hasOwnProperty('e'))
     }
     /**
-         * Check if the object contains ALL the parameters of an RSA key.
-         * @param {Object} [obj={}] - An object that may contain nine rsa key
-         * parameters
-         * @returns {boolean} true if the object contains all the parameters needed
-         * @todo check for types of the parameters all the parameters but the public exponent
-         * should be parseable bigint objects, the public exponent should be a parseable integer number
-         * @private
-         */
+     * Check if the object contains ALL the parameters of an RSA key.
+     * @param {Object} [obj={}] - An object that may contain nine rsa key
+     * parameters
+     * @returns {boolean} true if the object contains all the parameters needed
+     * @todo check for types of the parameters all the parameters but the public exponent
+     * should be parseable bigint objects, the public exponent should be a parseable integer number
+     * @private
+     */
     JSEncryptRSAKey.hasPrivateKeyProperty = function (obj) {
       obj = obj || {}
       return (obj.hasOwnProperty('n') &&
-                obj.hasOwnProperty('e') &&
-                obj.hasOwnProperty('d') &&
-                obj.hasOwnProperty('p') &&
-                obj.hasOwnProperty('q') &&
-                obj.hasOwnProperty('dmp1') &&
-                obj.hasOwnProperty('dmq1') &&
-                obj.hasOwnProperty('coeff'))
+        obj.hasOwnProperty('e') &&
+        obj.hasOwnProperty('d') &&
+        obj.hasOwnProperty('p') &&
+        obj.hasOwnProperty('q') &&
+        obj.hasOwnProperty('dmp1') &&
+        obj.hasOwnProperty('dmq1') &&
+        obj.hasOwnProperty('coeff'))
     }
     /**
-         * Parse the properties of obj in the current rsa object. Obj should AT LEAST
-         * include the modulus and public exponent (n, e) parameters.
-         * @param {Object} obj - the object containing rsa parameters
-         * @private
-         */
+     * Parse the properties of obj in the current rsa object. Obj should AT LEAST
+     * include the modulus and public exponent (n, e) parameters.
+     * @param {Object} obj - the object containing rsa parameters
+     * @private
+     */
     JSEncryptRSAKey.prototype.parsePropertiesFrom = function (obj) {
       this.n = obj.n
       this.e = obj.e
@@ -5152,14 +5086,14 @@ version: 2.9.0
   }(RSAKey))
 
   /**
-     *
-     * @param {Object} [options = {}] - An object to customize JSEncrypt behaviour
-     * possible parameters are:
-     * - default_key_size        {number}  default: 1024 the key size in bit
-     * - default_public_exponent {string}  default: '010001' the hexadecimal representation of the public exponent
-     * - log                     {boolean} default: false whether log warn/error or not
-     * @constructor
-     */
+   *
+   * @param {Object} [options = {}] - An object to customize JSEncrypt behaviour
+   * possible parameters are:
+   * - default_key_size        {number}  default: 1024 the key size in bit
+   * - default_public_exponent {string}  default: '010001' the hexadecimal representation of the public exponent
+   * - log                     {boolean} default: false whether log warn/error or not
+   * @constructor
+   */
   const JSEncrypt = /** @class */ (function () {
     function JSEncrypt (options) {
       options = options || {}
@@ -5169,14 +5103,13 @@ version: 2.9.0
       // The private and public key.
       this.key = null
     }
-
     /**
-         * Method to set the rsa key parameter (one method is enough to set both the public
-         * and the private key, since the private key contains the public key paramenters)
-         * Log a warning if logs are enabled
-         * @param {Object|string} key the pem encoded string or an object (with or without header/footer)
-         * @public
-         */
+     * Method to set the rsa key parameter (one method is enough to set both the public
+     * and the private key, since the private key contains the public key paramenters)
+     * Log a warning if logs are enabled
+     * @param {Object|string} key the pem encoded string or an object (with or without header/footer)
+     * @public
+     */
     JSEncrypt.prototype.setKey = function (key) {
       if (this.log && this.key) {
         console.warn('A key was already set, overriding existing.')
@@ -5184,35 +5117,33 @@ version: 2.9.0
       this.key = new JSEncryptRSAKey(key)
     }
     /**
-         * Proxy method for setKey, for api compatibility
-         * @see setKey
-         * @public
-         */
+     * Proxy method for setKey, for api compatibility
+     * @see setKey
+     * @public
+     */
     JSEncrypt.prototype.setPrivateKey = function (privkey) {
       // Create the key.
       this.setKey(privkey)
     }
     /**
-         * Proxy method for setKey, for api compatibility
-         * @see setKey
-         * @public
-         */
+     * Proxy method for setKey, for api compatibility
+     * @see setKey
+     * @public
+     */
     JSEncrypt.prototype.setPublicKey = function (pubkey) {
       // Sets the public key.
       this.setKey(pubkey)
     }
     /**
-         * Proxy method for RSAKey object's decrypt, decrypt the string using the private
-         * components of the rsa key object. Note that if the object was not set will be created
-         * on the fly (by the getKey method) using the parameters passed in the JSEncrypt constructor
-         * @param {string} str base64 encoded crypted string to decrypt
-         * @return {string} the decrypted string
-         * @public
-         */
+     * Proxy method for RSAKey object's decrypt, decrypt the string using the private
+     * components of the rsa key object. Note that if the object was not set will be created
+     * on the fly (by the getKey method) using the parameters passed in the JSEncrypt constructor
+     * @param {string} str base64 encoded crypted string to decrypt
+     * @return {string} the decrypted string
+     * @public
+     */
     JSEncrypt.prototype.decrypt = function (str, withPrivateKey) {
-      if (withPrivateKey === void 0) {
-        withPrivateKey = true
-      }
+      if (withPrivateKey === void 0) { withPrivateKey = true }
       // Return the decrypted string.
       try {
         return this.getKey().decrypt(b64tohex(str), withPrivateKey)
@@ -5221,17 +5152,15 @@ version: 2.9.0
       }
     }
     /**
-         * Proxy method for RSAKey object's encrypt, encrypt the string using the public
-         * components of the rsa key object. Note that if the object was not set will be created
-         * on the fly (by the getKey method) using the parameters passed in the JSEncrypt constructor
-         * @param {string} str the string to encrypt
-         * @return {string} the encrypted string encoded in base64
-         * @public
-         */
+     * Proxy method for RSAKey object's encrypt, encrypt the string using the public
+     * components of the rsa key object. Note that if the object was not set will be created
+     * on the fly (by the getKey method) using the parameters passed in the JSEncrypt constructor
+     * @param {string} str the string to encrypt
+     * @return {string} the encrypted string encoded in base64
+     * @public
+     */
     JSEncrypt.prototype.encrypt = function (str, withPrivateKey) {
-      if (withPrivateKey === void 0) {
-        withPrivateKey = false
-      }
+      if (withPrivateKey === void 0) { withPrivateKey = false }
       // Return the encrypted string.
       try {
         return hex2b64(this.getKey().encrypt(str, withPrivateKey))
@@ -5240,13 +5169,13 @@ version: 2.9.0
       }
     }
     /**
-         * Proxy method for RSAKey object's sign.
-         * @param {string} str the string to sign
-         * @param {function} digestMethod hash method
-         * @param {string} digestName the name of the hash algorithm
-         * @return {string} the signature encoded in base64
-         * @public
-         */
+     * Proxy method for RSAKey object's sign.
+     * @param {string} str the string to sign
+     * @param {function} digestMethod hash method
+     * @param {string} digestName the name of the hash algorithm
+     * @return {string} the signature encoded in base64
+     * @public
+     */
     JSEncrypt.prototype.sign = function (str, digestMethod, digestName) {
       // return the RSA signature of 'str' in 'hex' format.
       try {
@@ -5256,13 +5185,13 @@ version: 2.9.0
       }
     }
     /**
-         * Proxy method for RSAKey object's verify.
-         * @param {string} str the string to verify
-         * @param {string} signature the signature encoded in base64 to compare the string to
-         * @param {function} digestMethod hash method
-         * @return {boolean} whether the data and signature match
-         * @public
-         */
+     * Proxy method for RSAKey object's verify.
+     * @param {string} str the string to verify
+     * @param {string} signature the signature encoded in base64 to compare the string to
+     * @param {function} digestMethod hash method
+     * @return {boolean} whether the data and signature match
+     * @public
+     */
     JSEncrypt.prototype.verify = function (str, signature, digestMethod) {
       // Return the decrypted 'digest' of the signature.
       try {
@@ -5272,13 +5201,13 @@ version: 2.9.0
       }
     }
     /**
-         * Getter for the current JSEncryptRSAKey object. If it doesn't exists a new object
-         * will be created and returned
-         * @param {callback} [cb] the callback to be called if we want the key to be generated
-         * in an async fashion
-         * @returns {JSEncryptRSAKey} the JSEncryptRSAKey object
-         * @public
-         */
+     * Getter for the current JSEncryptRSAKey object. If it doesn't exists a new object
+     * will be created and returned
+     * @param {callback} [cb] the callback to be called if we want the key to be generated
+     * in an async fashion
+     * @returns {JSEncryptRSAKey} the JSEncryptRSAKey object
+     * @public
+     */
     JSEncrypt.prototype.getKey = function (cb) {
       // Only create new if it does not exist.
       if (!this.key) {
@@ -5294,41 +5223,41 @@ version: 2.9.0
       return this.key
     }
     /**
-         * Returns the pem encoded representation of the private key
-         * If the key doesn't exists a new key will be created
-         * @returns {string} pem encoded representation of the private key WITH header and footer
-         * @public
-         */
+     * Returns the pem encoded representation of the private key
+     * If the key doesn't exists a new key will be created
+     * @returns {string} pem encoded representation of the private key WITH header and footer
+     * @public
+     */
     JSEncrypt.prototype.getPrivateKey = function () {
       // Return the private representation of this key.
       return this.getKey().getPrivateKey()
     }
     /**
-         * Returns the pem encoded representation of the private key
-         * If the key doesn't exists a new key will be created
-         * @returns {string} pem encoded representation of the private key WITHOUT header and footer
-         * @public
-         */
+     * Returns the pem encoded representation of the private key
+     * If the key doesn't exists a new key will be created
+     * @returns {string} pem encoded representation of the private key WITHOUT header and footer
+     * @public
+     */
     JSEncrypt.prototype.getPrivateKeyB64 = function () {
       // Return the private representation of this key.
       return this.getKey().getPrivateBaseKeyB64()
     }
     /**
-         * Returns the pem encoded representation of the public key
-         * If the key doesn't exists a new key will be created
-         * @returns {string} pem encoded representation of the public key WITH header and footer
-         * @public
-         */
+     * Returns the pem encoded representation of the public key
+     * If the key doesn't exists a new key will be created
+     * @returns {string} pem encoded representation of the public key WITH header and footer
+     * @public
+     */
     JSEncrypt.prototype.getPublicKey = function () {
       // Return the private representation of this key.
       return this.getKey().getPublicKey()
     }
     /**
-         * Returns the pem encoded representation of the public key
-         * If the key doesn't exists a new key will be created
-         * @returns {string} pem encoded representation of the public key WITHOUT header and footer
-         * @public
-         */
+     * Returns the pem encoded representation of the public key
+     * If the key doesn't exists a new key will be created
+     * @returns {string} pem encoded representation of the public key WITHOUT header and footer
+     * @public
+     */
     JSEncrypt.prototype.getPublicKeyB64 = function () {
       // Return the private representation of this key.
       return this.getKey().getPublicBaseKeyB64()

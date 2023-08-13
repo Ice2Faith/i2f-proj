@@ -8,32 +8,26 @@
   'use strict'
 
   const BI_RM = '0123456789abcdefghijklmnopqrstuvwxyz'
-
   function int2char (n) {
     return BI_RM.charAt(n)
   }
-
   // #region BIT_OPERATIONS
   // (public) this & a
   function op_and (x, y) {
     return x & y
   }
-
   // (public) this | a
   function op_or (x, y) {
     return x | y
   }
-
   // (public) this ^ a
   function op_xor (x, y) {
     return x ^ y
   }
-
   // (public) this & ~a
   function op_andnot (x, y) {
     return x & ~y
   }
-
   // return index of lowest 1-bit in x, x < 2^31
   function lbit (x) {
     if (x == 0) {
@@ -61,7 +55,6 @@
     }
     return r
   }
-
   // return number of 1 bits in x
   function cbit (x) {
     let r = 0
@@ -71,12 +64,10 @@
     }
     return r
   }
-
   // #endregion BIT_OPERATIONS
 
   const b64map = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
   const b64pad = '='
-
   function hex2b64 (h) {
     let i
     let c
@@ -97,7 +88,6 @@
     }
     return ret
   }
-
   // convert a base64 string to hex
   function b64tohex (s) {
     let ret = ''
@@ -155,22 +145,14 @@ PERFORMANCE OF THIS SOFTWARE.
 
   var extendStatics = function (d, b) {
     extendStatics = Object.setPrototypeOf ||
-      ({ __proto__: [] } instanceof Array && function (d, b) {
-        d.__proto__ = b
-      }) ||
-      function (d, b) {
-        for (const p in b) if (b.hasOwnProperty(p)) d[p] = b[p]
-      }
+      ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b }) ||
+      function (d, b) { for (const p in b) if (b.hasOwnProperty(p)) d[p] = b[p] }
     return extendStatics(d, b)
   }
 
   function __extends (d, b) {
     extendStatics(d, b)
-
-    function __ () {
-      this.constructor = d
-    }
-
+    function __ () { this.constructor = d }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __())
   }
 
@@ -341,7 +323,6 @@ PERFORMANCE OF THIS SOFTWARE.
     function Int10 (value) {
       this.buf = [+value || 0]
     }
-
     Int10.prototype.mulAdd = function (m, c) {
       // assert(m <= 256)
       const b = this.buf
@@ -412,14 +393,12 @@ PERFORMANCE OF THIS SOFTWARE.
   const ellipsis = '\u2026'
   const reTimeS = /^(\d\d)(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])([01]\d|2[0-3])(?:([0-5]\d)(?:([0-5]\d)(?:[.,](\d{1,3}))?)?)?(Z|[-+](?:[0]\d|1[0-2])([0-5]\d)?)?$/
   const reTimeL = /^(\d\d\d\d)(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])([01]\d|2[0-3])(?:([0-5]\d)(?:([0-5]\d)(?:[.,](\d{1,3}))?)?)?(Z|[-+](?:[0]\d|1[0-2])([0-5]\d)?)?$/
-
   function stringCut (str, len) {
     if (str.length > len) {
       str = str.substring(0, len) + ellipsis
     }
     return str
   }
-
   const Stream = /** @class */ (function () {
     function Stream (enc, pos) {
       this.hexDigits = '0123456789ABCDEF'
@@ -432,7 +411,6 @@ PERFORMANCE OF THIS SOFTWARE.
         this.pos = pos
       }
     }
-
     Stream.prototype.get = function (pos) {
       if (pos === undefined) {
         pos = this.pos++
@@ -653,7 +631,6 @@ PERFORMANCE OF THIS SOFTWARE.
       this.tag = tag
       this.sub = sub
     }
-
     ASN1.prototype.typeName = function () {
       switch (this.tag.tagClass) {
         case 0: // universal
@@ -880,7 +857,7 @@ PERFORMANCE OF THIS SOFTWARE.
         } else {
           // undefined length
           try {
-            for (; ;) {
+            for (;;) {
               const s = ASN1.decode(stream)
               if (s.tag.isEOC()) {
                 break
@@ -941,7 +918,6 @@ PERFORMANCE OF THIS SOFTWARE.
         this.tagNumber = n.simplify()
       }
     }
-
     ASN1Tag.prototype.isUniversal = function () {
       return this.tagClass === 0x00
     }
@@ -974,7 +950,6 @@ PERFORMANCE OF THIS SOFTWARE.
         }
       }
     }
-
     // #region PUBLIC
     // BigInteger.prototype.toString = bnToString;
     // (public) return string representation in given radix
@@ -2276,9 +2251,7 @@ PERFORMANCE OF THIS SOFTWARE.
           if (g > 0) {
             y.lShiftTo(g, y)
           }
-          setTimeout(function () {
-            callback(y)
-          }, 0) // escape
+          setTimeout(function () { callback(y) }, 0) // escape
         } else {
           setTimeout(gcda1, 0)
         }
@@ -2305,9 +2278,7 @@ PERFORMANCE OF THIS SOFTWARE.
               bnp_1.subTo(BigInteger.ONE.shiftLeft(a - 1), bnp_1)
             }
             if (bnp_1.isProbablePrime(b)) {
-              setTimeout(function () {
-                callback()
-              }, 0) // escape
+              setTimeout(function () { callback() }, 0) // escape
             } else {
               setTimeout(bnpfn1_1, 0)
             }
@@ -2334,7 +2305,6 @@ PERFORMANCE OF THIS SOFTWARE.
   var NullExp = /** @class */ (function () {
     function NullExp () {
     }
-
     // NullExp.prototype.convert = nNop;
     NullExp.prototype.convert = function (x) {
       return x
@@ -2358,7 +2328,6 @@ PERFORMANCE OF THIS SOFTWARE.
     function Classic (m) {
       this.m = m
     }
-
     // Classic.prototype.convert = cConvert;
     Classic.prototype.convert = function (x) {
       if (x.s < 0 || x.compareTo(this.m) >= 0) {
@@ -2399,7 +2368,6 @@ PERFORMANCE OF THIS SOFTWARE.
       this.um = (1 << (m.DB - 15)) - 1
       this.mt2 = 2 * m.t
     }
-
     // Montgomery.prototype.convert = montConvert;
     // xR mod m
     Montgomery.prototype.convert = function (x) {
@@ -2471,7 +2439,6 @@ PERFORMANCE OF THIS SOFTWARE.
       BigInteger.ONE.dlShiftTo(2 * m.t, this.r2)
       this.mu = this.r2.divide(m)
     }
-
     // Barrett.prototype.convert = barrettConvert;
     Barrett.prototype.convert = function (x) {
       if (x.s < 0 || x.t > 2 * this.m.t) {
@@ -2524,14 +2491,10 @@ PERFORMANCE OF THIS SOFTWARE.
   // #endregion
   // #endregion REDUCERS
   // return new, unset BigInteger
-  function nbi () {
-    return new BigInteger(null)
-  }
-
+  function nbi () { return new BigInteger(null) }
   function parseBigInt (str, r) {
     return new BigInteger(str, r)
   }
-
   // am: Compute w_j += (x*this_i), propagate carries,
   // c is initial carry, returns final carry.
   // c < 3*dvalue, x < 2*dvalue, this_i < dvalue
@@ -2547,7 +2510,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return c
   }
-
   // am2 avoids a big mult-and-extract completely.
   // Max digit bits should be <= 30 because we do bitwise ops
   // on values up to 2*hdvalue^2-hdvalue-1 (< 2^31)
@@ -2564,7 +2526,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return c
   }
-
   // Alternately, set max digit bits to 28 since some
   // browsers slow down when dealing with 32-bit numbers.
   function am3 (i, x, w, j, c, n) {
@@ -2580,7 +2541,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return c
   }
-
   if (j_lm && (navigator.appName == 'Microsoft Internet Explorer')) {
     BigInteger.prototype.am = am2
     dbits = 30
@@ -2614,19 +2574,16 @@ PERFORMANCE OF THIS SOFTWARE.
   for (vv = 10; vv < 36; ++vv) {
     BI_RC[rr++] = vv
   }
-
   function intAt (s, i) {
     const c = BI_RC[s.charCodeAt(i)]
     return (c == null) ? -1 : c
   }
-
   // return bigint initialized to value
   function nbv (i) {
     const r = nbi()
     r.fromInt(i)
     return r
   }
-
   // returns bit length of the integer x
   function nbits (x) {
     let r = 1
@@ -2653,7 +2610,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return r
   }
-
   // "constants"
   BigInteger.ZERO = nbv(0)
   BigInteger.ONE = nbv(1)
@@ -2665,7 +2621,6 @@ PERFORMANCE OF THIS SOFTWARE.
       this.j = 0
       this.S = []
     }
-
     // Arcfour.prototype.init = ARC4init;
     // Initialize arcfour context from key, an array of ints, each from [0..255]
     Arcfour.prototype.init = function (key) {
@@ -2697,12 +2652,10 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return Arcfour
   }())
-
   // Plug in your RNG constructor here
   function prng_newstate () {
     return new Arcfour()
   }
-
   // Pool size must be a multiple of 4 and greater than 32.
   // An array of bytes the size of the pool will be passed to init()
   const rng_psize = 256
@@ -2750,7 +2703,6 @@ PERFORMANCE OF THIS SOFTWARE.
       window.attachEvent('onmousemove', onMouseMoveListener_1)
     }
   }
-
   function rng_get_byte () {
     if (rng_state == null) {
       rng_state = prng_newstate()
@@ -2768,11 +2720,9 @@ PERFORMANCE OF THIS SOFTWARE.
     // TODO: allow reseeding after first request
     return rng_state.next()
   }
-
   const SecureRandom = /** @class */ (function () {
     function SecureRandom () {
     }
-
     SecureRandom.prototype.nextBytes = function (ba) {
       for (let i = 0; i < ba.length; ++i) {
         ba[i] = rng_get_byte()
@@ -2841,7 +2791,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return new BigInteger(ba)
   }
-
   function pkcs1unpad (d, n, forPrivateKey) {
     const b = d.toByteArray()
     let i = 0
@@ -2884,7 +2833,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return ret
   }
-
   // "empty" RSA key constructor
   const RSAKey = /** @class */ (function () {
     function RSAKey () {
@@ -2897,7 +2845,6 @@ PERFORMANCE OF THIS SOFTWARE.
       this.dmq1 = null
       this.coeff = null
     }
-
     // #region PROTECTED
     // protected
     // RSAKey.prototype.doPublic = RSADoPublic;
@@ -2934,9 +2881,7 @@ PERFORMANCE OF THIS SOFTWARE.
     // RSAKey.prototype.encrypt = RSAEncrypt;
     // Return the PKCS#1 RSA encryption of "text" as an even-length hex string
     RSAKey.prototype.encrypt = function (text, usePrivateKey) {
-      if (usePrivateKey === void 0) {
-        usePrivateKey = false
-      }
+      if (usePrivateKey === void 0) { usePrivateKey = false }
       const wl = (this.n.bitLength() + 7) >> 3
       const m = pkcs1pad(text, wl, usePrivateKey)
       if (m == null) {
@@ -2987,14 +2932,14 @@ PERFORMANCE OF THIS SOFTWARE.
       const qs = B >> 1
       this.e = parseInt(E, 16)
       const ee = new BigInteger(E, 16)
-      for (; ;) {
-        for (; ;) {
+      for (;;) {
+        for (;;) {
           this.p = new BigInteger(B - qs, 1, rng)
           if (this.p.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 && this.p.isProbablePrime(10)) {
             break
           }
         }
-        for (; ;) {
+        for (;;) {
           this.q = new BigInteger(qs, 1, rng)
           if (this.q.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 && this.q.isProbablePrime(10)) {
             break
@@ -3022,9 +2967,7 @@ PERFORMANCE OF THIS SOFTWARE.
     // Return the PKCS#1 RSA decryption of "ctext".
     // "ctext" is an even-length hex string and the output is a plain string.
     RSAKey.prototype.decrypt = function (ctext, usePrivateKey) {
-      if (usePrivateKey === void 0) {
-        usePrivateKey = true
-      }
+      if (usePrivateKey === void 0) { usePrivateKey = true }
       const c = parseBigInt(ctext, 16)
       const m = usePrivateKey ? this.doPrivate(c) : this.doPublic(c)
       if (m == null) {
@@ -3136,11 +3079,9 @@ PERFORMANCE OF THIS SOFTWARE.
     sha512: '3051300d060960864801650304020305000440',
     ripemd160: '3021300906052b2403020105000414'
   }
-
   function getDigestHeader (name) {
     return DIGEST_HEADERS[name] || ''
   }
-
   function removeDigestHeader (str) {
     for (const name_1 in DIGEST_HEADERS) {
       if (DIGEST_HEADERS.hasOwnProperty(name_1)) {
@@ -3153,7 +3094,6 @@ PERFORMANCE OF THIS SOFTWARE.
     }
     return str
   }
-
   // Return the PKCS#1 RSA encryption of "text" as a Base64-encoded string
   // function RSAEncryptB64(text) {
   //  var h = this.encrypt(text);
@@ -3190,8 +3130,7 @@ version: 2.9.0
           'all dependencies are included.')
       }
 
-      const F = function () {
-      }
+      const F = function () {}
       F.prototype = superc.prototype
       subc.prototype = new F()
       subc.prototype.constructor = subc
@@ -3217,8 +3156,7 @@ version: 2.9.0
              * @static
              * @private
              */
-        let _IEEnumFix = function () {
-        }
+        let _IEEnumFix = function () {}
         const ADD = ['toString', 'valueOf']
         try {
           if (/MSIE/.test(navigator.userAgent)) {
@@ -3231,9 +3169,7 @@ version: 2.9.0
               }
             }
           }
-        } catch (ex) {
-        }
-        _IEEnumFix(subc.prototype, overrides)
+        } catch (ex) {} _IEEnumFix(subc.prototype, overrides)
       }
     }
   }
@@ -4869,7 +4805,6 @@ version: 2.9.0
    */
   const JSEncryptRSAKey = /** @class */ (function (_super) {
     __extends(JSEncryptRSAKey, _super)
-
     function JSEncryptRSAKey (key) {
       const _this = _super.call(this) || this
       // Call the super constructor.
@@ -4887,7 +4822,6 @@ version: 2.9.0
       }
       return _this
     }
-
     /**
      * Method to parse a pem encoded string containing both a public or private key.
      * The method will translate the pem encoded string in a der encoded string and
@@ -5169,7 +5103,6 @@ version: 2.9.0
       // The private and public key.
       this.key = null
     }
-
     /**
      * Method to set the rsa key parameter (one method is enough to set both the public
      * and the private key, since the private key contains the public key paramenters)
@@ -5210,9 +5143,7 @@ version: 2.9.0
      * @public
      */
     JSEncrypt.prototype.decrypt = function (str, withPrivateKey) {
-      if (withPrivateKey === void 0) {
-        withPrivateKey = true
-      }
+      if (withPrivateKey === void 0) { withPrivateKey = true }
       // Return the decrypted string.
       try {
         return this.getKey().decrypt(b64tohex(str), withPrivateKey)
@@ -5229,9 +5160,7 @@ version: 2.9.0
      * @public
      */
     JSEncrypt.prototype.encrypt = function (str, withPrivateKey) {
-      if (withPrivateKey === void 0) {
-        withPrivateKey = false
-      }
+      if (withPrivateKey === void 0) { withPrivateKey = false }
       // Return the encrypted string.
       try {
         return hex2b64(this.getKey().encrypt(str, withPrivateKey))

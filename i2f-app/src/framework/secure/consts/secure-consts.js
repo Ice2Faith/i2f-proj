@@ -16,6 +16,9 @@ const SecureConsts = {
 
   DEFAULT_SECURE_CLIENT_ASYM_SIGN_NAME: () => 'sswcas',
 
+  // 默认的秘钥对获取方式，使用本地生成交换秘钥对方式
+  DEFAULT_SECURE_SWAP_ASYM_KEY: () => true,
+
   // 安全头的分隔符
   DEFAULT_HEADER_SEPARATOR: () => ';',
 

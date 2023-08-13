@@ -4,6 +4,9 @@ const SecureCallback = {
   },
   callPriKey: () => {
 
+  },
+  callSwapKey: () => {
+
   }
 }
 export default SecureCallback

@@ -11,7 +11,7 @@ import ObjectUtils from '../util/ObjectUtils'
 import qs from 'qs'
 import SecureException from '../excception/secure-exception'
 import SecureErrorCode from '../consts/secure-error-code'
-import SecureCallback from '@/framework/secure/core/secure-callback'
+import SecureCallback from './secure-callback'
 
 const SecureTransferFilter = {
   getRequestContentType (config) {
@@ -64,8 +64,8 @@ const SecureTransferFilter = {
     config.secure = {
       url: config.url
     }
-    if (SecureTransfer.existsAsymPriKey()) {
-      config.headers[SecureConfig.clientAsymSignName] = SecureTransfer.getAsymPriSign()
+    if (SecureTransfer.existsAsymSlfPubKeySign()) {
+      config.headers[SecureConfig.clientAsymSignName] = SecureTransfer.getAsymSlfPubSign()
     }
     if (config.data) {
       if (SecureUtils.typeOf(config.data) == 'formdata') {
@@ -109,7 +109,7 @@ const SecureTransferFilter = {
     const requestHeader = SecureHeader.newObj()
     requestHeader.nonce = new Date().getTime().toString(16) + '' + Math.floor(Math.random() * 0x0fff).toString(16)
     requestHeader.randomKey = SecureTransfer.getRequestSecureHeader(symmKey)
-    requestHeader.serverAsymSign = SecureTransfer.getAsymSign()
+    requestHeader.serverAsymSign = SecureTransfer.getAsymOthPubSign()
     let signText = ''
     if (secureData) {
       if (config.data) {
@@ -133,7 +133,7 @@ const SecureTransferFilter = {
         signText += config.params[SecureConfig.parameterName]
       }
     }
-    requestHeader.clientAsymSign = SecureTransfer.getAsymPriSign()
+    requestHeader.clientAsymSign = SecureTransfer.getAsymSlfPubSign()
     requestHeader.sign = SecureUtils.makeSecureSign(signText, requestHeader)
     requestHeader.digital = SecureTransfer.getRequestDigitalHeader(requestHeader.sign)
     if (SecureConfig.enableDebugLog) {
@@ -161,14 +161,14 @@ const SecureTransferFilter = {
       if (SecureConfig.enableDebugLog) {
         console.log('response:updateAsymPubKey:', (res.config.secure.url || res.config.url), skeyHeader)
       }
-      SecureTransfer.saveAsymPubKey(skeyHeader)
+      SecureTransfer.saveAsymOthPubKey(skeyHeader)
     }
     const wkeyHeader = res.headers[SecureConfig.clientKeyHeaderName]
     if (!StringUtils.isEmpty(wkeyHeader)) {
       if (SecureConfig.enableDebugLog) {
         console.log('response:updateAsymPriKey:', (res.config.secure.url || res.config.url), wkeyHeader)
       }
-      SecureTransfer.saveAsymPriKey(wkeyHeader)
+      SecureTransfer.saveAsymSlfPriKey(wkeyHeader)
     }
 
     const headerValue = res.headers[SecureConfig.headerName]
@@ -176,39 +176,77 @@ const SecureTransferFilter = {
       return res
     }
     const responseHeader = SecureUtils.parseSecureHeader(SecureConfig.headerName, SecureConfig.headerSeparator, res)
-    responseHeader.clientAsymSign = SecureTransfer.getAsymPriSign()
+    responseHeader.clientAsymSign = SecureTransfer.getAsymSlfPubSign()
     if (SecureConfig.enableDebugLog) {
       console.log('response:secureHeader:', (res.config.secure.url || res.config.url), ObjectUtils.deepClone(responseHeader))
     }
+    const callbackFlags = {
+      pubKey: false,
+      priKey: false,
+      swapKey: false
+    }
     const ok = SecureUtils.verifySecureHeader(res.data, responseHeader)
     if (!ok) {
-      if (SecureCallback.callPubKey) {
-        SecureCallback.callPubKey()
-      }
-      if (SecureCallback.callPriKey) {
-        SecureCallback.callPriKey()
+      if (SecureConfig.enableSwapAsymKey) {
+        if (SecureCallback.callSwapKey && !callbackFlags.swapKey) {
+          SecureCallback.callSwapKey()
+          callbackFlags.swapKey = true
+        }
+      } else {
+        if (SecureCallback.callPubKey && !callbackFlags.pubKey) {
+          SecureCallback.callPubKey()
+          callbackFlags.pubKey = true
+        }
+        if (SecureCallback.callPriKey && !callbackFlags.priKey) {
+          SecureCallback.callPriKey()
+          callbackFlags.priKey = true
+        }
       }
       throw SecureException.newObj(SecureErrorCode.BAD_SIGN, '签名验证失败')
     }
 
     const digital = SecureTransfer.getResponseDigitalHeader(responseHeader.digital)
     if (digital == null) {
-      if (SecureCallback.callPubKey) {
-        SecureCallback.callPubKey()
+      if (SecureConfig.enableSwapAsymKey) {
+        if (SecureCallback.callSwapKey && !callbackFlags.swapKey) {
+          SecureCallback.callSwapKey()
+          callbackFlags.swapKey = true
+        }
+      } else {
+        if (SecureCallback.callPubKey && !callbackFlags.pubKey) {
+          SecureCallback.callPubKey()
+          callbackFlags.pubKey = true
+        }
       }
       throw SecureException.newObj(SecureErrorCode.BAD_DIGITAL(), '数字签名验证失败，请重试！')
     }
     if (digital != responseHeader.sign) {
-      if (SecureCallback.callPubKey) {
-        SecureCallback.callPubKey()
+      if (SecureConfig.enableSwapAsymKey) {
+        if (SecureCallback.callSwapKey && !callbackFlags.swapKey) {
+          SecureCallback.callSwapKey()
+          callbackFlags.swapKey = true
+        }
+      } else {
+        if (SecureCallback.callPubKey && !callbackFlags.pubKey) {
+          SecureCallback.callPubKey()
+          callbackFlags.pubKey = true
+        }
       }
       throw SecureException.newObj(SecureErrorCode.BAD_DIGITAL(), '数字签名验证失败，请重试！')
     }
 
     const symmKey = SecureTransfer.getResponseSecureHeader(responseHeader.randomKey)
     if (symmKey == null) {
-      if (SecureCallback.callPriKey) {
-        SecureCallback.callPriKey()
+      if (SecureConfig.enableSwapAsymKey) {
+        if (SecureCallback.callSwapKey && !callbackFlags.swapKey) {
+          SecureCallback.callSwapKey()
+          callbackFlags.swapKey = true
+        }
+      } else {
+        if (SecureCallback.callPriKey && !callbackFlags.priKey) {
+          SecureCallback.callPriKey()
+          callbackFlags.priKey = true
+        }
       }
       throw SecureException.newObj(SecureErrorCode.BAD_RANDOM_KEY(), '随机秘钥无效或已失效，请重试！')
     }

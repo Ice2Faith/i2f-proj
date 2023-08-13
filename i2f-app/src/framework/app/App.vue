@@ -7,37 +7,61 @@
 import SecureTransfer from '@/framework/secure/core/secure-transfer'
 import '../resizer/DebounceResizeObserver'
 import SecureCallback from '@/framework/secure/core/secure-callback'
+import SecureConfig from '@/framework/secure/secure-config'
 
 export default {
   name: 'App',
   created () {
-    this.initAsymPubKey()
-    this.initAsymPriKey()
-    SecureCallback.callPubKey = this.initAsymPubKey
-    SecureCallback.callPriKey = this.initAsymPriKey
-    const _this = this
-    window.rsaTimer = setInterval(function () {
-      _this.initAsymPubKey()
-    }, 5 * 60 * 1000)
+    if (SecureConfig.enableSwapAsymKey) {
+      this.swapAsymKey()
+      SecureCallback.callSwapKey = this.swapAsymKey
+      const _this = this
+      window.rsaTimer = setInterval(function () {
+        _this.swapAsymKey()
+      }, 5 * 60 * 1000)
+    } else {
+      this.initAsymOthPubKey()
+      this.initAsymSlfPriKey()
+      SecureCallback.callPubKey = this.initAsymOthPubKey
+      SecureCallback.callPriKey = this.initAsymSlfPriKey
+      const _this = this
+      window.rsaTimer = setInterval(function () {
+        _this.initAsymPubKey()
+      }, 5 * 60 * 1000)
+    }
   },
   unmounted () {
     clearInterval(window.rsaTimer)
   },
   methods: {
-    initAsymPubKey () {
+    swapAsymKey () {
+      this.$axios({
+        url: 'secure/swapKey',
+        method: 'post',
+        data: {
+          key: SecureTransfer.loadWebAsymSlfPubKey()
+        }
+      }).then(({ data }) => {
+        console.log('SECURE_KEY', data)
+        SecureTransfer.saveAsymOthPubKey(data)
+      })
+    },
+    initAsymOthPubKey () {
       this.$axios({
         url: 'secure/key',
         method: 'post'
       }).then(({ data }) => {
-        SecureTransfer.saveAsymPubKey(data)
+        console.log('SECURE_KEY', data)
+        SecureTransfer.saveAsymOthPubKey(data)
       })
     },
-    initAsymPriKey () {
+    initAsymSlfPriKey () {
       this.$axios({
         url: 'secure/clientKey',
         method: 'post'
       }).then(({ data }) => {
-        SecureTransfer.saveAsymPriKey(data)
+        console.log('SECURE_KEY', data)
+        SecureTransfer.saveAsymSlfPriKey(data)
       })
     }
   }
