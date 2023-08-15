@@ -11,6 +11,7 @@ import i2f.springboot.redis.EnableRedisConfig;
 import i2f.springboot.redisson.EnableRedissonConfig;
 import i2f.springboot.secure.EnableSecureConfig;
 import i2f.springboot.security.EnableSecurityConfig;
+import i2f.springboot.verifycode.EnableVerifyCodeConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -25,6 +26,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnablePerfConfig
 @EnableExceptionHandlerConfig
 @EnableApiRespConfig
+@EnableVerifyCodeConfig
 @EnableAspectJAutoProxy
 @Slf4j
 @SpringBootApplication(scanBasePackages = "com.i2f")
