@@ -58,19 +58,27 @@ MultipartRequest.interceptors.response.use(res => {
   if (res.data) {
     const code = res.data.code
     const msg = res.data.msg
+    if (code == undefined || code == 200) {
+      return res.data
+    }
+
     // 判定业务响应码
     if (code == 401) {
-      Message.noticeError('当前未登录，请登录后重试')
+      Message.noticeError(msg || '当前未登录，请登录后重试')
       Auth.removeToken()
       const route = VueUtil.route()
       const nextRedirect = Auth.getNextRedirect(route.path, route.query)
       VueUtil.router().push(nextRedirect)
+      return Promise.reject(msg || '请先完成登录')
     } else if (code == 403) {
-      Message.noticeError('403，您没有权限查看资源')
+      Message.noticeError(msg || '403，您没有权限查看资源')
+      return Promise.reject(msg || '您没有权限查看资源')
     } else if (code == 404) {
-      Message.noticeError('404，找不到目标资源')
+      Message.noticeError(msg || '404，找不到目标资源')
+      return Promise.reject(msg || '找不到目标资源')
     } else {
-      Message.noticeError(`服务器响应失败：${code} | ${msg}`)
+      Message.noticeError(msg || `服务器响应失败：${code} | ${msg}`)
+      return Promise.reject(msg || '服务器响应失败')
     }
   }
   return res.data

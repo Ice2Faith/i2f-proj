@@ -32,6 +32,14 @@
             <a-input-password v-model:value="form.password"/>
           </a-form-item>
 
+          <a-form-item
+            :rules="rules.result"
+            label="验证码"
+            name="result"
+          >
+            <a-input v-model:value="form.result" @click.native="showVerifyCodeDialog"/>
+          </a-form-item>
+
           <a-form-item :wrapper-col="{ offset: 0, span: 24 }">
             <a-row justify="center" type="flex">
               <a-spin :spinning="controls.loading">
@@ -58,17 +66,39 @@
         念 @Copyright 2023 created by Ice2Faith
       </div>
     </div>
+
+    <a-modal
+      v-if="dialogs.verifycode.show"
+      v-model:visible="dialogs.verifycode.show"
+      :title="dialogs.verifycode.title"
+      :footer="null"
+      width="1200px"
+    >
+      <VerifyCode :request="verifycode"
+                  @refresh="onRefreshVerifyCode"
+                  @submit="onSubmitVerifyCode">
+      </VerifyCode>
+    </a-modal>
   </div>
 </template>
 
 <script>
 import Auth from '@/framework/auth'
+import VerifyCode from '@/components/VerifyCode'
 
 export default {
   name: 'Login',
+  components: { VerifyCode },
   props: {},
   data () {
     return {
+      verifycode: {
+        question: '',
+        base64: '',
+        code: '',
+        width: 320,
+        height: 320
+      },
       form: {
         username: '',
         password: ''
@@ -78,7 +108,14 @@ export default {
       },
       rules: {
         username: [{ required: true, message: '请输入用户名!' }],
-        password: [{ required: true, message: '请输入密码!' }]
+        password: [{ required: true, message: '请输入密码!' }],
+        result: [{ required: true, message: '请输入验证码!' }]
+      },
+      dialogs: {
+        verifycode: {
+          show: false,
+          title: '请输入验证码'
+        }
       }
     }
   },
@@ -88,6 +125,21 @@ export default {
     Auth.setRoutes([])
   },
   methods: {
+    showVerifyCodeDialog () {
+      this.dialogs.verifycode.show = true
+    },
+    onRefreshVerifyCode () {
+      this.$axios({
+        url: '/verifycode/refresh',
+        method: 'get'
+      }).then(({ data }) => {
+        this.verifycode = data
+      })
+    },
+    onSubmitVerifyCode (data) {
+      Object.assign(this.form, data)
+      this.dialogs.verifycode.show = false
+    },
     doLogin () {
       this.$refs.form.validateFields().then(() => {
         this.controls.loading = true
@@ -145,7 +197,7 @@ export default {
 .login-box {
   min-width: 420px;
   width: 25%;
-  height: 280px;
+  height: 340px;
   position: fixed;
   right: 15%;
   top: 50%;

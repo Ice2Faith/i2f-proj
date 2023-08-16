@@ -122,12 +122,11 @@ const Auth = {
     if (!query) {
       query = {}
     }
+    delete query.redirect
+    query.redirect = path
     return {
       path: Config.LOGIN_ROUTE,
-      query: {
-        redirect: path,
-        query: encodeURIComponent(JSON.stringify(query))
-      }
+      query: query
     }
   },
   // 处理登录页面登录成功之后要跳转的路由
@@ -142,18 +141,13 @@ const Auth = {
     if (!query) {
       query = {}
     }
-    query = { ...query }
     if (query.redirect && query.redirect != '') {
-      const nextRoute = {
-        path: query.redirect,
-        query: {}
-      }
-      if (query.query && query.query != '') {
-        nextRoute.query = JSON.parse(decodeURIComponent(query.query))
-      }
-      delete query.query
+      const redirectPath = query.redirect
       delete query.redirect
-      nextRoute.query = Object.assign({}, query, nextQuery, nextRoute.query)
+      const nextRoute = {
+        path: redirectPath,
+        query: Object.assign({}, query, nextQuery)
+      }
       VueUtil.router().replace(nextRoute)
     } else if (nextPath && nextPath != '') {
       VueUtil.router().replace({ path: nextPath, query: nextQuery })
