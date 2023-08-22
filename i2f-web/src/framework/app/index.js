@@ -74,9 +74,6 @@ import DirectiveInstaller from '@/framework/directives/install'
 /// ///////////////////////////////////////////////////////
 import GlobalExceptionInstaller from '@/framework/exception/installer/GlobalExceptionInstaller'
 
-if (process.env.NODE_ENV == 'prod') {
-  DebuggerProtection.install()
-}
 
 VueMarkdownEditor.use(vuepressTheme, {
   Prism
