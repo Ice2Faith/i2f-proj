@@ -2,6 +2,7 @@
 // 直接在main.js中引入进行mount即可
 // import VueApp from "@/framework/app"
 // VueApp.mount("#app")
+import '@/framework/guarder'
 import { createApp } from 'vue'
 import App from '@/framework/app/App.vue'
 import Router from '@/framework/router'
@@ -12,8 +13,6 @@ import Config from '@/framework/config'
 import Message from '@/framework/message'
 import DownloadRequest from '@/framework/request/download'
 import MultipartRequest from '@/framework/request/multipart'
-
-import DebuggerProtection from '@/framework/debugger/DebuggerProtection'
 
 import '@/assets/css/scorll-bar.css'
 import '@/assets/css/media-adapt.css'
