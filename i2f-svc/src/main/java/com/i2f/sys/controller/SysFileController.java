@@ -3,8 +3,12 @@ package com.i2f.sys.controller;
 import i2f.core.check.CheckUtil;
 import i2f.core.codec.CodecUtil;
 import i2f.core.digest.CodeUtil;
+import i2f.core.exception.BoostException;
 import i2f.core.io.file.FileUtil;
+import i2f.core.io.file.core.FileMime;
 import i2f.core.j2ee.web.ServletFileUtil;
+import i2f.core.security.file.FileAccessFirewall;
+import i2f.core.security.file.FileUploadDownloadGuarder;
 import i2f.core.security.jce.digest.MessageDigestUtil;
 import i2f.core.security.jce.digest.sha.ShaType;
 import i2f.core.std.api.ApiResp;
@@ -20,7 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,16 +59,30 @@ public class SysFileController {
     public void saveFile(InputStream is,String signName) throws IOException {
         File storeDir = new File(STORE_PATH);
         File saveFile=new File(storeDir,signName);
+        boolean ok = FileAccessFirewall.isSafePath(storeDir.getAbsolutePath(), saveFile.getAbsolutePath());
+        if(!ok){
+            throw new BoostException("非法访问");
+        }
         FileUtil.useParentDir(saveFile);
-
+        ok = FileUploadDownloadGuarder.DEFAULT_INSTANCE.upload(is, storeDir, saveFile);
+        if(!ok){
+            throw new BoostException("文件上传失败");
+        }
         FileUtil.save(is,saveFile);
     }
 
-    public InputStream loadFile(String signName) throws FileNotFoundException {
+    public void loadFile(String signName,OutputStream os) throws IOException {
         File storeDir = new File(STORE_PATH);
         File saveFile=new File(storeDir,signName);
+        boolean ok = FileAccessFirewall.isSafePath(storeDir.getAbsolutePath(), saveFile.getAbsolutePath());
+        if(!ok){
+            throw new BoostException("非法访问");
+        }
         FileUtil.useParentDir(saveFile);
-        return new FileInputStream(saveFile);
+        ok = FileUploadDownloadGuarder.DEFAULT_INSTANCE.download( storeDir, saveFile,os);
+        if(!ok){
+            throw new BoostException("文件下载失败");
+        }
     }
 
     public String getDownloadUrl(String signName,HttpServletRequest request){
@@ -148,9 +170,30 @@ public class SysFileController {
             ServletFileUtil.responseNotFileFound(signName,response);
         }
 
-        InputStream is = loadFile(signName);
 
-        ServletFileUtil.responseAsFileAttachment(is,true,signName,null,response);
+        responseAsFileAttachment((os)->{
+            loadFile(signName,os);
+        },signName,null,response);
+    }
+
+    @FunctionalInterface
+    public interface OutputStreamWriter{
+        void write(OutputStream os) throws IOException;
+    }
+
+    public static void responseAsFileAttachment(OutputStreamWriter writer, String virtualFileName, String mimeType, HttpServletResponse response) throws IOException {
+        if (null != mimeType) {
+            response.setContentType(mimeType + ";charset=UTF-8");
+        } else {
+            response.setContentType(FileMime.getMimeType(virtualFileName) + ";charset=UTF-8");
+        }
+
+        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(virtualFileName, "UTF-8"));
+        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+        OutputStream os = response.getOutputStream();
+        writer.write(os);
+        os.close();
+
     }
 
 

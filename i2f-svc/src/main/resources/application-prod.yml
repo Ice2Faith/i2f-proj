@@ -31,6 +31,8 @@ spring:
 
 i2f:
   springboot:
+    file:
+      downloadHost: 39.105.33.11
     config:
       # 多数据源配置
       datasource:
