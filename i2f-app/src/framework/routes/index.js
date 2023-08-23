@@ -7,6 +7,7 @@ import MenuView from '@/views/nav/MenuView'
 import MsgView from '@/views/nav/MsgView'
 import MineView from '@/views/nav/MineView'
 import Hello from '@/views/Hello'
+import PageLayout from "@/components/PageLayout";
 
 const Routes = [
   {
@@ -62,6 +63,13 @@ const Routes = [
         }
       },
 
+    ]
+  },
+
+  {
+    path: '/',
+    component: PageLayout,
+    children: [
       {
         path: '/about',
         name: 'about',

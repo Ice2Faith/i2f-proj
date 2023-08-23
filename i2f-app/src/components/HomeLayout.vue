@@ -6,8 +6,11 @@
     <van-tabbar v-model="activeTab" route>
       <van-tabbar-item icon="home-o" to="/home">主页</van-tabbar-item>
       <van-tabbar-item icon="apps-o" to="/menu">功能</van-tabbar-item>
-      <van-tabbar-item v-if="needShowWorkspace()" :to="$router.currentRoute.value.fullPath" icon="add-o">工作台
-      </van-tabbar-item>
+<!--      <van-tabbar-item v-if="needShowWorkspace()" -->
+<!--                       :to="$router.currentRoute.value.fullPath" -->
+<!--                       icon="add-o">-->
+<!--        工作台-->
+<!--      </van-tabbar-item>-->
       <van-tabbar-item :badge="noticeCount" icon="comment-o" to="/msg">消息</van-tabbar-item>
       <van-tabbar-item icon="user-o" to="/mine">我的</van-tabbar-item>
     </van-tabbar>
