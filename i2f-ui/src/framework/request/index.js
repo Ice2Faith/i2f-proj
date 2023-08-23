@@ -7,6 +7,7 @@ import AxiosExceptionHandler from '@/framework/request/exception'
 import VueUtil from '@/framework/utils/vue-util'
 import SecureTransfer from '@/framework/secure/core/secure-transfer'
 import SecureTransferFilter from '@/framework/secure/core/secure-transfer-filter'
+import NProgress from 'nprogress'
 
 // 定义默认的参数
 axios.defaults.headers['Content-Type'] = Config.REQUEST_DEFAULT_CONTENT_TYPE
@@ -31,11 +32,26 @@ BaseRequest.interceptors.request.use(config => {
   SecureTransfer.getSecureHeaderInto(config.headers, true, true)
   SecureTransferFilter.requestFilter(config)
 
+  // 浏览器专属
+  config.onUploadProgress = function (progressEvent) {
+    // 处理原生进度事件
+    NProgress.set(progressEvent.progress)
+  }
+
+  // `onDownloadProgress` 允许为下载处理进度事件
+  // 浏览器专属
+  config.onDownloadProgress = function (progressEvent) {
+    // 处理原生进度事件
+    NProgress.set(progressEvent.progress)
+  }
+
+  NProgress.start()
   return config
 })
 
 // 定义响应拦截
 BaseRequest.interceptors.response.use(res => {
+  NProgress.done()
   SecureTransferFilter.responseFilter(res)
 
   if (res.data) {
@@ -66,6 +82,7 @@ BaseRequest.interceptors.response.use(res => {
   }
   return res.data
 }, error => {
+  NProgress.done()
   SecureTransferFilter.responseFilter(error.response)
   AxiosExceptionHandler.handleResponseInterceptorError(error)
   return Promise.reject(error)

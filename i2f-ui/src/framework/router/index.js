@@ -5,6 +5,7 @@ import Routes from '@/framework/routes'
 import Auth from '@/framework/auth'
 import Config from '@/framework/config'
 import Message from '@/framework/message'
+import NProgress from 'nprogress'
 
 // 创建路由
 const Router = createRouter({
@@ -16,16 +17,20 @@ const Router = createRouter({
 Router.beforeEach((to, from, next) => {
   if (to.path == Config.LOGIN_ROUTE) {
     // 登录页直接放行
+    NProgress.start()
     next()
+    return
   }
   if (to.meta.permission == false) {
     // 有明确指定为false，则不需要判定权限
+    NProgress.start()
     next()
     return
   }
   // 未登录
   if (!Auth.isAuth()) {
     Message.noticeError('未登录，请先登录')
+    NProgress.start()
     next(Auth.getNextRedirect(to.path, to.query))
     return
   }
@@ -36,6 +41,15 @@ Router.beforeEach((to, from, next) => {
     // next(Auth.getNextRedirect(to.path,to.query))
     return
   }
+  NProgress.start()
   next()
+})
+
+Router.afterEach((to, from, failure) => {
+  if (failure) {
+    NProgress.done()
+  } else {
+    NProgress.done()
+  }
 })
 export default Router

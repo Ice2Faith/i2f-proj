@@ -50,11 +50,25 @@ MultipartRequest.interceptors.request.use(config => {
 
   config.data = formData
 
+  // 浏览器专属
+  config.onUploadProgress = function (progressEvent) {
+    // 处理原生进度事件
+    NProgress.set(progressEvent.progress)
+  }
+
+  // `onDownloadProgress` 允许为下载处理进度事件
+  // 浏览器专属
+  config.onDownloadProgress = function (progressEvent) {
+    // 处理原生进度事件
+    NProgress.set(progressEvent.progress)
+  }
+
   return config
 })
 
 // 定义响应拦截
 MultipartRequest.interceptors.response.use(res => {
+  NProgress.done()
   if (res.data) {
     const code = res.data.code
     const msg = res.data.msg
@@ -83,6 +97,7 @@ MultipartRequest.interceptors.response.use(res => {
   }
   return res.data
 }, error => {
+  NProgress.done()
   AxiosExceptionHandler.handleResponseInterceptorError(error)
   return Promise.reject(error)
 })
