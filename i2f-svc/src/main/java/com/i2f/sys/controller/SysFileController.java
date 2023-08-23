@@ -68,7 +68,6 @@ public class SysFileController {
         if(!ok){
             throw new BoostException("文件上传失败");
         }
-        FileUtil.save(is,saveFile);
     }
 
     public void loadFile(String signName,OutputStream os) throws IOException {
