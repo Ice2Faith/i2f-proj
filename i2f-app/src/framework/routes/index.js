@@ -71,6 +71,13 @@ const Routes = [
     component: PageLayout,
     children: [
       {
+        path: '/sys/resources',
+        name: 'sysResources',
+        component: () => import('@/views/sys/resources/SysResources.vue')
+      },
+
+
+      {
         path: '/about',
         name: 'about',
         // route level code-splitting
