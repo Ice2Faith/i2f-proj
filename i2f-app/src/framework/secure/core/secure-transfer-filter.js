@@ -43,15 +43,21 @@ const SecureTransferFilter = {
     if (!url.startsWith('/')) {
       url = '/' + url
     }
-    for (let i = 0; i < whiteList.length; i++) {
-      let wurl = whiteList[i]
-      if (!wurl.startsWith('/')) {
-        wurl = '/' + wurl
-      }
-      if (url == wurl) {
-        return true
-      }
-    }
+        for (let i = 0; i < whiteList.length; i++) {
+            let wurl = whiteList[i]
+            if(wurl.test){
+                if(wurl.test(url)){
+                    return true
+                }
+            }else{
+                if (!wurl.startsWith('/')) {
+                    wurl = '/' + wurl
+                }
+                if (url == wurl) {
+                    return true
+                }
+            }
+        }
     return false
   },
   // 请求加密过滤，config需要包含属性：data,params,headers
@@ -61,6 +67,9 @@ const SecureTransferFilter = {
   // 也就是说，如果请求头中，这两个请求头不存在，或者值不为SECURE_HEADER_ENABLE，都将不会处理
   // 也就是手动处理，部分参数的情形
   requestFilter (config) {
+        if(SecureConfig.enable==false){
+            return config
+        }
     if (config.url.indexOf('?') >= 0) {
       // regular query string
       const url = config.url
@@ -117,7 +126,7 @@ const SecureTransferFilter = {
     }
     const symmKey = SecureTransfer.symmKeyGen(SecureConfig.symmKeySize / 8)
     const requestHeader = SecureHeader.newObj()
-    requestHeader.nonce = new Date().getTime().toString(16) + '' + Math.floor(Math.random() * 0x0fff).toString(16)
+    requestHeader.nonce = new Date().getTime().toString(16) + '-' + Math.floor(Math.random() * 0x0fff).toString(16)
     requestHeader.randomKey = SecureTransfer.getRequestSecureHeader(symmKey)
     requestHeader.serverAsymSign = SecureTransfer.getAsymOthPubSign()
     let signText = ''
@@ -160,8 +169,16 @@ const SecureTransferFilter = {
   // 分别表示响应头和响应体
   // 当响应头中存在SECURE_DATA_HEADER时，将会自动解密响应体
   responseFilter (res) {
+        if(SecureConfig.enable==false){
+            return res
+        }
     if (res == null || res == undefined) {
       return
+    }
+    const callbackFlags = {
+      pubKey: false,
+      priKey: false,
+      swapKey: false
     }
     if (SecureConfig.enableDebugLog) {
       console.log('response:beforeSecureRes:', (res.config.secure.url || res.config.url), ObjectUtils.deepClone(res))
@@ -178,7 +195,14 @@ const SecureTransferFilter = {
       if (SecureConfig.enableDebugLog) {
         console.log('response:updateAsymPriKey:', (res.config.secure.url || res.config.url), wkeyHeader)
       }
-      SecureTransfer.saveAsymSlfPriKey(wkeyHeader)
+      if (SecureConfig.enableSwapAsymKey) {
+        if (SecureCallback.callSwapKey && !callbackFlags.swapKey) {
+          SecureCallback.callSwapKey()
+          callbackFlags.swapKey = true
+        }
+      } else {
+        SecureTransfer.saveAsymSlfPriKey(wkeyHeader)
+      }
     }
 
     const headerValue = res.headers[SecureConfig.headerName]
@@ -190,11 +214,7 @@ const SecureTransferFilter = {
     if (SecureConfig.enableDebugLog) {
       console.log('response:secureHeader:', (res.config.secure.url || res.config.url), ObjectUtils.deepClone(responseHeader))
     }
-    const callbackFlags = {
-      pubKey: false,
-      priKey: false,
-      swapKey: false
-    }
+
     const ok = SecureUtils.verifySecureHeader(res.data, responseHeader)
     if (!ok) {
       if (SecureConfig.enableSwapAsymKey) {
