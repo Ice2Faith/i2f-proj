@@ -71,9 +71,34 @@ const Routes = [
     component: PageLayout,
     children: [
       {
+        path: '/sys/role',
+        name: 'sysRole',
+        component: () => import('@/views/sys/role/SysRole.vue')
+      },
+      {
         path: '/sys/resources',
         name: 'sysResources',
         component: () => import('@/views/sys/resources/SysResources.vue')
+      },
+      {
+        path: '/sys/dept',
+        name: 'sysDept',
+        component: () => import('@/views/sys/dept/SysDept.vue')
+      },
+      {
+        path: '/sys/config',
+        name: 'sysConfig',
+        component: () => import('@/views/sys/config/SysConfig.vue')
+      },
+      {
+        path: '/sys/user',
+        name: 'sysUser',
+        component: () => import('@/views/sys/user/SysUser.vue')
+      },
+      {
+        path: '/sys/perf',
+        name: 'sysPerf',
+        component: () => import('@/views/sys/perf/SysPerf.vue')
       },
 
 
@@ -88,6 +113,22 @@ const Routes = [
       {
         path: '/hello',
         component: Hello
+      },
+
+      {
+        path: '/pri/noteBook',
+        name: 'noteBook',
+        component: () => import('@/views/pri/noteBook/NoteBook.vue')
+      },
+      {
+        path: '/pri/passwordBook',
+        name: 'passwordBook',
+        component: () => import('@/views/pri/passwordBook/PasswordBook.vue')
+      },
+      {
+        path: '/pri/taskList',
+        name: 'taskList',
+        component: () => import('@/views/pri/taskList/TaskList.vue')
       },
 
       // 定义错误页

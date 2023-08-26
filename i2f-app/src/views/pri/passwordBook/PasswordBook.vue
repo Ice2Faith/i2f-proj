@@ -57,7 +57,7 @@ export default {
         }
       ],
 
-      moduleBaseUrl: '/api/sys/resources',
+      moduleBaseUrl: '/api/biz/passwordBook',
 
       form: {
 
@@ -79,7 +79,7 @@ export default {
   created() {
     this.$emit('nav',{
       enable: true,
-      title: '资源管理',
+      title: '密码本',
       rightText: null,
       rightIcon: 'search',
       rightClick: this.expandSearchPanel

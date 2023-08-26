@@ -16,7 +16,7 @@
             <van-button square type="danger" text="删除" @click="doDelete(item)"/>
             <van-button square type="primary" text="编辑" @click="doEdit(item)"/>
           </template>
-          <van-cell :title="item.name">
+          <van-cell :title="item.roleName">
             <template #right-icon>
               <van-icon name="arrow" class="search-icon" @click="doView(item)" />
             </template>
@@ -57,7 +57,7 @@ export default {
         }
       ],
 
-      moduleBaseUrl: '/api/sys/resources',
+      moduleBaseUrl: '/api/sys/role',
 
       form: {
 
@@ -79,7 +79,7 @@ export default {
   created() {
     this.$emit('nav',{
       enable: true,
-      title: '资源管理',
+      title: '角色管理',
       rightText: null,
       rightIcon: 'search',
       rightClick: this.expandSearchPanel
