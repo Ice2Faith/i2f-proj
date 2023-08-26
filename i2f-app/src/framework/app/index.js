@@ -23,6 +23,7 @@ import 'nprogress/nprogress.css'
 /// ///////////////////////////////////////////////////////
 import Vant from 'vant'
 import 'vant/lib/index.css'
+import { showDialog, showConfirmDialog } from 'vant'
 import * as AntIcons from '@ant-design/icons-vue'
 /// ///////////////////////////////////////////////////////
 import Directives from '@/framework/directives'
@@ -65,6 +66,8 @@ VueApp.config.globalProperties.$multipart = MultipartRequest
 VueApp.config.globalProperties.$auth = Auth
 VueApp.config.globalProperties.$config = Config
 VueApp.config.globalProperties.$message = Message
+VueApp.config.globalProperties.$dialog = showDialog
+VueApp.config.globalProperties.$confirm = showConfirmDialog
 
 // 在setup语法中，可以使用如下方式获取对象
 // import { getCurrentInstance } from 'vue'
