@@ -12,7 +12,7 @@
     >
       <a-form-item
         label="截止时间"
-        name="name">
+        name="deadline">
         <a-range-picker v-model:value="beforeForm.deadline"
                         valueFormat="YYYY-MM-DD"
                         format="YYYY-MM-DD"

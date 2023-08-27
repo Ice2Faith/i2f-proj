@@ -53,6 +53,8 @@ const ListManageMixin = {
 
     },
     getData (reset) {
+      this.actionSearchShow=false
+      this.actionMoreShow=false
       if (reset) {
         this.tablePage.current = 1
         this.tablePage.total=0

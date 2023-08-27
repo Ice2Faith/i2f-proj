@@ -34,13 +34,69 @@
       @cancel="actionMoreShow=false"
     />
 
-    <van-action-sheet
-      v-model:show="actionSearchShow"
-      title="搜索框"
-      safe-area-inset-bottom
-    >
-      在此处进行搜索
-    </van-action-sheet>
+
+
+    <van-popup v-model:show="actionSearchShow"
+               position="top"
+               round
+               :style="{  }" >
+      <van-form ref="form" @keydown.enter.native.stop="doSearch">
+        <van-cell-group inset style="max-height: 50vh;overflow: auto;margin-right: 0px">
+          <van-field
+            v-model="form.deptKey"
+            clearable
+            name="deptKey"
+            label="部门键"
+            placeholder="部门键"
+          />
+          <van-field
+            v-model="form.name"
+            clearable
+            name="name"
+            label="名称"
+            placeholder="名称"
+          />
+          <van-field
+            v-model="form.statusDesc"
+            clearable
+            is-link
+            readonly
+            name="status"
+            label="状态"
+            placeholder="点击选择"
+            @click="dialogs.status.show = true"
+          />
+          <van-popup v-model:show="dialogs.status.show" position="bottom">
+            <van-picker
+              :columns-field-names="{ text: 'label', value: 'value', children: 'children' }"
+              :columns="metas.statusList"
+              @confirm="({ selectedOptions }) =>{dialogs.status.show=false;form.status=selectedOptions[0].value;form.statusDesc=selectedOptions[0].label}"
+              @cancel="dialogs.status.show = false"
+            />
+          </van-popup>
+          <van-field
+            v-model="form.remark"
+            clearable
+            name="remark"
+            label="备注"
+            placeholder="备注"
+          />
+
+        </van-cell-group>
+        <van-row style="margin: 16px">
+          <van-col span="12">
+            <van-button block type="default" size="small" @click="doReset">
+              重置
+            </van-button>
+          </van-col>
+          <van-col span="12">
+            <van-button block type="primary" size="small" @click="doSearch">
+              搜索
+            </van-button>
+          </van-col>
+        </van-row>
+      </van-form>
+    </van-popup>
 
   </div>
 </template>
@@ -60,7 +116,11 @@ export default {
       moduleBaseUrl: '/api/sys/dept',
 
       form: {
-
+        deptKey: '',
+        name: '',
+        status: '',
+        statusDesc: '',
+        remark: ''
       },
       controls: {
 
@@ -69,10 +129,21 @@ export default {
 
       },
       dialogs: {
-
+        status:{
+          show:false
+        }
       },
       metas: {
-
+        statusList: [{
+          value: 0,
+          label: '禁用'
+        }, {
+          value: 1,
+          label: '启用'
+        }, {
+          value: 99,
+          label: '删除'
+        }]
       },
     }
   },
@@ -94,7 +165,15 @@ export default {
 
   },
   methods: {
-
+    doReset(){
+      this.form= {
+          deptKey: '',
+          name: '',
+          status: '',
+          statusDesc: '',
+          remark: ''
+      }
+    }
   }
 }
 </script>

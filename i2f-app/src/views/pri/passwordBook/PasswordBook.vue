@@ -34,13 +34,43 @@
       @cancel="actionMoreShow=false"
     />
 
-    <van-action-sheet
-      v-model:show="actionSearchShow"
-      title="搜索框"
-      safe-area-inset-bottom
-    >
-      在此处进行搜索
-    </van-action-sheet>
+
+    <van-popup v-model:show="actionSearchShow"
+               position="top"
+               round
+               :style="{  }" >
+      <van-form ref="form" @keydown.enter.native.stop="doSearch">
+        <van-cell-group inset style="max-height: 50vh;overflow: auto;margin-right: 0px">
+          <van-field
+            v-model="form.name"
+            clearable
+            name="name"
+            label="名称"
+            placeholder="名称"
+          />
+          <van-field
+            v-model="form.platform"
+            clearable
+            name="platform"
+            label="平台"
+            placeholder="平台"
+          />
+
+        </van-cell-group>
+        <van-row style="margin: 16px">
+          <van-col span="12">
+            <van-button block type="default" size="small" @click="doReset">
+              重置
+            </van-button>
+          </van-col>
+          <van-col span="12">
+            <van-button block type="primary" size="small" @click="doSearch">
+              搜索
+            </van-button>
+          </van-col>
+        </van-row>
+      </van-form>
+    </van-popup>
 
   </div>
 </template>
@@ -60,7 +90,10 @@ export default {
       moduleBaseUrl: '/api/biz/passwordBook',
 
       form: {
-
+        name: '',
+        platform: null,
+        account: '',
+        remark: ''
       },
       controls: {
 
@@ -94,7 +127,14 @@ export default {
 
   },
   methods: {
-
+    doReset(){
+      this.form= {
+          name: '',
+          platform: null,
+          account: '',
+          remark: ''
+      }
+    }
   }
 }
 </script>

@@ -34,13 +34,98 @@
       @cancel="actionMoreShow=false"
     />
 
-    <van-action-sheet
-      v-model:show="actionSearchShow"
-      title="搜索框"
-      safe-area-inset-bottom
-    >
-      在此处进行搜索
-    </van-action-sheet>
+
+    <van-popup v-model:show="actionSearchShow"
+               position="top"
+               round
+               :style="{  }" >
+      <van-form ref="form" @keydown.enter.native.stop="doSearch">
+        <van-cell-group inset style="max-height: 50vh;overflow: auto;margin-right: 0px">
+          <van-field
+            v-model="form.roleKey"
+            clearable
+            name="roleKey"
+            label="角色键"
+            placeholder="角色键"
+          />
+          <van-field
+            v-model="form.roleName"
+            clearable
+            name="roleName"
+            label="角色名称"
+            placeholder="角色名称"
+          />
+          <van-field
+            v-model="form.statusDesc"
+            clearable
+            is-link
+            readonly
+            name="status"
+            label="状态"
+            placeholder="点击选择"
+            @click="dialogs.status.show = true"
+          />
+          <van-popup v-model:show="dialogs.status.show" position="bottom">
+            <van-picker
+              :columns-field-names="{ text: 'label', value: 'value', children: 'children' }"
+              :columns="metas.statusList"
+              @confirm="({ selectedOptions }) =>{dialogs.status.show=false;form.status=selectedOptions[0].value;form.statusDesc=selectedOptions[0].label}"
+              @cancel="dialogs.status.show = false"
+            />
+          </van-popup>
+          <van-field
+            v-model="form.delFlagDesc"
+            clearable
+            is-link
+            readonly
+            name="status"
+            label="是否可删除"
+            placeholder="点击选择"
+            @click="dialogs.delFlag.show = true"
+          />
+          <van-popup v-model:show="dialogs.delFlag.show" position="bottom">
+            <van-picker
+              :columns-field-names="{ text: 'label', value: 'value', children: 'children' }"
+              :columns="metas.boolList"
+              @confirm="({ selectedOptions }) =>{dialogs.delFlag.show=false;form.delFlag=selectedOptions[0].value;form.delFlagDesc=selectedOptions[0].label}"
+              @cancel="dialogs.delFlag.show = false"
+            />
+          </van-popup>
+          <van-field
+            v-model="form.sysFlagDesc"
+            clearable
+            is-link
+            readonly
+            name="status"
+            label="是否系统"
+            placeholder="点击选择"
+            @click="dialogs.sysFlag.show = true"
+          />
+          <van-popup v-model:show="dialogs.sysFlag.show" position="bottom">
+            <van-picker
+              :columns-field-names="{ text: 'label', value: 'value', children: 'children' }"
+              :columns="metas.boolList"
+              @confirm="({ selectedOptions }) =>{dialogs.sysFlag.show=false;form.sysFlag=selectedOptions[0].value;form.sysFlagDesc=selectedOptions[0].label}"
+              @cancel="dialogs.sysFlag.show = false"
+            />
+          </van-popup>
+
+        </van-cell-group>
+        <van-row style="margin: 16px">
+          <van-col span="12">
+            <van-button block type="default" size="small" @click="doReset">
+              重置
+            </van-button>
+          </van-col>
+          <van-col span="12">
+            <van-button block type="primary" size="small" @click="doSearch">
+              搜索
+            </van-button>
+          </van-col>
+        </van-row>
+      </van-form>
+    </van-popup>
+
 
   </div>
 </template>
@@ -60,7 +145,14 @@ export default {
       moduleBaseUrl: '/api/sys/role',
 
       form: {
-
+        roleKey: '',
+        roleName: '',
+        status: null,
+        statusDesc: '',
+        delFlag: null,
+        delFlagDesc: '',
+        sysFlag: null,
+        sysFlagDesc: ''
       },
       controls: {
 
@@ -69,10 +161,35 @@ export default {
 
       },
       dialogs: {
-
+        status:{
+          show:false
+        },
+        delFlag:{
+          show:false,
+        },
+        sysFlag:{
+          show:false
+        }
       },
       metas: {
-
+        statusList: [{
+          value: 0,
+          label: '禁用'
+        }, {
+          value: 1,
+          label: '启用'
+        }, {
+          value: 99,
+          label: '删除'
+        }],
+        boolList: [{
+          value: 0,
+          label: '否'
+        }, {
+          value: 1,
+          label: '是'
+        }],
+        resourceTreeData: []
       },
     }
   },
@@ -94,7 +211,18 @@ export default {
 
   },
   methods: {
-
+    doReset(){
+      this.form = {
+          roleKey: '',
+          roleName: '',
+          status: null,
+          statusDesc: '',
+          delFlag: null,
+          delFlagDesc: '',
+          sysFlag: null,
+          sysFlagDesc: ''
+      }
+    }
   }
 }
 </script>

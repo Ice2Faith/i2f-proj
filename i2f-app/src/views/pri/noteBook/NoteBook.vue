@@ -34,13 +34,50 @@
       @cancel="actionMoreShow=false"
     />
 
-    <van-action-sheet
-      v-model:show="actionSearchShow"
-      title="搜索框"
-      safe-area-inset-bottom
-    >
-      在此处进行搜索
-    </van-action-sheet>
+
+    <van-popup v-model:show="actionSearchShow"
+               position="top"
+               round
+               :style="{  }" >
+      <van-form ref="form" @keydown.enter.native.stop="doSearch">
+        <van-cell-group inset style="max-height: 50vh;overflow: auto;margin-right: 0px">
+          <van-field
+            v-model="form.title"
+            clearable
+            name="title"
+            label="标题"
+            placeholder="标题"
+          />
+          <van-field
+            v-model="form.keywords"
+            clearable
+            name="keywords"
+            label="关键字"
+            placeholder="关键字"
+          />
+          <van-field
+            v-model="form.remark"
+            clearable
+            name="remark"
+            label="备注"
+            placeholder="备注"
+          />
+
+        </van-cell-group>
+        <van-row style="margin: 16px">
+          <van-col span="12">
+            <van-button block type="default" size="small" @click="doReset">
+              重置
+            </van-button>
+          </van-col>
+          <van-col span="12">
+            <van-button block type="primary" size="small" @click="doSearch">
+              搜索
+            </van-button>
+          </van-col>
+        </van-row>
+      </van-form>
+    </van-popup>
 
   </div>
 </template>
@@ -60,7 +97,9 @@ export default {
       moduleBaseUrl: '/api/biz/noteBook',
 
       form: {
-
+        title: '',
+        keywords: '',
+        remark: ''
       },
       controls: {
 
@@ -94,7 +133,13 @@ export default {
 
   },
   methods: {
-
+    doReset(){
+      this.form= {
+          title: '',
+          keywords: '',
+          remark: ''
+      }
+    }
   }
 }
 </script>
