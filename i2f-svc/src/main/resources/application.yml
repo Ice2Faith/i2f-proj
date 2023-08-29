@@ -21,7 +21,7 @@ server:
 spring:
   # 激活配置
   profiles:
-    active: dev
+    active: test
   # 应用配置
   application:
     name: i2f-app

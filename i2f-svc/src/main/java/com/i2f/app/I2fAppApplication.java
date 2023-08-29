@@ -5,6 +5,7 @@ import i2f.springboot.application.WarBootApplication;
 import i2f.springboot.cors.EnableCorsConfig;
 import i2f.springboot.datasource.EnableDynamicDatasourceConfig;
 import i2f.springboot.exception.EnableExceptionHandlerConfig;
+import i2f.springboot.firewall.EnableFirewallConfig;
 import i2f.springboot.limit.EnableLimitConfig;
 import i2f.springboot.mybatis.EnableMybatisConfig;
 import i2f.springboot.perf.EnablePerfConfig;
@@ -31,6 +32,7 @@ import org.springframework.context.annotation.Import;
 @EnableApiRespConfig
 @EnableVerifyCodeConfig
 @EnableLimitConfig
+@EnableFirewallConfig
 @Import(VerifyCodeBeforeLoginChecker.class)
 @EnableAspectJAutoProxy
 @Slf4j
