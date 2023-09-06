@@ -2,10 +2,10 @@
 import Config from '@/framework/config'
 import VueUtil from '@/framework/utils/vue-util'
 import Base64Util from '@/framework/utils/base64-util'
-import SecureTransfer from '@/framework/secure/core/secure-transfer'
-import SecureConfig from '@/framework/secure/secure-config'
+import SecureTransfer from '@/framework/secure/core/SecureTransfer'
+import SecureConfig from '@/framework/secure/SecureConfig'
 import SecureProvider from '@/framework/secure/crypto/SecureProvider'
-import Base64Obfuscator from '@/framework/secure/util/base64-obfuscator'
+import Base64Obfuscator from '@/framework/secure/util/Base64Obfuscator'
 
 const Auth = {
   // 常量，表示存储token的键

@@ -5,8 +5,8 @@ import Auth from '@/framework/auth'
 import Message from '@/framework/message'
 import AxiosExceptionHandler from '@/framework/request/exception'
 import VueUtil from '@/framework/utils/vue-util'
-import SecureTransfer from '@/framework/secure/core/secure-transfer'
-import SecureTransferFilter from '@/framework/secure/core/secure-transfer-filter'
+import SecureTransfer from '@/framework/secure/core/SecureTransfer'
+import SecureTransferFilter from '@/framework/secure/core/SecureTransferFilter'
 import NProgress from 'nprogress'
 
 // 定义默认的参数

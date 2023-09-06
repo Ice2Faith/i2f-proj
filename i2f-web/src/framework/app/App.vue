@@ -6,11 +6,11 @@
 
 <script>
 
-import SecureTransfer from '@/framework/secure/core/secure-transfer'
+import SecureTransfer from '@/framework/secure/core/SecureTransfer'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 import '../resizer/DebounceResizeObserver'
-import SecureCallback from '@/framework/secure/core/secure-callback'
-import SecureConfig from '@/framework/secure/secure-config'
+import SecureCallback from '@/framework/secure/core/SecureCallback'
+import SecureConfig from '@/framework/secure/SecureConfig'
 
 export default {
   name: 'App',
