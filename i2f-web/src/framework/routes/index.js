@@ -97,6 +97,11 @@ const Routes = [
         component: () => import('@/views/pri/taskList/TaskList.vue')
       },
       {
+        path: '/pri/liveOnline',
+        name: 'liveOnline',
+        component: () => import('@/views/pri/liveOnline/LiveOnline.vue')
+      },
+      {
         path: '/about',
         name: 'about',
         // route level code-splitting
