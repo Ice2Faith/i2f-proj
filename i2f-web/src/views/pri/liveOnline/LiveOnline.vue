@@ -83,6 +83,7 @@
         :wrapper-col="{ span: 20 }"
         autocomplete="off"
       >
+        <a-checkbox v-model:checked="metas.useFfmpeg">FFMPEG</a-checkbox>
 
         <a-form-item
           label="服务器"
@@ -271,7 +272,9 @@ export default {
           title: '推流配置'
         }
       },
-      metas: {},
+      metas: {
+        useFfmpeg: false,
+      },
       tableColumns: []
     }
   },
@@ -287,10 +290,18 @@ export default {
       return `${this.form.pushChannel}?token=${this.form.token}`
     },
     pushHlsUrl() {
-      return `rtmp://${this.form.host}:11935/hls/${this.form.pushChannel}?token=${this.form.token}`
+      let url = `rtmp://${this.form.host}:11935/hls/${this.form.pushChannel}?token=${this.form.token}`
+      if (this.metas.useFfmpeg) {
+        url = `ffmpeg -re -i test.mp4 -f flv ${url}`
+      }
+      return url
     },
     pullHlsUrl() {
-      return `http://${this.form.host}:11934/hls/${this.form.pushChannel}/index.m3u8?token=${this.form.token}`
+      let url = `http://${this.form.host}:11934/hls/${this.form.pushChannel}/index.m3u8?token=${this.form.token}`
+      if (this.metas.useFfmpeg) {
+        url = `ffplay ${url}`
+      }
+      return url
     },
     pushRtmpServerUrl() {
       return `rtmp://${this.form.host}:11935/live/`
@@ -299,10 +310,18 @@ export default {
       return `${this.form.pushChannel}?token=${this.form.token}`
     },
     pushRtmpUrl() {
-      return `rtmp://${this.form.host}:11935/live/${this.form.pushChannel}?token=${this.form.token}`
+      let url = `rtmp://${this.form.host}:11935/live/${this.form.pushChannel}?token=${this.form.token}`
+      if (this.metas.useFfmpeg) {
+        url = `ffmpeg -re -i test.mp4 -f flv ${url}`
+      }
+      return url
     },
     pullRtmpUrl() {
-      return `rtmp://${this.form.host}:11935/live/${this.form.pushChannel}/index.m3u8?token=${this.form.token}`
+      let url = `rtmp://${this.form.host}:11935/live/${this.form.pushChannel}?token=${this.form.token}`
+      if (this.metas.useFfmpeg) {
+        url = `ffplay ${url}`
+      }
+      return url
     }
   },
   methods: {
