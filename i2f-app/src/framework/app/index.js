@@ -29,8 +29,6 @@ import Directives from '@/framework/directives'
 import DirectiveInstaller from '@/framework/directives/install'
 /// ///////////////////////////////////////////////////////
 import GlobalExceptionInstaller from '@/framework/exception/installer/GlobalExceptionInstaller'
-/// ///////////////////////////////////////////////////////
-import LiquorTree from 'liquor-tree'
 
 // 全局进度条的配置
 NProgress.configure({
@@ -47,7 +45,6 @@ const VueApp = createApp(App)
   .use(Router)
   .use(Store)
   .use(Vant)
-  .use(LiquorTree)
 
 // 注册指令
 DirectiveInstaller.installAll(VueApp, Directives)
