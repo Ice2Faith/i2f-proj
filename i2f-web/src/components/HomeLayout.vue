@@ -114,6 +114,7 @@ export default {
         children: 'children',
         url: 'url'
       },
+      flatMenus: {},
       menus: [
         {
           key: '0',
@@ -152,12 +153,22 @@ export default {
       ]
     }
   },
-  created () {
+  created() {
     this.user = Auth.getUser()
     this.loadMenu()
   },
+  updated() {
+    this.currentTabFill()
+  },
   methods: {
-    onTabEdit (targetKey, action) {
+    currentTabFill() {
+      let path = this.$route.fullPath
+      let menu = this.flatMenus[path]
+      if (menu) {
+        this.onClickMenu(menu)
+      }
+    },
+    onTabEdit(targetKey, action) {
       let idx = -1
       for (let i = 0; i < this.tabs.length; i++) {
         if (this.tabs[i].key == targetKey) {
@@ -223,14 +234,42 @@ export default {
         this.$message.noticeInfo(data.msg)
       })
     },
-    loadMenu () {
+    loadMenu() {
       this.$axios({
         url: '/sys/user/menus',
         method: 'post'
       }).then(data => {
         this.menus = data.data
+        this.initFlatMenus()
+        this.currentTabFill()
       })
-    }
+    },
+    initFlatMenus() {
+      this.flatMenus = {}
+      this.initFlatMenusNext(this.menus)
+    },
+    initFlatMenusNext(menus) {
+      if (!menus || menus.length == 0) {
+        return
+      }
+      for (let i = 0; i < menus.length; i++) {
+        let item = {
+          key: menus[i].id,
+          title: menus[i].name,
+          icon: menus[i].icon,
+          url: menus[i].url
+        }
+        if (!item.url) {
+          continue
+        }
+        let key = item.url + ''
+        if (!key.startsWith('/')) {
+          key = '/' + key
+        }
+        this.flatMenus[key] = item
+        this.initFlatMenusNext(menus[i].children)
+      }
+    },
   }
 }
 </script>

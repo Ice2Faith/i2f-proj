@@ -101,6 +101,13 @@ const Routes = [
         name: 'liveOnline',
         component: () => import('@/views/pri/liveOnline/LiveOnline.vue')
       },
+
+
+      {
+        path: '/pub/qrCode',
+        name: 'qrCode',
+        component: () => import('@/views/pub/qrCode/QrCode.vue')
+      },
       {
         path: '/about',
         name: 'about',

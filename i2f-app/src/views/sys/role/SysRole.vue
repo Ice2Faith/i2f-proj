@@ -126,19 +126,54 @@
       </van-form>
     </van-popup>
 
+    <van-popup
+      v-model:show="dialogs.auth.show"
+      :style="{ width: '100%' }"
+      close-icon-position="top-left"
+      closeable
+      position="right"
+    >
+      <h2>
+        {{ dialogs.auth.title }}
+      </h2>
+      <div>
+        <van-button size="small"
+                    style="float: right"
+                    type="primary"
+                    @click="onAuthSubmit">
+          提交
+        </van-button>
+      </div>
+
+
+      <tree
+        ref="resourcesTree"
+        :data="metas.resourceTreeData"
+        :options="metas.resourcesTreeOptions"
+      />
+    </van-popup>
 
   </div>
 </template>
 <script>
-import ListManageMixin from "@/mixins/ListManageMixin";
+import ListManageMixin from "@/mixins/ListManageMixin"
+import Tree from '@/components/Tree'
+
 export default {
-  mixins:[ListManageMixin],
-  data(){
+  components: {
+    Tree
+  },
+  mixins: [ListManageMixin],
+  data() {
     return {
-      actionMoreActions:[
+      actionMoreActions: [
         {
           name: '新增',
           callback: this.doAdd
+        },
+        {
+          name: '授权',
+          callback: this.doAuthResources
         }
       ],
 
@@ -161,14 +196,20 @@ export default {
 
       },
       dialogs: {
-        status:{
-          show:false
+        status: {
+          show: false
         },
-        delFlag:{
-          show:false,
+        delFlag: {
+          show: false,
         },
-        sysFlag:{
-          show:false
+        sysFlag: {
+          show: false
+        },
+        auth: {
+          title: '角色授权',
+          show: false,
+          record: {},
+          checkedKeys: []
         }
       },
       metas: {
@@ -189,6 +230,11 @@ export default {
           value: 1,
           label: '是'
         }],
+        resourcesTreeOptions: {
+          checkbox: true,
+          text: 'name',
+          children: 'children'
+        },
         resourceTreeData: []
       },
     }
@@ -213,15 +259,45 @@ export default {
   methods: {
     doReset(){
       this.form = {
-          roleKey: '',
-          roleName: '',
-          status: null,
-          statusDesc: '',
-          delFlag: null,
-          delFlagDesc: '',
-          sysFlag: null,
-          sysFlagDesc: ''
+        roleKey: '',
+        roleName: '',
+        status: null,
+        statusDesc: '',
+        delFlag: null,
+        delFlagDesc: '',
+        sysFlag: null,
+        sysFlagDesc: ''
       }
+    },
+    hookAfterMounted() {
+      this.loadResourcesTreeData()
+    },
+    loadResourcesTreeData() {
+      this.$axios({
+        url: '/api/sys/resources/tree',
+        method: 'get'
+      }).then(({data}) => {
+        this.metas.resourceTreeData = data
+      })
+    },
+    onAuthSubmit() {
+      this.$axios({
+        url: `${this.moduleBaseUrl}/resources/update/${this.dialogs.auth.record.id}`,
+        method: 'put',
+        data: this.dialogs.auth.checkedKeys
+      }).then((data) => {
+        this.dialogs.auth.show = false
+      })
+    },
+    doAuthResources() {
+      this.dialogs.auth.record = this.actionMoreRecord
+      this.$axios({
+        url: `${this.moduleBaseUrl}/resources/ids/${this.dialogs.auth.record.id}`,
+        method: 'get'
+      }).then(({data}) => {
+        this.dialogs.auth.checkedKeys = data
+        this.dialogs.auth.show = true
+      })
     }
   }
 }

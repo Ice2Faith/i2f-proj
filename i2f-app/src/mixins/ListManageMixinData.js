@@ -7,9 +7,8 @@ function ListManageMixinData () {
     queryFinished: true,
 
     actionMoreShow: false,
-    actionMoreActions:[
-
-    ],
+    actionMoreRecord: {},
+    actionMoreActions: [],
 
     actionSearchShow: false,
 

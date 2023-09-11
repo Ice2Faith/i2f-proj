@@ -111,7 +111,8 @@ const ListManageMixin = {
 
     },
     doMore(record){
-
+      this.actionMoreRecord = record
+      this.actionMoreShow = true
     },
     doView (record) {
       this.$message.noticeInfo('查看')
@@ -140,10 +141,10 @@ const ListManageMixin = {
         }).then(() => {
           _this.doSearch()
         })
-      }).catch(()=>{
+      }).catch(() => {
         _this.$message.noticeInfo('操作已取消')
       })
-    }
+    },
   }
 }
 
