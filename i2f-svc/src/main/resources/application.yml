@@ -143,6 +143,7 @@ i2f:
           bothPattens:
             - /api/sys/file/**
             - /secure/key
+            - /api/rtmp/**
           # 进站忽略的列表清单
           inPattens:
             - /api/sys/file/upload/**

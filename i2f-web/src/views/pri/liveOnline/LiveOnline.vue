@@ -126,6 +126,14 @@
         >
           <a-input :value="pushHlsUrl" allow-clear disabled/>
         </a-form-item>
+        <template v-if="metas.useFfmpeg">
+          <a-form-item
+            label="推流桌面地址"
+            name="pushDesktopHlsUrl"
+          >
+            <a-input :value="pushDesktopHlsUrl" allow-clear disabled/>
+          </a-form-item>
+        </template>
         <a-form-item
           label="拉流地址"
           name="pullHlsUrl"
@@ -259,7 +267,7 @@ export default {
       },
 
       form: {
-        url: 'http://47.92.88.61:11934/hls/hello/index.m3u8?token=ltb12315',
+        url: '',
 
         host: '47.92.88.61',
         token: 'ltb12315',
@@ -281,6 +289,10 @@ export default {
   mounted() {
     this.user = Auth.getUser()
     this.form.pushChannel = this.user.username
+    this.form.token = Auth.getToken()
+    if (!this.form.url || this.form.url == '') {
+      this.form.url = `http://${this.form.host}:11934/hls/${this.form.pushChannel}/index.m3u8?token=${this.form.token}`
+    }
   },
   computed: {
     pushHlsServerUrl() {
@@ -293,6 +305,13 @@ export default {
       let url = `rtmp://${this.form.host}:11935/hls/${this.form.pushChannel}?token=${this.form.token}`
       if (this.metas.useFfmpeg) {
         url = `ffmpeg -re -i test.mp4 -f flv ${url}`
+      }
+      return url
+    },
+    pushDesktopHlsUrl() {
+      let url = `rtmp://${this.form.host}:11935/hls/${this.form.pushChannel}?token=${this.form.token}`
+      if (this.metas.useFfmpeg) {
+        url = `ffmpeg -f gdigrab -i desktop -vcodec libx264 -s 720*480 -r 30 -preset:v ultrafast -tune:v zerolatency -f flv ${url}`
       }
       return url
     },
