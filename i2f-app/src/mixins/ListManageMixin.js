@@ -112,14 +112,12 @@ const ListManageMixin = {
       this.actionRecordMoreShow = true
     },
     doView (record) {
-      this.$message.noticeInfo('查看')
       this.dialogDetail.mode = FormDetailMode.VIEW()
       this.dialogDetail.title = '详情'
       this.dialogDetail.record = record
       this.dialogDetail.show = true
     },
     doEdit (record) {
-      this.$message.noticeInfo('编辑')
       this.dialogDetail.mode = FormDetailMode.EDIT()
       this.dialogDetail.title = '编辑'
       this.dialogDetail.record = record

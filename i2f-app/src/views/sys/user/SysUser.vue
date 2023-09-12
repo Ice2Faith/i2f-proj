@@ -190,6 +190,7 @@
         <template #content="{node}">
           {{node.text}}
           <van-button
+            v-if="node.checked"
             plain
             type="primary"
             size="mini"
@@ -249,6 +250,7 @@
 import ListManageMixin from '@/mixins/ListManageMixin'
 import Tree from '@/components/Tree'
 import Detail from './components/Detail'
+
 export default {
   components: {
     Detail,
@@ -445,7 +447,6 @@ export default {
       })
     },
     doAuthDeptRoles (deptId) {
-      debugger
       this.dialogs.deptRole.deptId = deptId
       Promise.all([
         this.$axios({
@@ -461,6 +462,10 @@ export default {
         })
       ]
       ).then((arr) => {
+        if (!arr[0].data || arr[0].data.length == 0) {
+          this.$message.noticeWarning('该该部门无角色配置')
+          return
+        }
         this.dialogs.deptRole.roleList = arr[0].data
         this.dialogs.deptRole.roleKeys = arr[1].data
         this.dialogs.deptRole.show = true
