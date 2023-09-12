@@ -34,6 +34,14 @@
       @cancel="actionMoreShow=false"
     />
 
+    <van-action-sheet
+      v-model:show="actionRecordMoreShow"
+      :actions="actionRecordMoreActions"
+      cancel-text="取消"
+      close-on-click-action
+      safe-area-inset-bottom
+      @cancel="actionRecordMoreShow=false"
+    />
 
     <van-popup v-model:show="actionSearchShow"
                position="top"
@@ -128,35 +136,33 @@
 
     <van-popup
       v-model:show="dialogs.auth.show"
-      :style="{ width: '100%' }"
-      close-icon-position="top-left"
-      closeable
+      :style="{ width: '100%',height: '100%',paddingTop: 'var(--van-popup-close-icon-margin)' }"
       position="right"
     >
-      <h2>
-        {{ dialogs.auth.title }}
-      </h2>
-      <div>
-        <van-button size="small"
-                    style="float: right"
-                    type="primary"
-                    @click="onAuthSubmit">
-          提交
-        </van-button>
-      </div>
-
+      <van-nav-bar
+        :title="dialogs.auth.title"
+        left-text="取消"
+        right-text="提交"
+        left-arrow
+        @click-left="dialogs.auth.show=false"
+        @click-right="onAuthSubmit"
+      />
 
       <tree
         ref="resourcesTree"
-        :data="metas.resourceTreeData"
-        :options="metas.resourcesTreeOptions"
+        :checkable="true"
+        :multiple="true"
+        :toolbox="true"
+        v-model:checked-keys="dialogs.auth.checkedKeys"
+        :tree="metas.resourceTreeData"
+        :fields="metas.resourcesTreeFields"
       />
     </van-popup>
 
   </div>
 </template>
 <script>
-import ListManageMixin from "@/mixins/ListManageMixin"
+import ListManageMixin from '@/mixins/ListManageMixin'
 import Tree from '@/components/Tree'
 
 export default {
@@ -164,13 +170,16 @@ export default {
     Tree
   },
   mixins: [ListManageMixin],
-  data() {
+  data () {
     return {
       actionMoreActions: [
         {
           name: '新增',
           callback: this.doAdd
-        },
+        }
+      ],
+
+      actionRecordMoreActions: [
         {
           name: '授权',
           callback: this.doAuthResources
@@ -200,7 +209,7 @@ export default {
           show: false
         },
         delFlag: {
-          show: false,
+          show: false
         },
         sysFlag: {
           show: false
@@ -230,24 +239,24 @@ export default {
           value: 1,
           label: '是'
         }],
-        resourcesTreeOptions: {
-          checkbox: true,
+        resourcesTreeFields: {
+          key: 'id',
           text: 'name',
           children: 'children'
         },
         resourceTreeData: []
-      },
+      }
     }
   },
-  created() {
-    this.$emit('nav',{
+  created () {
+    this.$emit('nav', {
       enable: true,
       title: '角色管理',
       rightText: null,
       rightIcon: 'search',
       rightClick: this.expandSearchPanel
     })
-    this.$emit('dock',{
+    this.$emit('dock', {
       enable: true,
       icon: 'plus',
       click: this.expandMorePanel
@@ -257,7 +266,7 @@ export default {
 
   },
   methods: {
-    doReset(){
+    doReset () {
       this.form = {
         roleKey: '',
         roleName: '',
@@ -269,18 +278,18 @@ export default {
         sysFlagDesc: ''
       }
     },
-    hookAfterMounted() {
+    hookAfterMounted () {
       this.loadResourcesTreeData()
     },
-    loadResourcesTreeData() {
+    loadResourcesTreeData () {
       this.$axios({
         url: '/api/sys/resources/tree',
         method: 'get'
-      }).then(({data}) => {
+      }).then(({ data }) => {
         this.metas.resourceTreeData = data
       })
     },
-    onAuthSubmit() {
+    onAuthSubmit () {
       this.$axios({
         url: `${this.moduleBaseUrl}/resources/update/${this.dialogs.auth.record.id}`,
         method: 'put',
@@ -289,12 +298,12 @@ export default {
         this.dialogs.auth.show = false
       })
     },
-    doAuthResources() {
-      this.dialogs.auth.record = this.actionMoreRecord
+    doAuthResources () {
+      this.dialogs.auth.record = this.actionRecordMoreData
       this.$axios({
         url: `${this.moduleBaseUrl}/resources/ids/${this.dialogs.auth.record.id}`,
         method: 'get'
-      }).then(({data}) => {
+      }).then(({ data }) => {
         this.dialogs.auth.checkedKeys = data
         this.dialogs.auth.show = true
       })

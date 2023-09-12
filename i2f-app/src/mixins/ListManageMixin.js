@@ -32,11 +32,11 @@ const ListManageMixin = {
 
     },
 
-    expandSearchPanel(){
-      this.actionSearchShow=true
+    expandSearchPanel () {
+      this.actionSearchShow = true
     },
-    expandMorePanel(){
-      this.actionMoreShow=true
+    expandMorePanel () {
+      this.actionMoreShow = true
     },
     onClickUrl (url) {
       if (url && url != '') {
@@ -46,25 +46,25 @@ const ListManageMixin = {
     doSearch () {
       this.getData(true)
     },
-    doLoad(){
+    doLoad () {
       this.getData(false)
     },
     doReset () {
 
     },
     getData (reset) {
-      this.actionSearchShow=false
-      this.actionMoreShow=false
+      this.actionSearchShow = false
+      this.actionMoreShow = false
       if (reset) {
         this.tablePage.current = 1
-        this.tablePage.total=0
-        this.tableData=[]
+        this.tablePage.total = 0
+        this.tableData = []
       }
-      if(reset){
-        this.queryRefreshing=true
-        this.queryFinished=false
+      if (reset) {
+        this.queryRefreshing = true
+        this.queryFinished = false
       }
-      this.queryLoading=true
+      this.queryLoading = true
 
       this.hookBeforeGetData()
       this.$axios({
@@ -72,23 +72,21 @@ const ListManageMixin = {
         method: 'get',
         params: this.form
       }).then(({ data }) => {
-        let list=data.list
-        if(!list || list.length<this.tablePage.pageSize){
-          this.queryFinished=true
+        const list = data.list
+        if (!list || list.length < this.tablePage.pageSize) {
+          this.queryFinished = true
         }
-        this.tableData = [...this.tableData,...list]
-        this.tablePage.current = (data.index + 1)+1
+        this.tableData = [...this.tableData, ...list]
+        this.tablePage.current = (data.index + 1) + 1
         this.tablePage.pageSize = data.size
         this.tablePage.total = data.total
-
-      }).catch(err=>{
-        this.queryFinished=true
+      }).catch(err => {
+        this.queryFinished = true
       }).finally(() => {
-        if(reset){
-          this.queryRefreshing=false
+        if (reset) {
+          this.queryRefreshing = false
         }
-        this.queryLoading=false
-
+        this.queryLoading = false
       })
     },
     doAdd () {
@@ -110,9 +108,9 @@ const ListManageMixin = {
     doExport () {
 
     },
-    doMore(record){
-      this.actionMoreRecord = record
-      this.actionMoreShow = true
+    doMore (record) {
+      this.actionRecordMoreData = record
+      this.actionRecordMoreShow = true
     },
     doView (record) {
       this.$message.noticeInfo('查看')
@@ -133,7 +131,7 @@ const ListManageMixin = {
       this.$confirm({
         title: '删除确认框',
         message: '您真的要要删除此项吗?'
-      }).then(()=>{
+      }).then(() => {
         _this.$axios({
           url: `${_this.moduleBaseUrl}/delete/${record.id}`,
           method: 'delete',
@@ -144,7 +142,7 @@ const ListManageMixin = {
       }).catch(() => {
         _this.$message.noticeInfo('操作已取消')
       })
-    },
+    }
   }
 }
 

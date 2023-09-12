@@ -7,11 +7,13 @@ function ListManageMixinData () {
     queryFinished: true,
 
     actionMoreShow: false,
-    actionMoreRecord: {},
     actionMoreActions: [],
 
-    actionSearchShow: false,
+    actionRecordMoreShow: false,
+    actionRecordMoreData: {},
+    actionRecordMoreActions: [],
 
+    actionSearchShow: false,
 
     dialogDetail: {
       title: '新增',
@@ -42,7 +44,7 @@ function ListManageMixinData () {
     },
     metas: {
 
-    },
+    }
   }
 }
 

@@ -3,7 +3,7 @@
  */
 import Vue from 'vue'
 
-import Random from './util/random'
+import Random from './util/Random'
 import B64 from './util/base64'
 import Base64Obfuscator from './util/base64-obfuscator'
 import SecureTransfer from './core/secure-transfer'
