@@ -60,8 +60,8 @@ export default {
         loading: false
       },
       rules: {
-        username: [{required: true, message: '请输入登录用户名!'}],
-        password: [{required: true, message: '请输入登录密码!'}]
+        username: [{ required: true, message: '请输入登录用户名!' }],
+        password: [{ required: true, message: '请输入登录密码!' }]
       },
       metas: {
         statusList: [{
