@@ -90,7 +90,6 @@ const ListManageMixin = {
       })
     },
     doAdd () {
-      this.$message.noticeInfo('新增')
       this.dialogDetail.mode = FormDetailMode.ADD()
       this.dialogDetail.title = '新增'
       this.dialogDetail.show = true

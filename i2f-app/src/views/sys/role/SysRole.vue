@@ -159,14 +159,33 @@
       />
     </van-popup>
 
+    <van-popup
+      v-model:show="dialogDetail.show"
+      :style="{ width: '100%',height: '100%',paddingTop: 'var(--van-popup-close-icon-margin)' }"
+      position="right"
+    >
+      <van-nav-bar
+        :title="dialogDetail.title"
+        left-text="取消"
+        left-arrow
+        @click-left="dialogDetail.show=false"
+      />
+      <Detail :mode="dialogDetail.mode"
+              :record="dialogDetail.record"
+              v-if="dialogDetail.show"
+              @cancel="handleDetailCancel"
+              @submit="handleDetailOk"></Detail>
+    </van-popup>
+
   </div>
 </template>
 <script>
 import ListManageMixin from '@/mixins/ListManageMixin'
 import Tree from '@/components/Tree'
-
+import Detail from './components/Detail'
 export default {
   components: {
+    Detail,
     Tree
   },
   mixins: [ListManageMixin],
