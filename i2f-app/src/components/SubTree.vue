@@ -33,6 +33,25 @@
                   @checked-change="onCheckedChange"
                   @item-click="onItemClicked"
                   @expand-click="onExpandClicked">
+          <template #icon="{node}">
+            <slot name="icon" :node="node">
+              <van-icon name="arrow-down" v-if="node.expand"/>
+              <van-icon name="arrow" v-else />
+            </slot>
+          </template>
+          <template #checkbox="{node}">
+            <slot name="checkbox" :node="node">
+              <van-checkbox :shape="multiple?'square':'round'"
+                            v-model="node.checked"
+                            :checked-color="node.indeterminate?'#fa8919':'#1989fa'">
+              </van-checkbox>
+            </slot>
+          </template>
+          <template #content="{node}">
+            <slot name="content" :node="node">
+              {{node.text}}
+            </slot>
+          </template>
         </sub-tree>
       </div>
     </div>
