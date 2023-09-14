@@ -212,10 +212,12 @@ export default {
     },
     emitCheckedKeys () {
       const currentCheckedKeys = []
-      this.findAllCheckedKeys(this.treeData, currentCheckedKeys)
+      const currentCheckNodes = []
+      this.findAllCheckedKeys(this.treeData, currentCheckedKeys, currentCheckNodes)
+      this.$emit('checked-nodes', currentCheckNodes)
       this.$emit('update:checkedKeys', currentCheckedKeys)
     },
-    findAllCheckedKeys (node, keys) {
+    findAllCheckedKeys (node, keys, nodes) {
       if (!node) {
         return
       }
@@ -223,8 +225,9 @@ export default {
         const item = node[i]
         if (item.checked) {
           keys.push(item.key)
+          nodes.push(item)
         }
-        this.findAllCheckedKeys(item.children, keys)
+        this.findAllCheckedKeys(item.children, keys, nodes)
       }
     },
     updateTreeParentChecked (node, child) {
