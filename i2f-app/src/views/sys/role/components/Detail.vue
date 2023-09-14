@@ -1,109 +1,11 @@
 <template>
   <div>
-
-    <van-form
-      van-form ref="form"
-    >
-      <van-cell-group inset>
-        <van-field
-          v-model="form.roleKey"
-          clearable
-          :rules="rules.roleKey"
-          name="roleKey"
-          label="角色键"
-        />
-
-        <van-field
-          v-model="form.roleName"
-          clearable
-          :rules="rules.roleName"
-          label="角色名称"
-          name="roleName"
-        />
-
-        <van-field
-          :rules="rules.status"
-          label="状态"
-          name="status">
-          <template #input>
-            <van-radio-group v-model="form.status" direction="horizontal">
-              <van-radio v-for="(item,index) in metas.statusList"
-                            :key="item.value"
-                            :name="item.value">
-                {{item.label}}
-              </van-radio>
-            </van-radio-group>
-          </template>
-        </van-field>
-
-        <van-field
-          :rules="rules.delFlag"
-          label="是否可删除"
-          name="delFlag">
-          <template #input>
-            <van-radio-group v-model="form.delFlag" direction="horizontal">
-              <van-radio v-for="(item,index) in metas.boolList"
-                            :key="item.value"
-                            :name="item.value" shape="square">
-                {{item.label}}
-              </van-radio>
-            </van-radio-group>
-          </template>
-        </van-field>
-
-        <van-field
-          :rules="rules.sysFlag"
-          label="是否系统"
-          name="sysFlag">
-          <template #input>
-            <van-radio-group v-model="form.sysFlag" direction="horizontal">
-              <van-radio v-for="(item,index) in metas.boolList"
-                            :key="item.value"
-                            :name="item.value" shape="square">
-                {{item.label}}
-              </van-radio>
-            </van-radio-group>
-          </template>
-        </van-field>
-
-        <van-field
-          v-model="form.updateTime"
-          clearable
-          :rules="rules.updateTime"
-          disabled
-          label="更新日期"
-          name="updateTime"
-        />
-
-        <van-field
-          v-model="form.updateUser"
-          clearable
-          :rules="rules.updateUser"
-          disabled
-          label="更新人"
-          name="updateUser"
-        />
-
-        <van-field
-          v-model="form.createTime"
-          clearable
-          :rules="rules.createTime"
-          disabled
-          label="创建日期"
-          name="createTime"
-        />
-
-        <van-field
-          v-model="form.createUser"
-          clearable
-          :rules="rules.createUser"
-          disabled
-          label="创建人"
-          name="createUser"
-        />
-
-      </van-cell-group>
-    </van-form>
+    <Form ref="form"
+          :fields="fields"
+          v-model:form="form"
+          :metas="metas"
+          :rules="rules">
+    </Form>
 
     <van-row :gutter="20" justify="center" type="flex" style="margin-top:12px">
       <van-col>
@@ -119,8 +21,12 @@
 
 import FormDetailMode from '@/framework/consts/FormDetailMode'
 import ListDetailMixin from '@/mixins/ListDetailMixin'
+import Form from '@/components/Form'
 
 export default {
+  components: {
+    Form
+  },
   props: {
     mode: {
       type: String,
@@ -170,8 +76,68 @@ export default {
         }, {
           value: 1,
           label: '是'
-        }]
-      }
+        }],
+        metasFields: {
+          text: 'label',
+          value: 'value',
+          children: 'children'
+        }
+      },
+      fields: [
+        {
+          prop: 'roleKey',
+          label: '角色键'
+        },
+        {
+          prop: 'roleName',
+          label: '角色名称'
+        },
+        {
+          prop: 'status',
+          label: '状态',
+          type: 'radio',
+          options: 'statusList',
+          optionsFields: 'metasFields'
+        },
+        {
+          prop: 'delFlag',
+          label: '是否可删除',
+          type: 'radio',
+          options: 'boolList',
+          optionsFields: 'metasFields'
+        },
+        {
+          prop: 'sysFlag',
+          label: '是否系统',
+          type: 'radio',
+          options: 'boolList',
+          optionsFields: 'metasFields'
+        },
+        {
+          prop: 'updateTime',
+          label: '更新日期',
+          disabled: true,
+          hasIf: (value) => this.mode != FormDetailMode.ADD() && value && value != ''
+        },
+        {
+          prop: 'updateUser',
+          label: '更新人',
+          disabled: true,
+          hasIf: (value) => this.mode != FormDetailMode.ADD() && value && value != ''
+        },
+        {
+          prop: 'createTime',
+          label: '创建日期',
+          disabled: true,
+          hasIf: (value) => this.mode != FormDetailMode.ADD() && value && value != ''
+        },
+        {
+          prop: 'createUser',
+          label: '创建人',
+          disabled: true,
+          hasIf: (value) => this.mode != FormDetailMode.ADD() && value && value != ''
+        }
+      ]
     }
   },
   methods: {}

@@ -2,7 +2,7 @@
   <div>
     <Form ref="form"
           :fields="fields"
-          :form="form"
+          v-model:form="form"
           :metas="metas"
           :rules="rules">
     </Form>

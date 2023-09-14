@@ -47,105 +47,27 @@
                position="top"
                round
                :style="{  }" >
-      <van-form ref="form" @keydown.enter.native.stop="doSearch">
-        <van-cell-group inset style="max-height: 50vh;overflow: auto;margin-right: 0px">
-          <van-field
-            v-model="form.username"
-            clearable
-            name="username"
-            label="登录用户名"
-            placeholder="登录用户名"
-          />
-          <van-field
-            v-model="form.realname"
-            clearable
-            name="realname"
-            label="用户名"
-            placeholder="用户名"
-          />
-          <van-field
-            v-model="form.phone"
-            clearable
-            name="phone"
-            label="电话号码"
-            placeholder="电话号码"
-          />
-          <van-field
-            v-model="form.email"
-            clearable
-            name="email"
-            label="电子邮箱"
-            placeholder="电子邮箱"
-          />
-          <van-field
-            v-model="form.statusDesc"
-            clearable
-            is-link
-            readonly
-            name="status"
-            label="状态"
-            placeholder="点击选择"
-            @click="dialogs.status.show = true"
-          />
-          <van-popup v-model:show="dialogs.status.show" position="bottom">
-            <van-picker
-              :columns-field-names="{ text: 'label', value: 'value', children: 'children' }"
-              :columns="metas.statusList"
-              @confirm="({ selectedOptions }) =>{dialogs.status.show=false;form.status=selectedOptions[0].value;form.statusDesc=selectedOptions[0].label}"
-              @cancel="dialogs.status.show = false"
-            />
-          </van-popup>
-          <van-field
-            v-model="form.delFlagDesc"
-            clearable
-            is-link
-            readonly
-            name="status"
-            label="是否可删除"
-            placeholder="点击选择"
-            @click="dialogs.delFlag.show = true"
-          />
-          <van-popup v-model:show="dialogs.delFlag.show" position="bottom">
-            <van-picker
-              :columns-field-names="{ text: 'label', value: 'value', children: 'children' }"
-              :columns="metas.boolList"
-              @confirm="({ selectedOptions }) =>{dialogs.delFlag.show=false;form.delFlag=selectedOptions[0].value;form.delFlagDesc=selectedOptions[0].label}"
-              @cancel="dialogs.delFlag.show = false"
-            />
-          </van-popup>
-          <van-field
-            v-model="form.sysFlagDesc"
-            clearable
-            is-link
-            readonly
-            name="status"
-            label="是否系统"
-            placeholder="点击选择"
-            @click="dialogs.sysFlag.show = true"
-          />
-          <van-popup v-model:show="dialogs.sysFlag.show" position="bottom">
-            <van-picker
-              :columns-field-names="{ text: 'label', value: 'value', children: 'children' }"
-              :columns="metas.boolList"
-              @confirm="({ selectedOptions }) =>{dialogs.sysFlag.show=false;form.sysFlag=selectedOptions[0].value;form.sysFlagDesc=selectedOptions[0].label}"
-              @cancel="dialogs.sysFlag.show = false"
-            />
-          </van-popup>
+      <Form ref="form"
+            :fields="fields"
+            v-model:form="form"
+            :enter-submit="true"
+            @submit="doSearch"
+            :metas="metas"
+            :rules="rules">
+      </Form>
 
-        </van-cell-group>
-        <van-row style="margin: 16px">
-          <van-col span="12">
-            <van-button block type="default" size="small" @click="doReset">
-              重置
-            </van-button>
-          </van-col>
-          <van-col span="12">
-            <van-button block type="primary" size="small" @click="doSearch">
-              搜索
-            </van-button>
-          </van-col>
-        </van-row>
-      </van-form>
+      <van-row style="margin: 16px">
+        <van-col span="12">
+          <van-button block type="default" size="small" @click="doReset">
+            重置
+          </van-button>
+        </van-col>
+        <van-col span="12">
+          <van-button block type="primary" size="small" @click="doSearch">
+            搜索
+          </van-button>
+        </van-col>
+      </van-row>
     </van-popup>
 
     <van-popup
@@ -250,11 +172,13 @@
 import ListManageMixin from '@/mixins/ListManageMixin'
 import Tree from '@/components/Tree'
 import Detail from './components/Detail'
+import Form from '@/components/Form'
 
 export default {
   components: {
     Detail,
-    Tree
+    Tree,
+    Form
   },
   mixins: [ListManageMixin],
   data () {
@@ -294,15 +218,6 @@ export default {
 
       },
       dialogs: {
-        status: {
-          show: false
-        },
-        delFlag: {
-          show: false
-        },
-        sysFlag: {
-          show: false
-        },
         auth: {
           title: '用户授权',
           show: false,
@@ -352,8 +267,54 @@ export default {
           text: 'name',
           children: 'children'
         },
-        deptTreeData: []
-      }
+        deptTreeData: [],
+        metasFields: {
+          text: 'label',
+          value: 'value',
+          children: 'children'
+        }
+      },
+      fields: [
+        {
+          prop: 'username',
+          label: '登录用户名'
+        },
+        {
+          prop: 'realname',
+          label: '用户名'
+        },
+        {
+          prop: 'phone',
+          label: '电话号码',
+          type: 'phone'
+        },
+        {
+          prop: 'email',
+          label: '电子邮箱',
+          type: 'email'
+        },
+        {
+          prop: 'status',
+          label: '状态',
+          type: 'select',
+          options: 'statusList',
+          optionsFields: 'metasFields'
+        },
+        {
+          prop: 'delFlag',
+          label: '是否可删除',
+          type: 'select',
+          options: 'boolList',
+          optionsFields: 'metasFields'
+        },
+        {
+          prop: 'sysFlag',
+          label: '是否系统',
+          type: 'select',
+          options: 'boolList',
+          optionsFields: 'metasFields'
+        }
+      ]
     }
   },
   created () {

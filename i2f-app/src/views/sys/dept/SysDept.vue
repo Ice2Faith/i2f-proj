@@ -34,82 +34,86 @@
       @cancel="actionMoreShow=false"
     />
 
-
+    <van-action-sheet
+      v-model:show="actionRecordMoreShow"
+      :actions="actionRecordMoreActions"
+      cancel-text="取消"
+      close-on-click-action
+      safe-area-inset-bottom
+      @cancel="actionRecordMoreShow=false"
+    />
 
     <van-popup v-model:show="actionSearchShow"
                position="top"
                round
                :style="{  }" >
-      <van-form ref="form" @keydown.enter.native.stop="doSearch">
-        <van-cell-group inset style="max-height: 50vh;overflow: auto;margin-right: 0px">
-          <van-field
-            v-model="form.deptKey"
-            clearable
-            name="deptKey"
-            label="部门键"
-            placeholder="部门键"
-          />
-          <van-field
-            v-model="form.name"
-            clearable
-            name="name"
-            label="名称"
-            placeholder="名称"
-          />
-          <van-field
-            v-model="form.statusDesc"
-            clearable
-            is-link
-            readonly
-            name="status"
-            label="状态"
-            placeholder="点击选择"
-            @click="dialogs.status.show = true"
-          />
-          <van-popup v-model:show="dialogs.status.show" position="bottom">
-            <van-picker
-              :columns-field-names="{ text: 'label', value: 'value', children: 'children' }"
-              :columns="metas.statusList"
-              @confirm="({ selectedOptions }) =>{dialogs.status.show=false;form.status=selectedOptions[0].value;form.statusDesc=selectedOptions[0].label}"
-              @cancel="dialogs.status.show = false"
-            />
-          </van-popup>
-          <van-field
-            v-model="form.remark"
-            clearable
-            name="remark"
-            label="备注"
-            placeholder="备注"
-          />
+      <Form ref="form"
+            :fields="fields"
+            v-model:form="form"
+            :enter-submit="true"
+            @submit="doSearch"
+            :metas="metas"
+            :rules="rules">
+      </Form>
 
-        </van-cell-group>
-        <van-row style="margin: 16px">
-          <van-col span="12">
-            <van-button block type="default" size="small" @click="doReset">
-              重置
-            </van-button>
-          </van-col>
-          <van-col span="12">
-            <van-button block type="primary" size="small" @click="doSearch">
-              搜索
-            </van-button>
-          </van-col>
-        </van-row>
-      </van-form>
+      <van-row style="margin: 16px">
+        <van-col span="12">
+          <van-button block type="default" size="small" @click="doReset">
+            重置
+          </van-button>
+        </van-col>
+        <van-col span="12">
+          <van-button block type="primary" size="small" @click="doSearch">
+            搜索
+          </van-button>
+        </van-col>
+      </van-row>
     </van-popup>
 
+    <van-popup
+      v-model:show="dialogDetail.show"
+      :style="{ width: '100%',height: '100%',paddingTop: 'var(--van-popup-close-icon-margin)' }"
+      position="right"
+    >
+      <van-nav-bar
+        :title="dialogDetail.title"
+        left-text="取消"
+        left-arrow
+        @click-left="dialogDetail.show=false"
+      />
+      <Detail :mode="dialogDetail.mode"
+              :record="dialogDetail.record"
+              v-if="dialogDetail.show"
+              @cancel="handleDetailCancel"
+              @submit="handleDetailOk"></Detail>
+    </van-popup>
   </div>
 </template>
 <script>
-import ListManageMixin from "@/mixins/ListManageMixin";
+import ListManageMixin from '@/mixins/ListManageMixin'
+import Tree from '@/components/Tree'
+import Detail from './components/Detail'
+import Form from '@/components/Form'
 export default {
-  mixins:[ListManageMixin],
-  data(){
+  components: {
+    Detail,
+    Tree,
+    Form
+  },
+  mixins: [ListManageMixin],
+  data () {
     return {
-      actionMoreActions:[
+      actionMoreActions: [
         {
           name: '新增',
           callback: this.doAdd
+        }
+      ],
+
+      actionRecordMoreActions: [
+        {
+          name: '授权',
+          callback: this.doAuthResources
         }
       ],
 
@@ -129,9 +133,7 @@ export default {
 
       },
       dialogs: {
-        status:{
-          show:false
-        }
+
       },
       metas: {
         statusList: [{
@@ -143,19 +145,45 @@ export default {
         }, {
           value: 99,
           label: '删除'
-        }]
+        }],
+        metasFields: {
+          text: 'label',
+          value: 'value',
+          children: 'children'
+        }
       },
+      fields: [
+        {
+          prop: 'deptKey',
+          label: '部门键'
+        },
+        {
+          prop: 'name',
+          label: '名称'
+        },
+        {
+          prop: 'status',
+          label: '状态',
+          type: 'select',
+          options: 'statusList',
+          optionsFields: 'metasFields'
+        },
+        {
+          prop: 'remark',
+          label: '备注'
+        }
+      ]
     }
   },
-  created() {
-    this.$emit('nav',{
+  created () {
+    this.$emit('nav', {
       enable: true,
       title: '部门管理',
       rightText: null,
       rightIcon: 'search',
       rightClick: this.expandSearchPanel
     })
-    this.$emit('dock',{
+    this.$emit('dock', {
       enable: true,
       icon: 'plus',
       click: this.expandMorePanel
@@ -165,13 +193,13 @@ export default {
 
   },
   methods: {
-    doReset(){
-      this.form= {
-          deptKey: '',
-          name: '',
-          status: '',
-          statusDesc: '',
-          remark: ''
+    doReset () {
+      this.form = {
+        deptKey: '',
+        name: '',
+        status: '',
+        statusDesc: '',
+        remark: ''
       }
     }
   }

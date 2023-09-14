@@ -92,6 +92,36 @@
                 </template>
               </van-field>
             </template>
+            <template v-else-if="item.type=='tree'">
+              <van-field
+                v-show="item.hasShow?item.hasShow(innerForm[item.prop]):true"
+                v-model="descForm[item.prop]"
+                :clearable="item.clearable==false?false:true"
+                :disabled="item.disabled==true?true:false"
+                :is-link="item.isLink==false?false:true"
+                :label="item.label"
+                :name="item.prop"
+                :placeholder="item.placeholder?item.placeholder:`请填写${item.label}`"
+                :readonly="item.readonly==true?true:false"
+                :rules="rules[item.prop]?rules[item.prop]:[]"
+                :type="'text'"
+                @click="item._show=true"
+              />
+              <van-popup v-model:show="item._show" position="bottom">
+                <div style="padding: 24px 5px;">
+                  <tree
+                    :checkable="true"
+                    :multiple="false"
+                    :strict="false"
+                    v-model:checked-keys="innerForm[item.prop]"
+                    @checked-nodes="(nodes)=>{descForm[item.prop]=nodes.map(e=>e.text).join(',')}"
+                    :tree="metas[item.options?item.options:item.prop]"
+                    :fields="metas[item.optionsFields?item.optionsFields:item.prop+'Fields']?metas[item.optionsFields?item.optionsFields:item.prop+'Fields']:defaultListFields"
+                  >
+                  </tree>
+                </div>
+              </van-popup>
+            </template>
             <van-field
               v-else
               v-show="item.hasShow?item.hasShow(innerForm[item.prop]):true"
@@ -114,8 +144,10 @@
 </template>
 
 <script>
+import Tree from '@/components/Tree'
 export default {
   name: 'Form',
+  components: { Tree },
   props: {
     form: {
       type: Object,
@@ -132,7 +164,7 @@ export default {
         disabled: false,
         readonly: false,
         isLink: false,
-        type: 'text', // select,radio,checkbox,checkbox-group,date,datetime,原始input标签支持的type[email,phone,password...]
+        type: 'text', // select,radio,checkbox,checkbox-group,tree,multi-tree,date,datetime,原始input标签支持的type[email,phone,password...]
         format: 'YYYY-MM-DD',
         options: 'username',
         optionsFields: 'usernameFields'
@@ -164,7 +196,7 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       innerForm: {},
       descForm: {},
@@ -183,31 +215,51 @@ export default {
         const form = Object.assign({}, this.form)
         this.innerForm = Object.assign({}, form)
         this.descForm = Object.assign({}, form)
+        for (let i = 0; i < this.fields.length; i++) {
+          const item = this.fields[i]
+          if (item.type == 'tree') {
+            const srcVal = this.innerForm[item.prop]
+            this.innerForm[item.prop] = []
+            if (srcVal) {
+              this.innerForm[item.prop].push(srcVal)
+            }
+          }
+        }
       }
     },
     innerForm: {
-      immediate: true,
       deep: true,
       handler: function (val, old) {
-        this.$emit('update:form', this.innerForm)
+        const wrapForm = Object.assign({}, this.innerForm)
+        for (let i = 0; i < this.fields.length; i++) {
+          const item = this.fields[i]
+          if (item.type == 'tree') {
+            const srcVal = wrapForm[item.prop]
+            wrapForm[item.prop] = null
+            if (srcVal) {
+              wrapForm[item.prop] = srcVal[0]
+            }
+          }
+        }
+        this.$emit('update:form', wrapForm)
       }
     }
   },
   methods: {
-    onKeydownEnter() {
+    onKeydownEnter () {
       if (this.enterSubmit) {
         this.emitForm()
       }
     },
-    emitForm() {
+    emitForm () {
       this.$refs.form.validate().then(() => {
         this.$emit('submit', this.innerForm)
       })
     },
-    validate() {
+    validate () {
       return this.$refs.form.validate()
     },
-    formRef() {
+    formRef () {
       return this.$refs.form
     }
   }

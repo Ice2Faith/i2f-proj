@@ -34,122 +34,87 @@
       @cancel="actionMoreShow=false"
     />
 
+    <van-action-sheet
+      v-model:show="actionRecordMoreShow"
+      :actions="actionRecordMoreActions"
+      cancel-text="取消"
+      close-on-click-action
+      safe-area-inset-bottom
+      @cancel="actionRecordMoreShow=false"
+    />
+
     <van-popup v-model:show="actionSearchShow"
                position="top"
                round
                :style="{  }" >
-      <van-form ref="form" @keydown.enter.native.stop="doSearch">
-        <van-cell-group inset style="max-height: 50vh;overflow: auto;margin-right: 0px">
-          <van-field
-            v-model="form.name"
-            clearable
-            name="name"
-            label="名称"
-            placeholder="名称"
-          />
-          <van-field
-            v-model="form.menuKey"
-            clearable
-            name="menuKey"
-            label="菜单键"
-            placeholder="菜单键"
-          />
-          <van-field
-            v-model="form.typeDesc"
-            clearable
-            is-link
-            readonly
-            name="type"
-            label="类型"
-            placeholder="点击选择"
-            @click="dialogs.type.show = true"
-          />
-          <van-popup v-model:show="dialogs.type.show" position="bottom">
-            <van-picker
-              :columns-field-names="{ text: 'label', value: 'value', children: 'children' }"
-              :columns="metas.menuTypeList"
-              @confirm="({ selectedOptions }) =>{dialogs.type.show=false;form.type=selectedOptions[0].value;form.typeDesc=selectedOptions[0].label}"
-              @cancel="dialogs.type.show = false"
-            />
-          </van-popup>
-          <van-field
-            v-model="form.statusDesc"
-            clearable
-            is-link
-            readonly
-            name="status"
-            label="状态"
-            placeholder="点击选择"
-            @click="dialogs.status.show = true"
-          />
-          <van-popup v-model:show="dialogs.status.show" position="bottom">
-            <van-picker
-              :columns-field-names="{ text: 'label', value: 'value', children: 'children' }"
-              :columns="metas.statusList"
-              @confirm="({ selectedOptions }) =>{dialogs.status.show=false;form.status=selectedOptions[0].value;form.statusDesc=selectedOptions[0].label}"
-              @cancel="dialogs.status.show = false"
-            />
-          </van-popup>
-          <van-field
-            v-model="form.url"
-            clearable
-            name="url"
-            label="URL"
-            placeholder="URL"
-          />
-          <van-field
-            v-model="form.permKey"
-            clearable
-            name="permKey"
-            label="权限键"
-            placeholder="权限键"
-          />
-          <van-field
-            v-model="form.remark"
-            clearable
-            name="remark"
-            label="备注"
-            placeholder="备注"
-          />
-          <van-field
-            v-model="form.icon"
-            clearable
-            name="icon"
-            label="ICON"
-            placeholder="ICON"
-          />
+      <Form ref="form"
+            :fields="fields"
+            v-model:form="form"
+            :enter-submit="true"
+            @submit="doSearch"
+            :metas="metas"
+            :rules="rules">
+      </Form>
 
-
-        </van-cell-group>
-        <van-row style="margin: 16px">
-          <van-col span="12">
-            <van-button block type="default" size="small" @click="doReset">
-              重置
-            </van-button>
-          </van-col>
-          <van-col span="12">
-            <van-button block type="primary" size="small" @click="doSearch">
-              搜索
-            </van-button>
-          </van-col>
-        </van-row>
-      </van-form>
-
-
+      <van-row style="margin: 16px">
+        <van-col span="12">
+          <van-button block type="default" size="small" @click="doReset">
+            重置
+          </van-button>
+        </van-col>
+        <van-col span="12">
+          <van-button block type="primary" size="small" @click="doSearch">
+            搜索
+          </van-button>
+        </van-col>
+      </van-row>
     </van-popup>
 
+    <van-popup
+      v-model:show="dialogDetail.show"
+      :style="{ width: '100%',height: '100%',paddingTop: 'var(--van-popup-close-icon-margin)' }"
+      position="right"
+    >
+      <van-nav-bar
+        :title="dialogDetail.title"
+        left-text="取消"
+        left-arrow
+        @click-left="dialogDetail.show=false"
+      />
+      <Detail :mode="dialogDetail.mode"
+              :record="dialogDetail.record"
+              v-if="dialogDetail.show"
+              @cancel="handleDetailCancel"
+              @submit="handleDetailOk"></Detail>
+    </van-popup>
   </div>
 </template>
 <script>
-import ListManageMixin from "@/mixins/ListManageMixin";
+import ListManageMixin from '@/mixins/ListManageMixin'
+import Detail from './components/Detail'
+import Form from '@/components/Form'
+import Tree from '@/components/Tree'
+
 export default {
-  mixins:[ListManageMixin],
-  data(){
+  components: {
+    Detail,
+    Tree,
+    Form
+  },
+  mixins: [ListManageMixin],
+  data () {
     return {
-      actionMoreActions:[
+      actionMoreActions: [
         {
           name: '新增',
           callback: this.doAdd
+        }
+      ],
+
+      actionRecordMoreActions: [
+        {
+          name: '添加子节点',
+          callback: this.doAddSub
         }
       ],
 
@@ -171,16 +136,11 @@ export default {
 
       },
       rules: {
-        name: [{ required: true, message: '请填写名称' }],
+        name: [{ required: true, message: '请填写名称' }]
 
       },
       dialogs: {
-        type:{
-          show: false
-        },
-        status:{
-          show: false
-        }
+
       },
       metas: {
         statusList: [{
@@ -199,19 +159,64 @@ export default {
         }, {
           value: 1,
           label: '权限'
-        }]
+        }],
+        metasFields: {
+          text: 'label',
+          value: 'value',
+          children: 'children'
+        }
       },
+      fields: [
+        {
+          prop: 'name',
+          label: '名称'
+        },
+        {
+          prop: 'menuKey',
+          label: '菜单键'
+        },
+        {
+          prop: 'type',
+          label: '类型',
+          type: 'select',
+          options: 'menuTypeList',
+          optionsFields: 'metasFields'
+        },
+        {
+          prop: 'status',
+          label: '状态',
+          type: 'select',
+          options: 'statusList',
+          optionsFields: 'metasFields'
+        },
+        {
+          prop: 'url',
+          label: 'URL'
+        },
+        {
+          prop: 'permKey',
+          label: '权限键'
+        },
+        {
+          prop: 'remark',
+          label: '备注'
+        },
+        {
+          prop: 'icon',
+          label: 'ICON'
+        }
+      ]
     }
   },
-  created() {
-    this.$emit('nav',{
+  created () {
+    this.$emit('nav', {
       enable: true,
       title: '资源管理',
       rightText: null,
       rightIcon: 'search',
       rightClick: this.expandSearchPanel
     })
-    this.$emit('dock',{
+    this.$emit('dock', {
       enable: true,
       icon: 'plus',
       click: this.expandMorePanel
@@ -221,8 +226,8 @@ export default {
 
   },
   methods: {
-    doReset(){
-      this.form= {
+    doReset () {
+      this.form = {
         name: '',
         menuKey: '',
         type: null,
@@ -234,6 +239,9 @@ export default {
         remark: '',
         icon: ''
       }
+    },
+    doAddSub (record) {
+
     }
   }
 }
