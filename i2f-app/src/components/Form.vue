@@ -107,12 +107,28 @@
                 :type="'text'"
                 @click="item._show=true"
               />
-              <van-popup v-model:show="item._show" position="bottom">
+              <tree
+                v-if="!item._show"
+                v-show="false"
+                :ref="item.prop+'Tree'"
+                :checkable="true"
+                :multiple="false"
+                :strict="false"
+                @rendered="onFieldTreeRendered(item)"
+                v-model:checked-keys="innerForm[item.prop]"
+                @checked-nodes="(nodes)=>{descForm[item.prop]=nodes.map(e=>e.text).join(',')}"
+                :tree="metas[item.options?item.options:item.prop]"
+                :fields="metas[item.optionsFields?item.optionsFields:item.prop+'Fields']?metas[item.optionsFields?item.optionsFields:item.prop+'Fields']:defaultListFields"
+              >
+              </tree>
+              <van-popup v-else v-model:show="item._show" position="bottom">
                 <div style="padding: 24px 5px;">
                   <tree
+                    :ref="item.prop+'Tree'"
                     :checkable="true"
                     :multiple="false"
                     :strict="false"
+                    @rendered="onFieldTreeRendered(item)"
                     v-model:checked-keys="innerForm[item.prop]"
                     @checked-nodes="(nodes)=>{descForm[item.prop]=nodes.map(e=>e.text).join(',')}"
                     :tree="metas[item.options?item.options:item.prop]"
@@ -212,6 +228,9 @@ export default {
       immediate: true,
       deep: true,
       handler: function (val, old) {
+        if (JSON.stringify(val) == JSON.stringify(old)) {
+          return
+        }
         const form = Object.assign({}, this.form)
         this.innerForm = Object.assign({}, form)
         this.descForm = Object.assign({}, form)
@@ -230,6 +249,9 @@ export default {
     innerForm: {
       deep: true,
       handler: function (val, old) {
+        if (JSON.stringify(val) == JSON.stringify(old)) {
+          return
+        }
         const wrapForm = Object.assign({}, this.innerForm)
         for (let i = 0; i < this.fields.length; i++) {
           const item = this.fields[i]
@@ -246,6 +268,22 @@ export default {
     }
   },
   methods: {
+    onFieldTreeRendered (field) {
+      this.decodeTreeCheckedText(field)
+    },
+    decodeTreeCheckedText (item) {
+      let refTree = this.$refs[item.prop + 'Tree']
+      if (refTree) {
+        if (refTree.length && refTree.length > 0) {
+          refTree = refTree[0]
+        }
+        if (refTree.getAllCheckedNodes) {
+          const nodes = refTree.getAllCheckedNodes()
+          const text = nodes.map(e => e.text).join(',')
+          this.descForm[item.prop] = text
+        }
+      }
+    },
     onKeydownEnter () {
       if (this.enterSubmit) {
         this.emitForm()

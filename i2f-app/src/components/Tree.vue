@@ -150,6 +150,10 @@ export default {
     accordion: {
       type: Boolean,
       default: () => true
+    },
+    autoExpand: {
+      type: Boolean,
+      default: () => true
     }
   },
   data () {
@@ -164,12 +168,26 @@ export default {
       handler: function (val, old) {
         this.wrapTree()
       }
+    },
+    checkedKeys: {
+      immediate: true,
+      deep: true,
+      handler: function (val, old) {
+        if (JSON.stringify(val) == JSON.stringify(old)) {
+          return
+        }
+        this.updateCheckedNodes()
+      }
     }
   },
   methods: {
     wrapTree () {
       this.treeData = []
       this.wrapTreeNext(1, this.tree, this.treeData, null)
+      if (this.autoExpand) {
+        this.wrapExpandChecked()
+      }
+      this.$emit('rendered', this.treeData)
     },
     wrapTreeNext (level, srcTree, dstTree, parent) {
       if (!srcTree || srcTree.length == 0) {
@@ -190,6 +208,40 @@ export default {
         }
         dstTree.push(dstItem)
         this.wrapTreeNext(level + 1, srcItem[this.fields.children], dstItem.children, dstItem)
+      }
+    },
+    updateCheckedNodes () {
+      this.updateCheckedNodesNext(this.treeData)
+      this.$emit('rendered', this.treeData)
+    },
+    updateCheckedNodesNext (nodes) {
+      if (!nodes) {
+        return
+      }
+      if (nodes.length <= 0) {
+        return
+      }
+      for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i]
+        node.checked = this.checkedKeys.indexOf(node.key) >= 0
+        if (node.children) {
+          this.updateCheckedNodesNext(node.children)
+        }
+      }
+    },
+    wrapExpandChecked () {
+      const nodes = this.getAllCheckedNodes()
+      for (let i = 0; i < nodes.length; i++) {
+        this.wrapExpandCheckedItem(nodes[i].parent)
+      }
+    },
+    wrapExpandCheckedItem (item) {
+      if (!item) {
+        return
+      }
+      item.expand = true
+      if (item.parent) {
+        this.wrapExpandCheckedItem(item.parent)
       }
     },
     onCheckedChange (item) {
@@ -216,6 +268,18 @@ export default {
       this.findAllCheckedKeys(this.treeData, currentCheckedKeys, currentCheckNodes)
       this.$emit('checked-nodes', currentCheckNodes)
       this.$emit('update:checkedKeys', currentCheckedKeys)
+    },
+    getAllCheckedNodes () {
+      const currentCheckedKeys = []
+      const currentCheckNodes = []
+      this.findAllCheckedKeys(this.treeData, currentCheckedKeys, currentCheckNodes)
+      return currentCheckNodes
+    },
+    getAllCheckedKeys () {
+      const currentCheckedKeys = []
+      const currentCheckNodes = []
+      this.findAllCheckedKeys(this.treeData, currentCheckedKeys, currentCheckNodes)
+      return currentCheckedKeys
     },
     findAllCheckedKeys (node, keys, nodes) {
       if (!node) {
